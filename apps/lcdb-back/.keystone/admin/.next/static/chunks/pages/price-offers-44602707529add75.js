@@ -1,0 +1,1 @@
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[9108],{3397:function(n,e,r){(window.__NEXT_P=window.__NEXT_P||[]).push(["/price-offers",function(){return r(6774)}])},6774:function(n,e,r){"use strict";r.r(e);var u=r(8018);e.default=(0,u.d)({listKey:"PriceOffer"})}},function(n){n.O(0,[8018,2888,9774,179],(function(){return e=3397,n(n.s=e);var e}));var e=n.O();_N_E=e}]);
