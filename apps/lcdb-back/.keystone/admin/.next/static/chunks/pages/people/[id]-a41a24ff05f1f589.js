@@ -1,1 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[3910],{7443:function(n,u,e){(window.__NEXT_P=window.__NEXT_P||[]).push(["/people/[id]",function(){return e(1642)}])},1642:function(n,u,e){"use strict";e.r(u);var _=e(2323);u.default=(0,_.p)({listKey:"Person"})}},function(n){n.O(0,[2323,2888,9774,179],(function(){return u=7443,n(n.s=u);var u}));var u=n.O();_N_E=u}]);

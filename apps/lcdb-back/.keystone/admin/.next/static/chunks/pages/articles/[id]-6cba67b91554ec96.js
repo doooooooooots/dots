@@ -1,1 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[1977],{3764:function(n,t,u){(window.__NEXT_P=window.__NEXT_P||[]).push(["/articles/[id]",function(){return u(3897)}])},3897:function(n,t,u){"use strict";u.r(t);var i=u(2323);t.default=(0,i.p)({listKey:"Article"})}},function(n){n.O(0,[2323,2888,9774,179],(function(){return t=3764,n(n.s=t);var t}));var t=n.O();_N_E=t}]);

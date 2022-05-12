@@ -2,6 +2,49 @@
   "version": 2,
   "projects": {
     "clients": "libs/clients",
+    "columns-builder": {
+      "root": "libs/columns-builder",
+      "sourceRoot": "libs/columns-builder/src",
+      "projectType": "library",
+      "tags": [],
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:rollup",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/columns-builder",
+            "tsConfig": "libs/columns-builder/tsconfig.lib.json",
+            "project": "libs/columns-builder/package.json",
+            "entryFile": "libs/columns-builder/src/index.ts",
+            "external": ["react/jsx-runtime"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "compiler": "babel",
+            "assets": [
+              {
+                "glob": "libs/columns-builder/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/columns-builder/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/columns-builder"],
+          "options": {
+            "jestConfig": "libs/columns-builder/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "components": "libs/components",
     "contexts": {
       "root": "libs/contexts",
@@ -26,9 +69,9 @@
         }
       }
     },
-    "datagrid-builder": {
-      "root": "libs/datagrid-builder",
-      "sourceRoot": "libs/datagrid-builder/src",
+    "dots-system": {
+      "root": "libs/dots-system",
+      "sourceRoot": "libs/dots-system/src",
       "projectType": "library",
       "tags": [],
       "targets": {
@@ -36,14 +79,14 @@
           "executor": "@nrwl/linter:eslint",
           "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": ["libs/datagrid-builder/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": ["libs/dots-system/**/*.{ts,tsx,js,jsx}"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/datagrid-builder"],
+          "outputs": ["coverage/libs/dots-system"],
           "options": {
-            "jestConfig": "libs/datagrid-builder/jest.config.js",
+            "jestConfig": "libs/dots-system/jest.config.js",
             "passWithNoTests": true
           }
         }

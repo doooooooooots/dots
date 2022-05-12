@@ -1,5 +1,5 @@
 import React from 'react';
-import StorageFormCreate from '../../components/storage/forms/storage-form-create';
+import StorageFormCreate from '../../components/d_formulaire/storage-form-create';
 
 const formatDatas = () => {
   // if (!data) return undefined;

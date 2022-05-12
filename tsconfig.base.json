@@ -15,9 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@dots.cool/columns-builder": ["libs/columns-builder/src/index.ts"],
       "@dots.cool/components": ["libs/components/src/index.ts"],
       "@dots.cool/contexts": ["libs/contexts/src/index.ts"],
-      "@dots.cool/datagrid-builder": ["libs/datagrid-builder/src/index.ts"],
+      "@dots.cool/dots-system": ["libs/dots-system/src/index.ts"],
       "@dots.cool/form-builder": ["libs/form-builder/src/index.ts"],
       "@dots.cool/hooks": ["libs/hooks/src/index.ts"],
       "@dots.cool/schemas": ["libs/schemas/src/index.ts"],

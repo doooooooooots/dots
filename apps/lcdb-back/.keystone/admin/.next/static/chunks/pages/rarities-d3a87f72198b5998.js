@@ -1,1 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[3660],{141:function(n,t,u){(window.__NEXT_P=window.__NEXT_P||[]).push(["/rarities",function(){return u(6795)}])},6795:function(n,t,u){"use strict";u.r(t);var i=u(8018);t.default=(0,i.d)({listKey:"Rarity"})}},function(n){n.O(0,[8018,2888,9774,179],(function(){return t=141,n(n.s=t);var t}));var t=n.O();_N_E=t}]);

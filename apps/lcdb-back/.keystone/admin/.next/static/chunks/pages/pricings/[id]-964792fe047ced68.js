@@ -1,1 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[7923],{3887:function(n,i,u){(window.__NEXT_P=window.__NEXT_P||[]).push(["/pricings/[id]",function(){return u(2063)}])},2063:function(n,i,u){"use strict";u.r(i);var _=u(2323);i.default=(0,_.p)({listKey:"Pricing"})}},function(n){n.O(0,[2323,2888,9774,179],(function(){return i=3887,n(n.s=i);var i}));var i=n.O();_N_E=i}]);

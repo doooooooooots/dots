@@ -1,1 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[9640],{5206:function(n,u,r){(window.__NEXT_P=window.__NEXT_P||[]).push(["/currencies",function(){return r(597)}])},597:function(n,u,r){"use strict";r.r(u);var e=r(8018);u.default=(0,e.d)({listKey:"Currency"})}},function(n){n.O(0,[8018,2888,9774,179],(function(){return u=5206,n(n.s=u);var u}));var u=n.O();_N_E=u}]);

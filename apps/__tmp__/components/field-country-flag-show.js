@@ -4,7 +4,11 @@ import { getLanguageCode } from '@utils/get-language';
 import { Box } from '@mui/material';
 
 function FieldCountryFlagShow(props) {
-  let { countryCode = 'fr', width = 20, sx = { m: 'auto', display: 'flex', alignItems: 'center' } } = props;
+  let {
+    countryCode = 'fr',
+    width = 20,
+    sx = { m: 'auto', display: 'flex', alignItems: 'center' },
+  } = props;
 
   countryCode = getLanguageCode(countryCode);
   countryCode = countryCode === 'en' ? 'gb' : countryCode;

@@ -34,5 +34,11 @@
     "files": [
       "static/chunks/libs_components_src_filter_src_values_value-text_tsx.js"
     ]
+  },
+  "index.js -> ../components/no-ssr-patch/sortable-popper": {
+    "id": "index.js -> ../components/no-ssr-patch/sortable-popper",
+    "files": [
+      "static/chunks/src_components_no-ssr-patch_sortable-popper_ts.js"
+    ]
   }
 }

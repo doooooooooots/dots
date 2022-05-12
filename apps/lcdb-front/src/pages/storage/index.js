@@ -1,8 +1,8 @@
 import { LayoutMain } from '@dots.cool/components';
 import { Grid, Button } from '@mui/material';
 import React from 'react';
-import STORAGE_COLUMNS from '../../components/storage/columns/storage-columns';
-import StorageDatagrid from '../../components/storage/datagrids/storage-datagrid';
+import STORAGE_COLUMNS from '../../components/b_columns/storage';
+import StorageDatagrid from '../../components/g_datagrids/storage-datagrid';
 import { extractColumns } from '@dots.cool/utils';
 import { useMemory } from '@dots.cool/form-builder';
 

@@ -1,1 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[3849],{6749:function(n,t,u){(window.__NEXT_P=window.__NEXT_P||[]).push(["/batch-prods/[id]",function(){return u(2933)}])},2933:function(n,t,u){"use strict";u.r(t);var _=u(2323);t.default=(0,_.p)({listKey:"BatchProd"})}},function(n){n.O(0,[2323,2888,9774,179],(function(){return t=6749,n(n.s=t);var t}));var t=n.O();_N_E=t}]);
