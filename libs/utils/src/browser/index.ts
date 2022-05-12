@@ -1,0 +1,1 @@
+export {default as openFullscreen} from './open-fullscreen'

@@ -1,0 +1,9 @@
+{
+  "name": "@dots.cool/components",
+  "version": "0.0.1",
+  "main": "src/index.ts",
+  "peerDependencies": {
+    "@mui/material": "^5.6.4",
+    "@mui/x-data-grid-pro": "^5.10.0"
+  }
+}

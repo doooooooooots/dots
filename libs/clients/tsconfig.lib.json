@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "declaration": true,
+    "types": []
+  },
+  "include": ["**/*.ts", "src/apollo-gql/apollo-client.js"],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts"]
+}

@@ -1,0 +1,53 @@
+{
+  "operators": {
+    "is_empty": "est vide",
+    "is_not_empty": "n'est pas vide",
+    "is_null": "est null",
+    "is_not_null": "n'est pas null",
+    "date_is": "est",
+    "date_is_between": "est entre",
+    "date_is_within": "au cours",
+    "date_is_before": "avant",
+    "date_is_after": "après",
+    "date_is_on_or_after": "le ou après",
+    "date_is_on_or_before": "le ou avant",
+    "equal": "est égal",
+    "not_equal": "est différent",
+    "in": "dans",
+    "not_in": "n'est pas dans",
+    "begins_with": "commence par",
+    "not_begins_with": "ne commence pas par",
+    "contains": "contient",
+    "not_contains": "ne contient pas",
+    "ends_with": "termine par",
+    "not_ends_with": "ne termine pas par",
+    "less": "inférieur à",
+    "less_or_equal": "inférieur ou égal à",
+    "greater": "supérieur à",
+    "greater_or_equal": "supérieur ou égal à",
+    "between": "entre",
+    "not_between": "en dehors de"
+  },
+  "date": {
+    "values": {
+      "default": {
+        "today": "aujourd'hui",
+        "tomorrow": "demain",
+        "yesterday": "hier",
+        "one_week_ago": "la semaine dernière",
+        "one_week_from_now": "la semaine prochaine",
+        "one_month_ago": "le mois dernier",
+        "one_month_from_now": "le mois prochain",
+        "custom": "date personnalisée"
+      },
+      "is_within": {
+        "the_past_week": "de la dernière semaine",
+        "the_past_month": "du dernier mois",
+        "the_past_year": "de la dernière année",
+        "the_next_week": "de la semaine prochaine",
+        "the_next_month": "du mois prochain",
+        "the_next_year": "de l'année prochaine"
+      }
+    }
+  }
+}

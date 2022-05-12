@@ -1,0 +1,1 @@
+export {default as ucFirst} from './uc-first'

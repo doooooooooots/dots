@@ -15,7 +15,14 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@keystone-nx/test-lib": ["libs/test-lib/src/index.ts"]
+      "@dots.cool/components": ["libs/components/src/index.ts"],
+      "@dots.cool/contexts": ["libs/contexts/src/index.ts"],
+      "@dots.cool/datagrid-builder": ["libs/datagrid-builder/src/index.ts"],
+      "@dots.cool/form-builder": ["libs/form-builder/src/index.ts"],
+      "@dots.cool/hooks": ["libs/hooks/src/index.ts"],
+      "@dots.cool/schemas": ["libs/schemas/src/index.ts"],
+      "@dots.cool/tokens": ["libs/tokens/src/index.ts"],
+      "@dots.cool/utils": ["libs/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

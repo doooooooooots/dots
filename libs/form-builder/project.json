@@ -1,0 +1,43 @@
+{
+  "root": "libs/form-builder",
+  "sourceRoot": "libs/form-builder/src",
+  "projectType": "library",
+  "tags": ["form builder"],
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/form-builder",
+        "tsConfig": "libs/form-builder/tsconfig.lib.json",
+        "project": "libs/form-builder/package.json",
+        "entryFile": "libs/form-builder/src/index.ts",
+        "external": ["react/jsx-runtime"],
+        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "compiler": "babel",
+        "assets": [
+          {
+            "glob": "libs/form-builder/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/form-builder/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/form-builder"],
+      "options": {
+        "jestConfig": "libs/form-builder/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

@@ -1,8 +1,82 @@
 {
   "version": 2,
   "projects": {
-    "keystone-app": "apps/keystone-app",
-    "next-app": "apps/next-app",
-    "test-lib": "libs/test-lib"
+    "clients": "libs/clients",
+    "components": "libs/components",
+    "contexts": {
+      "root": "libs/contexts",
+      "sourceRoot": "libs/contexts/src",
+      "projectType": "library",
+      "tags": [],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/contexts/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/contexts"],
+          "options": {
+            "jestConfig": "libs/contexts/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "datagrid-builder": {
+      "root": "libs/datagrid-builder",
+      "sourceRoot": "libs/datagrid-builder/src",
+      "projectType": "library",
+      "tags": [],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/datagrid-builder/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/datagrid-builder"],
+          "options": {
+            "jestConfig": "libs/datagrid-builder/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "form-builder": "libs/form-builder",
+    "hooks": "libs/hooks",
+    "lcdb-back": "apps/lcdb-back",
+    "lcdb-front": "apps/lcdb-front",
+    "schemas": "libs/schemas",
+    "tokens": {
+      "root": "libs/tokens",
+      "sourceRoot": "libs/tokens/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/tokens/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/tokens"],
+          "options": {
+            "jestConfig": "libs/tokens/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["tokens constants"]
+    },
+    "utils": "libs/utils"
   }
 }

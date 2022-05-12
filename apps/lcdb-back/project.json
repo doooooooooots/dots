@@ -1,0 +1,27 @@
+{
+  "root": "apps/lcdb-back",
+  "sourceRoot": "apps/lcdb-back",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "apps/lcdb-back",
+        "command": "npx keystone build"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "apps/lcdb-back",
+        "command": "npx keystone dev"
+      },
+      "configurations": {
+        "production": {
+          "command": "npx keystone start"
+        }
+      }
+    }
+  },
+  "tags": []
+}

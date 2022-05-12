@@ -1,0 +1,202 @@
+{
+  "common": {
+    "unknown": {
+      "select": "Pas de donnée"
+    },
+    "date": {
+      "mask": "__/__/____",
+      "component": "dd MMM \n yyyy"
+    }
+  },
+  "fields": {
+    "name": {
+      "label": "Nom",
+      "description": "Comment s'appelle le projet"
+    },
+    "areaSea": {
+      "label": "Distance bords de mer",
+      "description": "Distance séparant le projet des côtes",
+      "options": ["moins de 3 km", "entre 3 et 10 km", "plus de 10km"]
+    },
+    "areaSnow": {
+      "label": "Zone de neige",
+      "description": "La zone est-elle très enneigée",
+      "options": ["A1", "A2", "B1", "B2", "C1", "C2", "D", "E"]
+    },
+    "areaWind": {
+      "label": "Zone de vent",
+      "description": "Quelle est la force du vent",
+      "options": [
+        {
+          "value": 1,
+          "label": 1
+        },
+        {
+          "value": 2,
+          "label": 2
+        },
+        {
+          "value": 3,
+          "label": 3
+        },
+        {
+          "value": 4,
+          "label": 4
+        }
+      ]
+    },
+    "areaField": {
+      "label": "Catégorie de terrain",
+      "description": "Type d'environnement environant",
+      "options": ["0", "II", "IIIa", "IIIb", "IV"],
+      "captions": [
+        "Mer ou zone côtière exposée aux vents de mer: lacs et plans d'eau parcourus par le vent sur une distance d'au moins 5km",
+        "Rase campagne avec ou non quelques obstacles isolés (arbres, bâtiments, etc) séparés les uns des autres de plus de 40 fois leur hauteur",
+        "Campagne avec haies; vignobles; bocage; habitat dispersé",
+        "Zones urbanisée ou industrielles; bocage dense; vergers",
+        "Zones urbaines dont moins 15% de la surface sont recouverts de bâtiments dont la hauteur moyenne est supérieure à 15m; forêts"
+      ]
+    },
+    "city": {
+      "label": "",
+      "description": ""
+    },
+    "claddingWidth": {
+      "label": "",
+      "description": ""
+    },
+    "country": {
+      "label": "",
+      "description": ""
+    },
+    "createdAt": {
+      "label": "",
+      "description": ""
+    },
+    "dateDelivery": {
+      "label": "Date de livraison",
+      "description": "Quand est-ce qu'est prévue la livraison"
+    },
+    "dateReception": {
+      "label": "Date de réception",
+      "description": "Date à laquelle le projet à été reçu"
+    },
+    "description": {
+      "label": "Description",
+      "description": "Un peu plus de détails",
+      "toggleAction": "Ajouter une description"
+    },
+    "electricalPower": {
+      "label": "",
+      "description": ""
+    },
+    "gps": {
+      "label": "",
+      "description": ""
+    },
+    "guid": {
+      "label": "",
+      "description": ""
+    },
+    "id": {
+      "label": "",
+      "description": ""
+    },
+    "firstName": {
+      "label": "",
+      "description": ""
+    },
+    "lastName": {
+      "label": "",
+      "description": ""
+    },
+    "numberOfWaves": {
+      "label": "",
+      "description": ""
+    },
+    "phone": {
+      "label": "",
+      "description": ""
+    },
+    "purlinBetweenAxis": {
+      "label": "",
+      "description": ""
+    },
+    "purlinType": {
+      "label": "",
+      "description": ""
+    },
+    "purlinThickness": {
+      "label": "",
+      "description": ""
+    },
+    "ref": {
+      "label": "",
+      "description": ""
+    },
+    "ridgeHeight": {
+      "label": "Hauteur faitage",
+      "description": "Hauteur faitage (m)"
+    },
+    "roofTypology": {
+      "label": "",
+      "description": ""
+    },
+    "status": {
+      "label": "",
+      "description": ""
+    },
+    "step": {
+      "label": "Etape du projet",
+      "description": "On en est où ?",
+      "options": [
+        "Pré-étude à faire",
+        "Pré-étude réalisée",
+        "Pré-étude envoyée",
+        "CF à faire",
+        "CF envoyé",
+        "CF validé"
+      ]
+    },
+    "streetName": {
+      "label": "",
+      "description": ""
+    },
+    "streetNumber": {
+      "label": "",
+      "description": ""
+    },
+    "streetSignPlace": {
+      "label": "",
+      "description": ""
+    },
+    "terrainRoughness": {
+      "label": "",
+      "description": ""
+    },
+    "typeEmergency": {
+      "label": "Urgence ?",
+      "description": "Est-ce une priorité"
+    },
+    "updatedAt": {
+      "label": "",
+      "description": ""
+    },
+    "waveBaseWidth": {
+      "label": "",
+      "description": ""
+    },
+    "waveTopWidth": {
+      "label": "",
+      "description": ""
+    },
+    "website": {
+      "label": "",
+      "description": ""
+    },
+    "zipCode": {
+      "label": "Code postal",
+      "description": "Code postal sous la forme XXXXX"
+    }
+  }
+}
