@@ -1,5 +1,5 @@
 import { createReducerContext } from 'react-use';
-import { HistoryAction, HistoryItem, HistoryState } from '.';
+import { HistoryAction, HistoryItem, HistoryState } from './index.d';
 
 const initialState: HistoryState = {
   // Array of path to store global paths (allow tabs)

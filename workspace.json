@@ -102,6 +102,16 @@
       "sourceRoot": "libs/tokens/src",
       "projectType": "library",
       "targets": {
+        "build": {
+          "executor": "@nrwl/js:tsc",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/tokens",
+            "main": "libs/tokens/src/index.ts",
+            "tsConfig": "libs/tokens/tsconfig.lib.json",
+            "assets": ["libs/tokens/*.md"]
+          }
+        },
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "outputs": ["{options.outputFile}"],
@@ -118,7 +128,7 @@
           }
         }
       },
-      "tags": ["tokens constants"]
+      "tags": ["tokens"]
     },
     "utils": "libs/utils"
   }

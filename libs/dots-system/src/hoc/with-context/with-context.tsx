@@ -1,13 +1,17 @@
-import { createSchema } from '@dots.cool/schemas';
+import { FC } from 'react';
 import ENTITIES, { EntityKey } from '../../schemas';
+import { EntitySchema } from '../../schemas/index.d';
 
-const withContext = (singular: EntityKey) => (Component: any) => {
-  const { plurial } = ENTITIES[singular];
-  const context = createSchema(singular, plurial);
-  const ComponentWithContext = (props: JSX.IntrinsicAttributes) => {
-    return <Component {...props} context={context} />;
+type ComponentWithContextType = FC<unknown & { context?: EntitySchema }>;
+
+const withContext =
+  (singular: EntityKey) =>
+  (Component: ComponentWithContextType): ComponentWithContextType => {
+    const context = ENTITIES[singular];
+    const ComponentWithContext: ComponentWithContextType = (props) => {
+      return <Component {...props} context={context} />;
+    };
+    return ComponentWithContext;
   };
-  return ComponentWithContext;
-};
 
 export default withContext;

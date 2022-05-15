@@ -1,44 +1,38 @@
 {
-  "../../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-checkbox": {
-    "id": "../../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-checkbox",
+  "../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-checkbox": {
+    "id": "../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-checkbox",
     "files": [
       "static/chunks/libs_components_src_filter_src_values_value-checkbox_tsx.js"
     ]
   },
-  "../../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-date": {
-    "id": "../../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-date",
+  "../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-date": {
+    "id": "../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-date",
     "files": [
       "static/chunks/libs_components_src_filter_src_values_value-date_tsx.js"
     ]
   },
-  "../../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-float": {
-    "id": "../../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-float",
+  "../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-float": {
+    "id": "../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-float",
     "files": [
       "static/chunks/libs_components_src_filter_src_values_value-float_tsx.js"
     ]
   },
-  "../../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-integer": {
-    "id": "../../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-integer",
+  "../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-integer": {
+    "id": "../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-integer",
     "files": [
       "static/chunks/libs_components_src_filter_src_values_value-integer_tsx.js"
     ]
   },
-  "../../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-select": {
-    "id": "../../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-select",
+  "../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-select": {
+    "id": "../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-select",
     "files": [
       "static/chunks/libs_components_src_filter_src_values_value-select_tsx.js"
     ]
   },
-  "../../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-text": {
-    "id": "../../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-text",
+  "../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-text": {
+    "id": "../../../libs/components/src/filter/src/rules/rule-value.tsx -> ../values/value-text",
     "files": [
       "static/chunks/libs_components_src_filter_src_values_value-text_tsx.js"
-    ]
-  },
-  "index.js -> ../components/no-ssr-patch/sortable-popper": {
-    "id": "index.js -> ../components/no-ssr-patch/sortable-popper",
-    "files": [
-      "static/chunks/src_components_no-ssr-patch_sortable-popper_ts.js"
     ]
   }
 }

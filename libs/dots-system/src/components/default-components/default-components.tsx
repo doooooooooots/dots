@@ -1,11 +1,11 @@
-import MainDatagrid from './components/datagrid';
-import MainFilterbar from './components/filterbar';
-import MainPagination from './components/pagination';
-import MainViews from './components/views';
-import ToolbarData from './components/toolbar';
-import MainDialogs from './components/dialogs';
 import MainCards from '../cards/cards';
-import Topbar from './components/topbar';
+import MainViews from '../views';
+import MainFilterbar from '../filterbar';
+import MainDatagrid from '../datagrid';
+import MainPagination from '../pagination';
+import ToolbarData from '../toolbar';
+import MainDialogs from '../dialog';
+import Topbar from '../topbar';
 
 const defaultComponents = {
   ViewBar: MainViews,

@@ -1,7 +1,9 @@
 import { useCallback } from 'react';
 import { useMap } from 'react-use';
 
-const useConfirmDialog = (initalState = { open: false, action: null, target: null }) => {
+const useConfirmDialog = (
+  initalState = { open: false, action: null, target: null }
+) => {
   const [dialog, { set, reset }] = useMap(initalState);
 
   const onOpen = useCallback(
@@ -38,7 +40,7 @@ const useConfirmDialog = (initalState = { open: false, action: null, target: nul
     target: dialog.target,
     onActionClick,
     onOpen,
-    onClose
+    onClose,
   };
 };
 

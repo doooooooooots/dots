@@ -7,10 +7,10 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import useHistory from '../../hoc/with-smart-history/use-history';
 import { useCallback } from 'react';
+import useHistory from '../../hooks/use-history';
 
-function Topbar(props) {
+function Topbar(props: any) {
   const { title, actionText, actionPage, fullscreenPage } = props;
 
   const { push } = useHistory();

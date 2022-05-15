@@ -2,6 +2,7 @@ import { MenuItem, Select as MuiSelect } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import FormGroup from '../group/form-group';
 import Label from '../label/label';
+import withMiddleware from '../with-middleware/with-middleware';
 
 function Select({ label, control = null, options, name, ...rest }) {
   return (
@@ -25,3 +26,4 @@ function Select({ label, control = null, options, name, ...rest }) {
 }
 
 export default Select;
+export const select = withMiddleware(Select);

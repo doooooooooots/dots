@@ -8,7 +8,7 @@ const PARAMS = `
   orderBy: $orderBy
 `;
 
-function findManyArgs(singular: string, lang: string | boolean = false) {
+function findManyArgs(singular: string, lang = false) {
   const Singular = ucFirst(singular);
 
   let output = `

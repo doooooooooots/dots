@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import ENTITIES from '../../schemas';
 import { createSchema } from '@dots.cool/schemas';
-import FetchError from '../../pages/fetch-error';
+import { FetchError } from '@dots.cool/components';
 
 const withQuery =
   (singular: string) =>

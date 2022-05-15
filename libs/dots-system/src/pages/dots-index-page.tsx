@@ -3,20 +3,19 @@ import { Box, Divider, Stack } from '@mui/material';
 import { DialogConfirm, LayoutMain } from '@dots.cool/components';
 import { useMemo } from 'react';
 import _defaultComponents from '../components/default-components/default-components';
-import {
-  COUNT,
-  FIND_MANY,
-  VIEW_MODE_CARD,
-  VIEW_MODE_TABLE,
-} from '@dots.cool/tokens';
+import withDotsSystem from '../hoc/with-dots-system';
+import { GRAPHQL_REQUESTS, VIEW_MODES } from '@dots.cool/tokens';
 
-const DotsIndexPage = (props: any) => {
+// Types
+import { DotsIndexPageProps } from './dots-index-page.d';
+
+const DotsIndexPage = (props: DotsIndexPageProps): JSX.Element => {
   const {
-    variant,
+    variant = 'details',
     context,
     // Data
-    query = 'id',
-    columns = [{ field: 'id', headerName: 'ID' }],
+    query: _query,
+    columns: _columns,
     // Filter
     filter,
     onFilterChange,
@@ -56,9 +55,20 @@ const DotsIndexPage = (props: any) => {
     componentProps = {},
   } = props;
 
+  //* COLUMNS & QUERY
+  const _columnNames = _columns || context.defaultColumns;
+  const query = _query || context.defaultFindManyQuery;
+
+  const columns = _columnNames.map(
+    (columnName: string) => context.columns[columnName]
+  );
+
   //* QUERIES
   const { graphql, plurial } = context;
-  const { [FIND_MANY]: findMany, [COUNT]: count } = graphql;
+  const {
+    [GRAPHQL_REQUESTS.FindMany]: findMany,
+    [GRAPHQL_REQUESTS.Count]: countQuery,
+  } = graphql;
 
   const mainQuery = useMemo(
     () => findMany(query, !!lang),
@@ -76,7 +86,7 @@ const DotsIndexPage = (props: any) => {
     variables: variables,
   });
 
-  const aggregateQuery = useMemo(() => count(), [count]);
+  const aggregateQuery = useMemo(() => countQuery(), [countQuery]);
   const { data: aggregate } = useQuery(aggregateQuery, {
     variables: { where: {} },
   });
@@ -85,21 +95,12 @@ const DotsIndexPage = (props: any) => {
   const mergedComponents = useMemo(
     () => ({
       ..._defaultComponents,
-      ...defaultComponents,
       ...components,
     }),
     [components]
   );
 
   // -- COMPONENT-PROPS
-  const mergedProps = useMemo(
-    () => ({
-      ...defaultComponentProps,
-      ...componentProps,
-    }),
-    [componentProps]
-  );
-
   // -- Extract components
   const {
     ViewBar,
@@ -118,24 +119,27 @@ const DotsIndexPage = (props: any) => {
     datagrid: datagridProps,
     dialog: dialogProps,
     topbar: topbarProps,
-  } = mergedProps;
+  } = componentProps;
 
   const DataViewerComponent = (
     <>
       <Box sx={{ flex: 1 }}>
-        {viewMode === VIEW_MODE_TABLE && (
+        {viewMode === VIEW_MODES.Table && (
           <Datagrid
+            query={query}
+            graphql={graphql}
+            lang={lang}
             rows={data?.[`${plurial}`] || []}
             columns={columns}
             loading={loading}
             selectionModel={selectionModel}
             onSelectionModelChange={onSelectionModelChange}
-            onOpenDialog={onOpenDialog}
-            components={datagridProps.components}
-            componentProps={datagridProps.componentProps}
+            onSubmitCallBack={refetch}
+            components={datagridProps?.components}
+            componentProps={datagridProps?.componentProps}
           />
         )}
-        {viewMode === VIEW_MODE_CARD && <Cards rows={data?.[`${plurial}`]} />}
+        {viewMode === VIEW_MODES.Card && <Cards rows={data?.[`${plurial}`]} />}
       </Box>
 
       {!hidePagination && (
@@ -178,8 +182,8 @@ const DotsIndexPage = (props: any) => {
             onFilterChange={onFilterChange}
             withFilter={withFilter}
             // Action Btn
-            actionText={filterBarProps.actionText}
-            actionPage={filterBarProps.actionPage}
+            actionText={filterBarProps?.actionText}
+            actionPage={filterBarProps?.actionPage}
             onSubmitCallback={refetch}
           />
           <Divider />
@@ -198,10 +202,10 @@ const DotsIndexPage = (props: any) => {
       {variant === 'preview' && (
         <>
           <Topbar
-            title={topbarProps.title || plurial}
-            actionText={topbarProps.actionText}
-            actionPage={topbarProps.actionPage}
-            fullscreenPage={topbarProps.fullscreenPage}
+            title={topbarProps?.title || plurial}
+            actionText={topbarProps?.actionText}
+            actionPage={topbarProps?.actionPage}
+            fullscreenPage={topbarProps?.fullscreenPage}
           />
           <Stack height={400} mt={2}>
             {DataViewerComponent}
@@ -211,21 +215,22 @@ const DotsIndexPage = (props: any) => {
 
       {!hideDialog && DialogContent && (
         <DialogConfirm open={!!open} onClose={onCloseDialog}>
-          <DialogContent
-            graphql={graphql}
-            query={query}
-            lang={lang}
-            open={open}
-            selectionModel={selectionModel}
-            onSubmitCallback={refetch}
-            onClose={onCloseDialog}
-            components={dialogProps.components}
-            componentProps={dialogProps.componentProps}
-          />
+          {open && (
+            <DialogContent
+              target={selectionModel}
+              query={query}
+              graphql={graphql}
+              lang={lang}
+              open={open}
+              onSubmitCallback={refetch}
+              onClose={onCloseDialog}
+              components={dialogProps?.components || {}}
+            />
+          )}
         </DialogConfirm>
       )}
     </>
   );
 };
 
-export default DotsIndexPage;
+export default withDotsSystem(DotsIndexPage);

@@ -3,6 +3,7 @@ import React from 'react';
 import { Controller } from 'react-hook-form';
 import FormGroup from '../group/form-group';
 import Label from '../label/label';
+import withMiddleware from '../with-middleware/with-middleware';
 
 function Slider({ control, label, name, ...other }) {
   return (
@@ -18,7 +19,7 @@ function Slider({ control, label, name, ...other }) {
             onChange={(_, value) => {
               field.onChange(value);
             }}
-            valueLabelDisplay='auto'
+            valueLabelDisplay="auto"
             max={10}
             step={1}
             {...other}
@@ -30,3 +31,4 @@ function Slider({ control, label, name, ...other }) {
 }
 
 export default Slider;
+export const slider = withMiddleware(Slider);

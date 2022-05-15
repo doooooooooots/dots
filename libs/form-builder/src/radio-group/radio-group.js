@@ -1,8 +1,13 @@
-import { FormControlLabel, Radio, RadioGroup as MuiRadioGroup } from '@mui/material';
+import {
+  FormControlLabel,
+  Radio,
+  RadioGroup as MuiRadioGroup,
+} from '@mui/material';
 import React from 'react';
 import { Controller } from 'react-hook-form';
 import FormGroup from '../group/form-group';
 import Label from '../label/label';
+import withMiddleware from '../with-middleware/with-middleware';
 
 function RadioGroup({ label, control, options, name, ...rest }) {
   return (
@@ -10,9 +15,14 @@ function RadioGroup({ label, control, options, name, ...rest }) {
       <Label label={label} />
       <Controller
         render={({ field }) => (
-          <MuiRadioGroup aria-label='gender' {...field} {...rest}>
+          <MuiRadioGroup aria-label="gender" {...field} {...rest}>
             {options.map((value) => (
-              <FormControlLabel key={value} value={value} control={<Radio />} label={value} />
+              <FormControlLabel
+                key={value}
+                value={value}
+                control={<Radio />}
+                label={value}
+              />
             ))}
           </MuiRadioGroup>
         )}
@@ -24,3 +34,4 @@ function RadioGroup({ label, control, options, name, ...rest }) {
 }
 
 export default RadioGroup;
+export const radioGroup = withMiddleware(RadioGroup);

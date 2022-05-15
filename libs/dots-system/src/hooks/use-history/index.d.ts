@@ -1,8 +1,12 @@
+import { FC } from 'react';
+
 export interface HistoryItem {
-  title: string;
   path: string;
-  data: any;
-  Component: React.Component;
+  title: string;
+  Component: FC;
+  componentProps?: {
+    [key: string]: unknown;
+  };
 }
 
 export interface HistoryState {

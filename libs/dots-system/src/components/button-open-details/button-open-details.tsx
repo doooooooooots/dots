@@ -1,19 +1,26 @@
+import { useCallback } from 'react';
 import LinkIcon from '@mui/icons-material/Link';
 import { Button } from '@mui/material';
-import React, { useCallback } from 'react';
-import useHistory from '../../hoc/with-smart-history/use-history';
+import useHistory from '../../hooks/use-history';
+import { HistoryItem } from '../../hooks/use-history/index.d';
+import { ActionButtonProps } from '../buttons';
 
-function ButtonOpenDetails(props) {
-  const { path, title, component, linkText, count } = props;
+type ButtonOpenDetailsProps = HistoryItem &
+  ActionButtonProps & {
+    count: number;
+  };
+
+function ButtonOpenDetails(props: ButtonOpenDetailsProps): JSX.Element {
+  const { path, title, Component, componentProps, actionText, count } = props;
   const { push } = useHistory();
 
   const handleClick = useCallback(() => {
-    push({ path, title, component });
-  }, [component, path, push, title]);
+    push({ path, title, Component, componentProps });
+  }, [push, path, title, Component, componentProps]);
 
   return (
     <Button startIcon={<LinkIcon />} onClick={handleClick} variant="text">
-      {`${linkText} (${count})`}
+      {`${actionText} (${count})`}
     </Button>
   );
 }

@@ -23,6 +23,7 @@
     "**/*.jsx",
     "**/*.ts",
     "**/*.tsx",
-    "../../apps/__tmp__/create-details.tsx"
+    "../../apps/__tmp__/create-details.tsx",
+    "../schemas/src/article.tsx"
   ]
 }

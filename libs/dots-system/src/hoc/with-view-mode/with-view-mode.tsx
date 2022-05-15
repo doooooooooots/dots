@@ -1,11 +1,11 @@
-import { VIEW_MODE_TABLE } from '@dots.cool/tokens';
+import { VIEW_MODES } from '@dots.cool/tokens';
 import { FunctionComponent, useState } from 'react';
 
 const withSmartViewMode = (
   Component: FunctionComponent<any>
 ): FunctionComponent<any> => {
   const ViewModableComponent = (props: any) => {
-    const [viewMode, setViewMode] = useState(VIEW_MODE_TABLE);
+    const [viewMode, setViewMode] = useState(VIEW_MODES.Table);
 
     return (
       <Component

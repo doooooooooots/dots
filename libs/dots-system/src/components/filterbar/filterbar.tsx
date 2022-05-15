@@ -9,7 +9,7 @@ import {
   FilterAdvanced,
   SortField,
 } from '@dots.cool/components';
-import useHistory from '../../hoc/with-smart-history/use-history';
+import useHistory from '../../hooks/use-history';
 
 function MainFilterbar(props: any) {
   const {

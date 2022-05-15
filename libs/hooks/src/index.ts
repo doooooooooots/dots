@@ -1,5 +1,4 @@
 export { default as DialogProvider } from './dialog-provider';
-export { default as HistoryProvider } from './history-provider';
 export * from './settings-provider';
 export { default as SettingsProvider } from './settings-provider';
 //
@@ -7,7 +6,6 @@ export { default as useAsync } from './use-async';
 export { default as useDatagrid } from './use-datagrid';
 export { default as useDialog } from './use-dialog';
 export { default as useEventListener } from './use-event-listener';
-export { default as useHistory } from './use-history';
 export { default as useMounted } from './use-mounted';
 export { default as useSettings } from './use-settings';
 export { default as useStepper } from './use-stepper';

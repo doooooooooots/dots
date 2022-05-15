@@ -20,7 +20,7 @@ function updateOneArgs(singular: string) {
 const updateOneBuilder = (singular: string) => (query: string) => {
   const Singular = ucFirst(singular);
   return gql`
-      query Update${Singular}(${updateOneArgs(singular)}) {
+      mutation Update${Singular}(${updateOneArgs(singular)}) {
         update${Singular}(${PARAMS}) {
           ${query}
         }

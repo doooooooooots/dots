@@ -2,7 +2,7 @@ import { FunctionComponent, useCallback, useState } from 'react';
 import {
   PAGINATION_DEFAULT_PAGE_START,
   PAGINATION_DEFAULT_TAKE,
-} from '../../constants';
+} from '@dots.cool/tokens';
 
 const withSmartPagination = (
   Component: FunctionComponent<any>,

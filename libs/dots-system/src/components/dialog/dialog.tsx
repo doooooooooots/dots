@@ -1,60 +1,91 @@
-import { useCallback, useMemo } from 'react';
+import { useMutation } from '@apollo/client';
+import React, { useMemo } from 'react';
+import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
+import type { GraphQlApiType } from '@dots.cool/schemas';
+import DEFAULT_DATAGRID_DIALOGS_COMPONENTS from '../dialog-default';
 
-import { ConfirmModalWithPresets } from '../../modals';
+import {
+  MutationFunctionOptions,
+  OperationVariables,
+  DefaultContext,
+  ApolloCache,
+} from '@apollo/client';
 
-import defaultDialogComponents from '../default-dialogs';
+export type OnSubmitType = (
+  options?:
+    | MutationFunctionOptions<
+        unknown,
+        OperationVariables,
+        DefaultContext,
+        ApolloCache<any>
+      >
+    | undefined
+) => Promise<unknown>;
 
-function MainDialogs(props: any) {
+export type OnSubmitCallbackType = (datas?: any) => void;
+
+export interface ModalComponentProps {
+  target: string[] | unknown;
+  onSubmit: OnSubmitType;
+  onSubmitCallback: OnSubmitCallbackType;
+  onCancel: () => void;
+  onClose: () => void;
+}
+
+type MainDialogsPropsType = {
+  target: string[] | unknown;
+  query: string;
+  graphql: GraphQlApiType;
+  lang?: string;
+  open: typeof GRAPHQL_ACTIONS[keyof typeof GRAPHQL_ACTIONS] | '';
+  onSubmitCallback: OnSubmitCallbackType;
+  onClose: () => void;
+  components?: {
+    [key in typeof GRAPHQL_ACTIONS[keyof typeof GRAPHQL_ACTIONS]]: React.FC<ModalComponentProps>;
+  };
+};
+
+function MainDialogs(props: MainDialogsPropsType) {
   const {
-    graphql,
-    query,
+    target,
+    query, // graphql query for answer
+    graphql, // list of graphql schema
     lang,
-    open,
-    selectionModel,
+    open, // is modal open ?
     onSubmitCallback,
     onClose,
-    components,
+    components = {}, // For further customization
   } = props;
 
-  // *Requests
-  const requests: any = useMemo(
-    () =>
-      Object.keys(graphql).reduce(
-        (acc, key) => ({
-          ...acc,
-          [key]: graphql[key](query, lang),
-        }),
-        {}
-      ),
-    [graphql, lang, query]
-  );
+  let action = graphql[open];
+  if (!action) {
+    if (open.endsWith('_one')) action = graphql[GRAPHQL_ACTIONS.UpdateOne];
+    if (open.endsWith('_many')) action = graphql[GRAPHQL_ACTIONS.UpdateMany];
+  }
+  const mutation = useMemo(() => action(query, !!lang), [query, action, lang]);
+  const [onSubmit] = useMutation(mutation);
 
-  // *Components
   const mergedComponents = useMemo(
     () => ({
-      ...defaultDialogComponents,
+      ...DEFAULT_DATAGRID_DIALOGS_COMPONENTS,
       ...components,
     }),
     [components]
   );
 
-  const LogicComponent = mergedComponents[open];
-  const ContainerComponent = useCallback(
-    (props) => <ConfirmModalWithPresets {...props} variant={open} />,
-    [open]
-  );
+  const LogicComponent = open && mergedComponents[open];
 
-  if (!open) return null;
+  if (!LogicComponent || !mutation) return null;
 
   return (
     <LogicComponent
       // Send to user modal logic
-      request={requests[open]}
-      targets={selectionModel}
+      target={target}
+      onSubmit={onSubmit}
       onClose={onClose}
-      Component={ContainerComponent}
       // Send to system modal logic
       onSubmitCallback={onSubmitCallback}
+      onCancel={onClose}
     />
   );
 }

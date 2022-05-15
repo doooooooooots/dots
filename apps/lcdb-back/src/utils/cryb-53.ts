@@ -28,4 +28,4 @@ const cyrb53 = (key, seed = 0) => {
   return E * (F & h2) + (h1 >>> 0);
 };
 
-export default cyrb53
+export default cyrb53;

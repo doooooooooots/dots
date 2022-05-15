@@ -1,2 +1,2 @@
-export { default as createDetails } from '../../../../apps/__tmp__/create-details';
-export { default as createPageSingle } from './dots-single-page';
+export { default as DotsIndexPage } from './dots-index-page';
+export { default as DotsSinglePage } from './dots-single-page';

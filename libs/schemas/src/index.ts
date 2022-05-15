@@ -1,1 +1,2 @@
-export { default as createSchema } from './create-schema';
+export * from './index.d';
+export { default as createGraphQlApi } from './create-schema';

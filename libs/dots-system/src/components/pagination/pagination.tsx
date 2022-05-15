@@ -1,3 +1,4 @@
+import { PAGINATION_DEFAULT_AVAILABLE_TAKES } from '@dots.cool/tokens';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
@@ -13,7 +14,6 @@ import {
 import { Box } from '@mui/system';
 import { ceil } from 'lodash';
 import React, { useCallback } from 'react';
-import { PAGINATION_DEFAULT_AVAILABLE_TAKES } from '../../constants';
 
 function MainPagination(props: any) {
   const {

@@ -1,23 +1,25 @@
-interface onActionClickPropsType {
+export * from './schemas/index.d';
+
+export interface onActionClickPropsType {
   path: string;
   title: string;
   component: React.ReactNode;
   componentProps: actionComponentPropsType;
 }
 
-interface actionComponentPropsType {
+export interface actionComponentPropsType {
   onSubmitCallback: () => void;
 }
-interface actionSuccessType {
+export interface actionSuccessType {
   onSubmitCallback: () => void;
 }
 
-interface actionPropsType {
+export interface actionPropsType {
   title: string;
   path: string;
 }
 
-interface MainFilterbar {
+export interface MainFilterbarType {
   filterList: string[];
   actionText: string;
   actionProps: actionPropsType;

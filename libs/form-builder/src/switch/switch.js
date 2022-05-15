@@ -3,6 +3,7 @@ import { Switch as MuiSwitch } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import FormGroup from '../group/form-group';
 import Label from '../label/label';
+import withMiddleware from '../with-middleware/with-middleware';
 
 function Switch({ label, control, name, ...rest }) {
   return (
@@ -12,7 +13,11 @@ function Switch({ label, control, name, ...rest }) {
         name={name}
         control={control}
         render={({ field }) => (
-          <MuiSwitch onChange={(e) => field.onChange(e.target.checked)} checked={field.value} {...rest} />
+          <MuiSwitch
+            onChange={(e) => field.onChange(e.target.checked)}
+            checked={field.value}
+            {...rest}
+          />
         )}
       />
     </FormGroup>
@@ -20,3 +25,4 @@ function Switch({ label, control, name, ...rest }) {
 }
 
 export default Switch;
+export const switchInput = withMiddleware(Switch);

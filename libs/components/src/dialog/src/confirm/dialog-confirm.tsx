@@ -1,12 +1,12 @@
 import { Dialog as MuiDialog, Stack } from '@mui/material';
 
-function Dialog(props) {
-  const { children, open, onClose } = props;
+function Dialog(props: any) {
+  const { children, open, onClose, maxWidth = 'md' } = props;
 
   return (
     <MuiDialog
       {...props}
-      maxWidth="md"
+      maxWidth={maxWidth}
       open={open}
       onClose={onClose}
       PaperProps={{ sx: { bgcolor: 'neutral.25', p: 2 } }}

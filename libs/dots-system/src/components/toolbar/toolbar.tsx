@@ -13,18 +13,11 @@ import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import DeleteIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import BackupOutlinedIcon from '@mui/icons-material/BackupOutlined';
 import CloudOffOutlinedIcon from '@mui/icons-material/CloudOffOutlined';
-import {
-  UPDATE_MANY,
-  DELETE_MANY,
-  MOVE,
-  PUBLISH,
-  UNLIST,
-  UNPUBLISH,
-} from '@dots.cool/tokens';
+import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
 import { useCallback } from 'react';
 import SelectViewMode from '../select-view-mode/select-view-mode';
 
-const ToolbarButton = (props) => {
+const ToolbarButton = (props: any) => {
   const { children, startIcon, onClick, disabled, color = 'primary' } = props;
   return (
     <Button
@@ -38,7 +31,7 @@ const ToolbarButton = (props) => {
   );
 };
 
-function ToolbarData(props) {
+function ToolbarData(props: any) {
   const { selectionModel, onActionClick, viewMode, onViewModeChange } = props;
 
   const handleButtonClick = useCallback(
@@ -68,40 +61,40 @@ function ToolbarData(props) {
         {!isEmpty(selectionModel) && (
           <Stack direction="row" alignItems="center">
             <ToolbarButton
-              onClick={handleButtonClick(UPDATE_MANY)}
+              onClick={handleButtonClick(GRAPHQL_ACTIONS.UpdateMany)}
               startIcon={<EditOutlinedIcon />}
             >
               Modifier
             </ToolbarButton>
             <ToolbarButton
-              onClick={handleButtonClick(MOVE)}
+              onClick={handleButtonClick(GRAPHQL_ACTIONS.MoveMany)}
               startIcon={<CallSplitIcon />}
             >
               Déplacer
             </ToolbarButton>
             <ToolbarButton
-              onClick={handleButtonClick(PUBLISH)}
+              onClick={handleButtonClick(GRAPHQL_ACTIONS.PublishMany)}
               startIcon={<BackupOutlinedIcon />}
             >
               Publier
             </ToolbarButton>
             <ToolbarButton
               color="warning"
-              onClick={handleButtonClick(UNPUBLISH)}
+              onClick={handleButtonClick(GRAPHQL_ACTIONS.UnpublishMany)}
               startIcon={<CloudOffOutlinedIcon />}
             >
               Dépublier
             </ToolbarButton>
             <ToolbarButton
               color="error"
-              onClick={handleButtonClick(UNLIST)}
+              onClick={handleButtonClick(GRAPHQL_ACTIONS.UnlistMany)}
               startIcon={<OutboxIcon />}
             >
               Sortir
             </ToolbarButton>
             <ToolbarButton
               color="error"
-              onClick={handleButtonClick(DELETE_MANY)}
+              onClick={handleButtonClick(GRAPHQL_ACTIONS.DeleteMany)}
               startIcon={<DeleteIcon />}
             >
               Supprimer
@@ -121,7 +114,7 @@ function ToolbarData(props) {
           onViewModeChange={onViewModeChange}
         />
         <ToolbarButton
-          onClick={handleButtonClick(DELETE_MANY)}
+          onClick={handleButtonClick(GRAPHQL_ACTIONS.MoveOne)}
           startIcon={<FullscreenIcon />}
         >
           Plein écran

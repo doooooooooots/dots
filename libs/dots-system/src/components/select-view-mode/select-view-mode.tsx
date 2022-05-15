@@ -1,4 +1,3 @@
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { MenuItem, Select } from '@mui/material';
 import { VIEW_MODES } from '@dots.cool/tokens';
 import { useCallback } from 'react';
@@ -15,7 +14,7 @@ function SelectViewMode(props) {
 
   return (
     <Select value={viewMode} onChange={handleChange}>
-      {VIEW_MODES.map((mode) => (
+      {Object.values(VIEW_MODES).map((mode) => (
         <MenuItem key={mode} value={mode}>
           {mode}
         </MenuItem>

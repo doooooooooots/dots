@@ -1,10 +1,11 @@
+import React from 'react';
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker as MuiDatePicker, LocalizationProvider } from '@mui/lab';
 import { TextField } from '@mui/material';
-import React from 'react';
 import { Controller } from 'react-hook-form';
 import FormGroup from '../group/form-group';
 import Label from '../label/label';
+import withMiddleware from '../with-middleware/with-middleware';
 
 export const DatePicker = ({ label, control, name, ...other }) => {
   return (
@@ -30,3 +31,4 @@ export const DatePicker = ({ label, control, name, ...other }) => {
 };
 
 export default DatePicker;
+export const datePicker = withMiddleware(DatePicker);

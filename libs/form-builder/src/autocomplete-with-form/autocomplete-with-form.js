@@ -1,8 +1,9 @@
 import { Stack, TextField } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import AutocompleteWithLogic from './autocomplete-with-logic';
+import withMiddleware from '../with-middleware/with-middleware';
 
-export default function AutocompleteWithForm(props) {
+function AutocompleteWithForm(props) {
   const { label, name, control, ...rest } = props;
 
   return (
@@ -23,3 +24,5 @@ export default function AutocompleteWithForm(props) {
     </Stack>
   );
 }
+
+export default withMiddleware(AutocompleteWithForm);

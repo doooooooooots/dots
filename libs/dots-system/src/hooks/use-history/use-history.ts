@@ -1,6 +1,7 @@
 /* eslint-disable no-case-declarations */
 import { useCallback, useEffect } from 'react';
 import { useHistoryState } from './history-context';
+import { HistoryItem } from './index.d';
 
 // Hook
 const useHistory = (initialPresent = null) => {
@@ -32,7 +33,8 @@ const useHistory = (initialPresent = null) => {
   }, [canRedo, dispatch]);
 
   const push = useCallback(
-    (newPresent) => dispatch({ type: 'PUSH', payload: newPresent }),
+    (newPresent: HistoryItem) =>
+      dispatch({ type: 'PUSH', payload: newPresent }),
     [dispatch]
   );
 
@@ -42,12 +44,12 @@ const useHistory = (initialPresent = null) => {
   );
 
   const goTo = useCallback(
-    (index) => dispatch({ type: 'GOTO', payload: index }),
+    (index: number) => dispatch({ type: 'GOTO', payload: index }),
     [dispatch]
   );
 
   const close = useCallback(
-    (index) => dispatch({ type: 'CLOSE', payload: index }),
+    (index: number) => dispatch({ type: 'CLOSE', payload: index }),
     [dispatch]
   );
 

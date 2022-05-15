@@ -6,11 +6,11 @@ import Image from 'next/image';
 //ACTIONS
 import { GridActionsCellItem } from '@mui/x-data-grid-pro';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import FieldCountryFlagShow from './fields/field-country-flag-show';
-import FieldConditionShow from './fields/field-condition-show';
+import FieldCountryFlagShow from '../fields/field-country-flag-show';
+import FieldConditionShow from '../fields/field-condition-show';
 import { formatCurrency } from '@dots.cool/utils';
-import FieldIsFirstEdShow from './fields/field-is-first-ed-show';
-import { ButtonOpenDetails } from '@dots.cool/dots-system';
+import FieldIsFirstEdShow from '../fields/field-is-first-ed-show';
+import ButtonOpenDetails from '../components/button-open-details';
 // import { OfferPreviewByStockUnit } from '@components/datagrid/offers-preview-by-stock-unit';
 
 export const STOCK_UNIT_COLUMNS = {

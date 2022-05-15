@@ -1,5 +1,6 @@
-import { Autocomplete, debounce } from '@mui/material';
 import React from 'react';
+import { Autocomplete, debounce } from '@mui/material';
+import withMiddleware from '../with-middleware/with-middleware';
 
 function AutocompleteWithLogic(props) {
   const {
@@ -113,4 +114,4 @@ function AutocompleteWithLogic(props) {
   );
 }
 
-export default AutocompleteWithLogic;
+export default withMiddleware(AutocompleteWithLogic);

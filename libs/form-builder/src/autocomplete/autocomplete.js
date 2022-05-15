@@ -3,8 +3,9 @@ import MuiAutocomplete from '@mui/material/Autocomplete';
 import { Controller } from 'react-hook-form';
 import { TextField } from '@mui/material';
 import FormGroup from '../group/form-group';
+import withMiddleware from '../with-middleware/with-middleware';
 
-export default function Autocomplete({ label, name, control, ...rest }) {
+function Autocomplete({ label, name, control, ...rest }) {
   return (
     <FormGroup>
       <label>{label}</label>
@@ -13,7 +14,7 @@ export default function Autocomplete({ label, name, control, ...rest }) {
           <MuiAutocomplete
             {...field}
             onChange={(_, data) => field.onChange(data)}
-            renderInput={(params) => <TextField {...params} label='Movie' />}
+            renderInput={(params) => <TextField {...params} label="Movie" />}
             {...rest}
           />
         )}
@@ -23,3 +24,6 @@ export default function Autocomplete({ label, name, control, ...rest }) {
     </FormGroup>
   );
 }
+
+export default Autocomplete;
+export const autocomplete = withMiddleware(Autocomplete);

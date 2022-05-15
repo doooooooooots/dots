@@ -9,7 +9,29 @@ import {
 
 import CheckIcon from '@mui/icons-material/Check';
 
-const ConfirmModal = (props: any) => {
+interface ConfirmModalProps {
+  children: React.FC;
+  color:
+    | 'inherit'
+    | 'success'
+    | 'primary'
+    | 'secondary'
+    | 'error'
+    | 'info'
+    | 'warning'
+    | undefined;
+  description: string;
+  icon: JSX.Element;
+  cancelText: string;
+  onCancel: () => void;
+  submitText: string;
+  onSubmit: () => Promise<unknown[]>;
+  onSubmitCallback: (args: unknown[]) => void;
+  textAlign: 'left' | 'center' | 'right';
+  title: string;
+}
+
+const ConfirmModal = (props: ConfirmModalProps) => {
   const {
     children,
     color = 'success',
@@ -50,11 +72,7 @@ const ConfirmModal = (props: any) => {
       {/* ACTIONS */}
       <Divider />
       <DialogActions>
-        <Button
-          onClick={onCancel}
-          variant="outlined"
-          sx={{ color: 'black', borderColor: 'divider' }}
-        >
+        <Button onClick={onCancel} variant="outlined">
           {cancelText}
         </Button>
         <Button

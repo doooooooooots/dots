@@ -1,5 +1,6 @@
 import React from 'react';
 import MuiStack from '@mui/material/Stack';
+import withMiddleware from '../with-middleware/with-middleware';
 
 function Stack({ register = null, control = null, children, ...rest }) {
   return (
@@ -20,4 +21,4 @@ function Stack({ register = null, control = null, children, ...rest }) {
   );
 }
 
-export default Stack;
+export default withMiddleware(Stack);

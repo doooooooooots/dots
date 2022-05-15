@@ -1,10 +1,11 @@
-const SELLER = 1;
-const BUYER = 2;
+// CUSTOMER TYPE
+export const SELLER = 1;
+export const BUYER = 2;
 
-const BOUGHT = 1;
-const PAID = 2;
-const SENT = 4;
-const RECEIVED = 8;
-const LOST = 32;
-const CANCELLED = 128;
-
+// ORDERS
+export const BOUGHT = 1;
+export const PAID = 2;
+export const SENT = 4;
+export const RECEIVED = 8;
+export const LOST = 32;
+export const CANCELLED = 128;

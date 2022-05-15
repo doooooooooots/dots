@@ -1,15 +1,29 @@
+import { useCallback } from 'react';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import { Button, Stack, Typography } from '@mui/material';
-import { useCallback } from 'react';
-import useHistory from '../../hoc/with-smart-history/use-history';
+import useHistory from '../../hooks/use-history';
+import { HistoryItem } from '../../hooks/use-history/index.d';
+import { ActionButtonProps } from '../buttons.d';
 
-function ButtonOpenSingle(props: any) {
-  const { cellText, path, title, Component, componentProps } = props;
+type ButtonOpenSingleProps = HistoryItem &
+  ActionButtonProps & {
+    cellText: string;
+  };
+
+function ButtonOpenSingle(props: ButtonOpenSingleProps): JSX.Element {
+  const {
+    actionText = 'Open',
+    cellText,
+    path,
+    title,
+    Component,
+    componentProps,
+  } = props;
   const { push } = useHistory();
 
   const handleClick = useCallback(() => {
     push({ path, title, Component, componentProps });
-  }, [Component, path, push, title, componentProps]);
+  }, [push, path, title, Component, componentProps]);
 
   return (
     <Stack direction="row" alignItems="center" spacing={1}>
@@ -21,7 +35,7 @@ function ButtonOpenSingle(props: any) {
         variant="outlined"
         size="small"
       >
-        Open
+        {actionText}
       </Button>
     </Stack>
   );

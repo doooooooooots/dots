@@ -1,4 +1,4 @@
-import { CREATE_ONE } from '@dots.cool/tokens';
+import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
 import { Stack } from '@mui/material';
 import React, { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -21,7 +21,7 @@ function Form(props: any) {
     defaultValues,
   });
 
-  const { [CREATE_ONE]: createOne } = context.graphql;
+  const createOne = context.graphql[GRAPHQL_ACTIONS.CreateOne];
   const [onSubmit] = useMutation(createOne(query));
 
   const handleSubmitClick = useCallback(
@@ -31,7 +31,7 @@ function Form(props: any) {
       if (typeof onSubmitSuccessCallback === 'function')
         onSubmitSuccessCallback(res);
     },
-    [onSubmit, onSubmitSuccessCallback]
+    [formatData, onSubmit, onSubmitSuccessCallback]
   );
 
   //* EFFECT - mount & unmount

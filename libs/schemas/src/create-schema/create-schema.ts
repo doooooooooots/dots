@@ -13,37 +13,25 @@ import updateManyBuilder from '../update-many-builder';
 // AGGREGATES
 import countBuilder from '../count-builder';
 
-import {
-  FIND_ONE,
-  FIND_MANY,
-  COUNT,
-  CREATE_ONE,
-  CREATE_MANY,
-  UPDATE_ONE,
-  UPDATE_MANY,
-  DELETE_ONE,
-  DELETE_MANY,
-} from '@dots.cool/tokens';
+// Types
+import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
+import { GraphQlApiType } from './create-schema.d';
 
-const createSchema = (singular: string, plurial: string) => {
+const createGraphQlApi = (
+  singular: string,
+  plurial: string
+): GraphQlApiType => {
   return {
-    singular: singular,
-    plurial: plurial,
-    graphql: {
-      // ONE
-      [FIND_ONE]: findOneBuilder(singular),
-      [CREATE_ONE]: createOneBuilder(singular),
-      [UPDATE_ONE]: updateOneBuilder(singular),
-      [DELETE_ONE]: deleteOneBuilder(singular),
-      // MANY
-      [FIND_MANY]: findManyBuilder(singular, plurial),
-      [CREATE_MANY]: createManyBuilder(singular, plurial),
-      [UPDATE_MANY]: updateManyBuilder(singular, plurial),
-      [DELETE_MANY]: deleteManyBuilder(singular, plurial),
-      // AGGREGATES
-      [COUNT]: countBuilder(singular, plurial),
-    },
+    [GRAPHQL_ACTIONS.FindOne]: findOneBuilder(singular),
+    [GRAPHQL_ACTIONS.CreateOne]: createOneBuilder(singular),
+    [GRAPHQL_ACTIONS.UpdateOne]: updateOneBuilder(singular),
+    [GRAPHQL_ACTIONS.DeleteOne]: deleteOneBuilder(singular),
+    [GRAPHQL_ACTIONS.FindMany]: findManyBuilder(singular, plurial),
+    [GRAPHQL_ACTIONS.CreateMany]: createManyBuilder(singular, plurial),
+    [GRAPHQL_ACTIONS.UpdateMany]: updateManyBuilder(singular, plurial),
+    [GRAPHQL_ACTIONS.DeleteMany]: deleteManyBuilder(singular, plurial),
+    [GRAPHQL_ACTIONS.Count]: countBuilder(singular, plurial),
   };
 };
 
-export default createSchema;
+export default createGraphQlApi;
