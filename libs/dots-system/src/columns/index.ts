@@ -12,7 +12,7 @@ export { default as people } from './people';
 export { default as pnl } from './pnl';
 export { default as progress } from './progress';
 export { default as rating } from './rating';
-export { default as relashionship } from './relashionship';
+export { relationshipMany, relationshipSingle } from './relationship';
 export { default as select } from './select';
 export { default as text } from './text';
 export { default as timestamp } from './timestamp';

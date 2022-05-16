@@ -1,6 +1,6 @@
 export const GRAPHQL_REQUESTS = {
   FindOne: 'graphql_action_find_one',
-  FindMany: 'graphql_action_find_one',
+  FindMany: 'graphql_action_find_many',
   CreateOne: 'graphql_action_create_one',
   CreateMany: 'graphql_action_create_many',
   UpdateOne: 'graphql_action_update_one',

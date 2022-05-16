@@ -1,36 +1,36 @@
-import uniqueId from '../../columns/unique-id';
-import text from '../../columns/text';
-import relashionship from '../../columns/relashionship';
-import schema from './schema';
+/* eslint-disable */
+import * as yup from 'yup';
+import { text, relationship } from './builder';
+import * as forms from '@dots.cool/form-builder';
 
-// types
-import { EntitySchema } from '../index.d';
-
-const Single = () => <div>Single</div>;
-const Links = () => <div>Links</div>;
-
-const storage: EntitySchema = schema({
+const storage = {
   singular: 'storage',
   plurial: 'storages',
-  defaultColumns: ['name', 'game', 'stockUnits'],
-  defaultSingle: [],
-  columns: {
-    name: uniqueId({
-      field: 'name',
-      Component: Single,
+  fields: {
+    name: text({
+      isIndexed: true,
+      defaultValue: 'lololol',
+      validation: yup.string().required(),
+      ui: {
+        input: forms.textField({}),
+      },
     }),
-    game: text({
-      field: 'game',
+    game: relationship({
       query: `game {id name}`,
-      valueGetter: ({ row }) => `${row?.game?.name || '-'}`,
+      valueGetter: ({ row }) => row.game.name,
+      filterQuery: ({ row }) => ({
+        where: {
+          id: row.game.id,
+        },
+      }),
+      many: false,
     }),
-    stockUnits: relashionship({
-      field: 'stockUnit',
-      query: `stockUnitsCount`,
-      count: ({ row }) => row.stockUnitsCount,
-      Component: Links,
-    }),
+    // stockUnits: relationship({
+    //   field: 'stockUnit',
+    //   query: `stockUnitsCount`,
+    //   count: ({ row }) => row.stockUnitsCount,
+    // }),
   },
-});
+};
 
 export default storage;

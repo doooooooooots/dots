@@ -1,32 +1,37 @@
 import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
-import { Stack } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import React, { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
+import { withSmartForm } from '../with-smart-form';
 
 function Form(props: any) {
   const {
     query = ' id',
     context,
-    defaultValues,
+    defaultValues: _defaultValues,
     onSubmitSuccessCallback,
     onUnmount,
     children,
     spacing = 0,
-    formatData,
+    formatData = (data) => data,
     direction = 'column',
   } = props;
+
+  const { graphql, defaultValues } = context;
 
   const { control, register, handleSubmit, getValues } = useForm({
     defaultValues,
   });
 
-  const createOne = context.graphql[GRAPHQL_ACTIONS.CreateOne];
+  const createOne = graphql[GRAPHQL_ACTIONS.CreateOne];
   const [onSubmit] = useMutation(createOne(query));
 
   const handleSubmitClick = useCallback(
     async (data) => {
-      const { data: res } = await onSubmit({ variables: formatData(data) });
+      const { data: res } = await onSubmit({
+        variables: { data: formatData(data) },
+      });
 
       if (typeof onSubmitSuccessCallback === 'function')
         onSubmitSuccessCallback(res);
@@ -59,8 +64,9 @@ function Form(props: any) {
             : child;
         })}
       </Stack>
+      <Button type="submit">OK</Button>
     </form>
   );
 }
 
-export default Form;
+export default withSmartForm(Form);

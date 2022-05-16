@@ -15,9 +15,10 @@ interface withMiddlewareProps extends ComponentConfig {
 const withMiddleware =
   (Component: React.FC<withMiddlewareProps>) =>
   (config: ComponentConfig) =>
-  (args: withMiddlewareProps) => {
-    const ComponentWithMiddleware = (props: unknown) => {
-      return <Component {...props} {...config} {...args} />;
+  ({ name, ...args }: withMiddlewareProps) => {
+    const ComponentWithMiddleware = (props) => {
+      const mergedProps = { ...props, ...config, ...args, name };
+      return <Component {...mergedProps} />;
     };
     return ComponentWithMiddleware;
   };

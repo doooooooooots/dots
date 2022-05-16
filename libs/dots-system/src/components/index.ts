@@ -1,5 +1,5 @@
-export { default as ButtonOpenDetails } from './button-open-details';
 export { default as ButtonOpenSingle } from './button-open-single';
+export { default as ButtonOpenRelation } from './button-open-relation';
 export { default as Cards } from './cards';
 export { default as Datagrid } from './datagrid';
 export { default as Dialog } from './dialog';

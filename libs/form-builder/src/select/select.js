@@ -4,7 +4,15 @@ import FormGroup from '../group/form-group';
 import Label from '../label/label';
 import withMiddleware from '../with-middleware/with-middleware';
 
-function Select({ label, control = null, options, name, ...rest }) {
+function Select({
+  label,
+  name,
+  control = null,
+  register,
+  options,
+  context,
+  ...rest
+}) {
   return (
     <FormGroup>
       <Label label={label} />

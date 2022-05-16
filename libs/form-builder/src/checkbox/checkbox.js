@@ -1,22 +1,24 @@
-import React from 'react';
-import { Checkbox as MuiCheckbox } from '@mui/material';
+import { Checkbox as MuiCheckbox, FormControlLabel } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import FormGroup from '../group/form-group';
-import Label from '../label/label';
 import withMiddleware from '../with-middleware/with-middleware';
 
-function Checkbox({ label, control, name, ...other }) {
+function Checkbox({ label, control, name, register, context, ...other }) {
   return (
     <FormGroup>
-      <Label label={label} />
       <Controller
         name={name}
         control={control}
         render={({ field }) => (
-          <MuiCheckbox
-            onChange={(e) => field.onChange(e.target.checked)}
-            checked={field.value}
-            {...other}
+          <FormControlLabel
+            control={
+              <MuiCheckbox
+                {...other}
+                onChange={(e) => field.onChange(e.target.checked)}
+                checked={field.value}
+              />
+            }
+            label={label}
           />
         )}
       />

@@ -9,7 +9,15 @@ import FormGroup from '../group/form-group';
 import Label from '../label/label';
 import withMiddleware from '../with-middleware/with-middleware';
 
-function RadioGroup({ label, control, options, name, ...rest }) {
+function RadioGroup({
+  label,
+  name,
+  control,
+  register,
+  options,
+  context,
+  ...rest
+}) {
   return (
     <FormGroup>
       <Label label={label} />

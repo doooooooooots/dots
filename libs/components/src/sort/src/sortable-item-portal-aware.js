@@ -4,7 +4,14 @@ import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 const PortalAwareItem = (props) => {
-  const { provided, snapshot, SortItemComponent, item } = props;
+  const {
+    provided,
+    snapshot,
+    SortItemComponent,
+    item,
+    onSortOrderChange,
+    sortableFields,
+  } = props;
   const usePortal = snapshot.isDragging;
 
   const [isMounted, setIsMounted] = useState(false);
@@ -23,7 +30,15 @@ const PortalAwareItem = (props) => {
       <ListItemIcon>
         <DragIndicatorSharpIcon fontSize="small" />
       </ListItemIcon>
-      <ListItemText primary={<SortItemComponent item={item} />} />
+      <ListItemText
+        primary={
+          <SortItemComponent
+            item={item}
+            onChange={onSortOrderChange}
+            sortableFields={sortableFields}
+          />
+        }
+      />
     </ListItem>
   );
 

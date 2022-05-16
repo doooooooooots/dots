@@ -3,6 +3,7 @@ import { DotsColumnProps } from '../types';
 
 const actions = (props: DotsColumnProps): GridColDef => ({
   ...props,
+  flex: 1,
   type: 'actions',
 });
 

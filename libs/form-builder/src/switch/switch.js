@@ -5,7 +5,7 @@ import FormGroup from '../group/form-group';
 import Label from '../label/label';
 import withMiddleware from '../with-middleware/with-middleware';
 
-function Switch({ label, control, name, ...rest }) {
+function Switch({ label, name, control, register, context, ...rest }) {
   return (
     <FormGroup>
       <Label label={label} />

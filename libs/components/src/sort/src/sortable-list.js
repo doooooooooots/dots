@@ -3,7 +3,12 @@ import { Draggable, Droppable } from 'react-beautiful-dnd';
 import PortalAwareItem from './sortable-item-portal-aware';
 
 function SortableList(props) {
-  const { list = [], SortItemComponent } = props;
+  const {
+    list = [],
+    SortItemComponent,
+    onSortOrderChange,
+    sortableFields,
+  } = props;
   return (
     <Droppable droppableId="droppable">
       {(droppableProvided) => (
@@ -21,6 +26,8 @@ function SortableList(props) {
                   provided={draggableProvided}
                   snapshot={draggableSnapshot}
                   SortItemComponent={SortItemComponent}
+                  onSortOrderChange={onSortOrderChange}
+                  sortableFields={sortableFields}
                 />
               )}
             </Draggable>

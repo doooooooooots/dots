@@ -5,7 +5,7 @@ import FormGroup from '../group/form-group';
 import Label from '../label/label';
 import withMiddleware from '../with-middleware/with-middleware';
 
-function Slider({ control, label, name, ...other }) {
+function Slider({ label, name, control, register, context, ...other }) {
   return (
     <FormGroup>
       <Label label={label} />

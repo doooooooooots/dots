@@ -2,12 +2,13 @@ import { useQuery } from '@apollo/client';
 import { Box, Divider, Stack } from '@mui/material';
 import { DialogConfirm, LayoutMain } from '@dots.cool/components';
 import { useMemo } from 'react';
-import _defaultComponents from '../components/default-components/default-components';
 import withDotsSystem from '../hoc/with-dots-system';
 import { GRAPHQL_REQUESTS, VIEW_MODES } from '@dots.cool/tokens';
+import DEFAULT_COMPONENTS from '../components/default-components/default-components';
 
 // Types
-import { DotsIndexPageProps } from './dots-index-page.d';
+import { DotsIndexPageProps } from './types/dots-index-page';
+import { isEmpty } from 'lodash';
 
 const DotsIndexPage = (props: DotsIndexPageProps): JSX.Element => {
   const {
@@ -56,8 +57,9 @@ const DotsIndexPage = (props: DotsIndexPageProps): JSX.Element => {
   } = props;
 
   //* COLUMNS & QUERY
-  const _columnNames = _columns || context.defaultColumns;
-  const query = _query || context.defaultFindManyQuery;
+  const _columnNames =
+    _columns || context.views[GRAPHQL_REQUESTS.FindMany].fieldNames;
+  const query = _query || context.views[GRAPHQL_REQUESTS.FindMany].query;
 
   const columns = _columnNames.map(
     (columnName: string) => context.columns[columnName]
@@ -65,6 +67,7 @@ const DotsIndexPage = (props: DotsIndexPageProps): JSX.Element => {
 
   //* QUERIES
   const { graphql, plurial } = context;
+
   const {
     [GRAPHQL_REQUESTS.FindMany]: findMany,
     [GRAPHQL_REQUESTS.Count]: countQuery,
@@ -75,8 +78,12 @@ const DotsIndexPage = (props: DotsIndexPageProps): JSX.Element => {
     [query, findMany, lang]
   );
 
+  const _sort = sort.map(({ field, direction }) => ({
+    [field]: direction,
+  }));
+
   // -- Variables
-  const variables = { skip, take, where: {}, orderBy: sort, lang: '' };
+  const variables = { skip, take, where: {}, orderBy: _sort, lang: '' };
   if (lang) {
     variables.lang = lang;
   }
@@ -94,11 +101,15 @@ const DotsIndexPage = (props: DotsIndexPageProps): JSX.Element => {
   // *COMPONENTS
   const mergedComponents = useMemo(
     () => ({
-      ..._defaultComponents,
+      ...DEFAULT_COMPONENTS,
       ...components,
     }),
     [components]
   );
+
+  //* RENDER
+  if (error || isEmpty(columns))
+    return <LayoutMain>{`Error! oups`}</LayoutMain>;
 
   // -- COMPONENT-PROPS
   // -- Extract components
@@ -159,19 +170,18 @@ const DotsIndexPage = (props: DotsIndexPageProps): JSX.Element => {
     </>
   );
 
-  //* RENDER
-  if (error) return <LayoutMain>{`Error! ${error.message}`}</LayoutMain>;
-
   return (
     <>
       {variant === 'details' && (
         <Stack direction="column" height="100%" overflow="hidden">
           <ViewBar
+            context={context}
             views={views}
             currentView={currentView}
             onViewChange={onViewChange}
           />
           <FilterBar
+            context={context}
             // Sort
             sort={sort}
             sortPinned={sortPinned}
@@ -188,6 +198,7 @@ const DotsIndexPage = (props: DotsIndexPageProps): JSX.Element => {
           />
           <Divider />
           <Toolbar
+            context={context}
             // Selection actions
             selectionModel={selectionModel}
             onActionClick={onOpenDialog}
@@ -202,6 +213,7 @@ const DotsIndexPage = (props: DotsIndexPageProps): JSX.Element => {
       {variant === 'preview' && (
         <>
           <Topbar
+            context={context}
             title={topbarProps?.title || plurial}
             actionText={topbarProps?.actionText}
             actionPage={topbarProps?.actionPage}
@@ -217,6 +229,7 @@ const DotsIndexPage = (props: DotsIndexPageProps): JSX.Element => {
         <DialogConfirm open={!!open} onClose={onCloseDialog}>
           {open && (
             <DialogContent
+              context={context}
               target={selectionModel}
               query={query}
               graphql={graphql}

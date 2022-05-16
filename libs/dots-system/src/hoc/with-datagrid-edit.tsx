@@ -92,7 +92,7 @@ export default function withEditMode(Component: any) {
         field: 'actions',
         type: 'actions',
         headerName: 'Actions',
-        width: 100,
+        width: 170,
         cellClassName: 'actions',
         getActions: ({ id }) => {
           const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;

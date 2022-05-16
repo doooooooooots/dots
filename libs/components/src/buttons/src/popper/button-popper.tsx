@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Popper from '@mui/material/Popper';
 import Grow from '@mui/material/Grow';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box, Button, ClickAwayListener } from '@mui/material';
 
 // https://mui.com/components/menus/#menulist-composition
@@ -10,10 +11,12 @@ export default function ButtonPopper(props) {
     color = 'neutral',
     variant = 'text',
     placement = 'bottom-start',
+    icon,
     PopperComponent,
     componentProps = {},
     ...other
   } = props;
+
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -31,15 +34,31 @@ export default function ButtonPopper(props) {
   const { popper = {}, grow = {}, popperComponent = {} } = componentProps;
   return (
     <>
-      <Button
-        aria-describedby={id}
-        color={color}
-        variant={variant}
-        onClick={handleClick}
-        {...other}
-      >
-        {children}
-      </Button>
+      {variant !== 'chip' ? (
+        <Button
+          aria-describedby={id}
+          color={color}
+          variant={variant}
+          onClick={handleClick}
+          {...other}
+        >
+          {children}
+        </Button>
+      ) : (
+        <Button
+          aria-describedby={id}
+          color={color}
+          size="small"
+          variant={'outlined'}
+          onClick={handleClick}
+          startIcon={icon}
+          endIcon={<ExpandMoreIcon />}
+          sx={{ borderRadius: 20 }}
+          {...other}
+        >
+          {children}
+        </Button>
+      )}
       <Popper
         id={id}
         open={!!open}

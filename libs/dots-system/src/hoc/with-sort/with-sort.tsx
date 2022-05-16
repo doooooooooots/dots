@@ -5,7 +5,7 @@ const withSmartSort = (
 ): FunctionComponent<any> => {
   const SortableComponent = (props: any) => {
     const { sort: initSort } = props;
-    const [sort, setSort] = useState(initSort);
+    const [sort, setSort] = useState(initSort || []);
     const [sortPinned, setSortPinned] = useState([]);
 
     return (

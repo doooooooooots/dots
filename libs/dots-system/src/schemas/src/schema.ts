@@ -1,12 +1,20 @@
 import { EntitySchema, EntitySchemaEnhanced } from '../index.d';
 import { createGraphQlApi } from '@dots.cool/schemas';
 import * as columnBuilder from '../../columns';
+import { GRAPHQL_REQUESTS } from '@dots.cool/tokens';
+
+const CREATE_ONE = GRAPHQL_REQUESTS.CreateOne;
+const FIND_ONE = GRAPHQL_REQUESTS.FindOne;
+const FIND_MANY = GRAPHQL_REQUESTS.FindMany;
 
 function createViews(singular, fields) {
   if (!fields) return {};
   return Object.entries(fields).reduce(
     (acc, [fieldName, fieldConfig]) => {
       const {
+        query,
+        needsContext,
+        sortable,
         defaultValue,
         validation,
         isIndexed,
@@ -22,25 +30,30 @@ function createViews(singular, fields) {
         description: `form.${singular}.${fieldName}.description`,
       });
 
+      // Add field to query and columns
+      [CREATE_ONE, FIND_ONE, FIND_MANY].forEach((request) => {
+        if (!hideIn.includes(request)) {
+          acc.views[request].fieldNames.add(fieldName);
+          if (sortable !== false) {
+            acc.sortableFields.add(fieldName);
+          }
+        }
+        acc.views[request].query.add(query ?? fieldName);
+      });
+
       // Create column definition except for indexed
-      let column;
       if (isIndexed && !acc.indexColumn) {
         acc.indexColumn = fieldName;
-        return acc;
       } else {
-        column = ui.column({
+        const column = ui.column({
           field: fieldName,
           headerName: `column.${singular}.${fieldName}.headerName`,
         });
+        acc.columns[fieldName] = column;
       }
 
-      ['createOne', 'findOne', 'findMany'].forEach((request) => {
-        if (!hideIn.includes(request))
-          acc.views[request].fieldNames.add(fieldName);
-        acc.views[request].query.add(fieldName);
-      });
+      if (needsContext === true) acc.needsContext.add(fieldName);
 
-      if (column) acc.columns[fieldName] = column;
       acc.inputs[fieldName] = Input;
       acc.validations[fieldName] = validation;
       acc.defaultValues[fieldName] = defaultValue;
@@ -50,23 +63,25 @@ function createViews(singular, fields) {
     {
       indexColumn: '', // allow 'open' button and automatic generation of single page
       views: {
-        createOne: {
+        [CREATE_ONE]: {
           fieldNames: new Set(),
           query: new Set(),
         },
-        findOne: {
+        [FIND_ONE]: {
           fieldNames: new Set(),
-          query: new Set(),
+          query: new Set(['id']),
         },
-        findMany: {
+        [FIND_MANY]: {
           fieldNames: new Set(),
-          query: new Set(),
+          query: new Set(['id']),
         },
       }, // allow page generations
       columns: {}, // to be extracted form queries
       inputs: {}, // to be extracted form fields
       validations: {}, // to be given to react hook form
       defaultValues: {}, // to be given to react hook form
+      sortableFields: new Set(),
+      needsContext: new Set(),
     }
   );
 }
@@ -81,15 +96,31 @@ const schema = (config: EntitySchema): EntitySchemaEnhanced => {
   const datas = createViews(singular, fields);
   if (!datas) return config;
 
-  const { indexColumn, views, columns, inputs, validations, defaultValues } =
-    datas;
+  const {
+    indexColumn,
+    views,
+    columns,
+    inputs,
+    validations,
+    defaultValues,
+    sortableFields,
+    needsContext,
+  } = datas;
 
   // Create indexedColumn with view
   if (columns) {
     columns[indexColumn] = columnBuilder.uniqueId({
-      name:
+      field: indexColumn,
       Component: 'test',
-    })(indexColumn);
+    })({});
+  }
+
+  // Flatten Queries
+  if (views) {
+    Object.values(views).forEach((view) => {
+      view.fieldNames = [...view.fieldNames];
+      view.query = [...view.query].join(' ');
+    });
   }
 
   return {
@@ -97,6 +128,8 @@ const schema = (config: EntitySchema): EntitySchemaEnhanced => {
     plurial,
     graphql,
     indexColumn,
+    sortableFields: [...sortableFields],
+    needsContext: [...needsContext],
     views,
     columns,
     inputs,

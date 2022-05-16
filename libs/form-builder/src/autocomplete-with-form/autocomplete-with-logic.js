@@ -1,23 +1,35 @@
 import React from 'react';
 import { Autocomplete, debounce } from '@mui/material';
 import withMiddleware from '../with-middleware/with-middleware';
+import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
+import { useQuery } from '@apollo/client';
 
-function AutocompleteWithLogic(props) {
+function AutocompleteWithLogic(props, ref) {
   const {
-    options,
+    context,
+    options = [],
     optionKey,
     onChange,
+    onCreateNew,
     onInputChange,
     formTitle,
     renderFormComponent,
     ...rest
   } = props;
 
-  const { push } = useHistory();
-
   // *FUNC -- When user is changing input value
   // -> Request is made 'onInputChange'
   // -> options is changed - component is re-rendered
+
+  const { indexColumn, graphql } = context;
+  const makeFindManyQuery = graphql[GRAPHQL_ACTIONS.FindMany];
+  const findManyQuery = makeFindManyQuery(
+    indexColumn === 'id' ? [indexColumn] : ['id', indexColumn]
+  );
+
+  const { data } = useQuery(findManyQuery, {
+    variables: {},
+  });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedStorageSearch = React.useCallback(
@@ -50,13 +62,7 @@ function AutocompleteWithLogic(props) {
         event.preventDefault();
         let _newValue = newValue;
         if (newValue.inputValue) _newValue = newValue.inputValue;
-        push({
-          path: `create`,
-          title: formTitle,
-          component: renderFormComponent({
-            initialValues: { [optionKey]: _newValue },
-          }),
-        });
+        onCreateNew({ [optionKey]: _newValue });
 
         // -- CHOOSE
         // User selected an option
@@ -64,7 +70,7 @@ function AutocompleteWithLogic(props) {
         onChange(event, newValue);
       }
     },
-    [push, renderFormComponent, optionKey, onChange, formTitle]
+    [onCreateNew, optionKey, onChange]
   );
 
   // *FUNC -- filterSelectedOptions
@@ -99,10 +105,11 @@ function AutocompleteWithLogic(props) {
   // *RENDER
   return (
     <Autocomplete
+      ref={ref}
       onInputChange={handleInputChange}
       onChange={handleChange}
       filterOptions={filterOptions}
-      options={options}
+      options={data}
       getOptionLabel={getOptionLabel}
       renderOption={(props, option) => <li {...props}>{option[optionKey]}</li>}
       selectOnFocus
@@ -114,4 +121,5 @@ function AutocompleteWithLogic(props) {
   );
 }
 
-export default withMiddleware(AutocompleteWithLogic);
+export default React.forwardRef(AutocompleteWithLogic);
+export const autocompleteWithLogic = withMiddleware(AutocompleteWithLogic);

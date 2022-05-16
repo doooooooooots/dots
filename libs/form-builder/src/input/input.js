@@ -4,7 +4,7 @@ import FormGroup from '../group/form-group';
 import Label from '../label/label';
 import withMiddleware from '../with-middleware/with-middleware';
 
-function Input({ label, control = null, name, ...rest }) {
+function Input({ label, control = null, register, name, context, ...rest }) {
   return (
     <FormGroup>
       <Label label={label} />

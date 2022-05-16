@@ -5,7 +5,7 @@ import { TextField } from '@mui/material';
 import FormGroup from '../group/form-group';
 import withMiddleware from '../with-middleware/with-middleware';
 
-function Autocomplete({ label, name, control, ...rest }) {
+function Autocomplete({ label, name, control, register, context, ...rest }) {
   return (
     <FormGroup>
       <label>{label}</label>

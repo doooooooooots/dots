@@ -4,7 +4,14 @@ import FormGroup from '../group/form-group';
 import Label from '../label/label';
 import withMiddleware from '../with-middleware/with-middleware';
 
-function TextField({ label, control = null, name, ...rest }) {
+function TextField({
+  label,
+  name,
+  control = null,
+  register,
+  context,
+  ...rest
+}) {
   return (
     <FormGroup>
       <Label label={label} />

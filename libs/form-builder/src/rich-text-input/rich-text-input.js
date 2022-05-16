@@ -4,7 +4,14 @@ import FormGroup from '../group/form-group';
 import Label from '../label/label';
 import withMiddleware from '../with-middleware/with-middleware';
 
-function RichTextInput({ label, control = null, name, ...rest }) {
+function RichTextInput({
+  label,
+  name,
+  control = null,
+  register,
+  context,
+  ...rest
+}) {
   return (
     <FormGroup>
       <Label label={label} />

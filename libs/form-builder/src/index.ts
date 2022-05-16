@@ -18,6 +18,7 @@ export { default as Textfield } from './textfield';
 
 // Component Generators
 export { autocomplete } from './autocomplete';
+export { autocompleteWithForm } from './autocomplete-with-form';
 export { checkbox } from './checkbox';
 export { datePicker } from './date-picker';
 export { imageInput } from './image-input';
@@ -30,5 +31,4 @@ export { switchInput } from './switch';
 export { textField } from './textfield';
 
 export * from './with-memory';
-export * from './with-schema';
 export * from './with-smart-form';

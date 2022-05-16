@@ -1,8 +1,9 @@
 import AddIcon from '@mui/icons-material/Add';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import MoreHorizSharpIcon from '@mui/icons-material/MoreHorizSharp';
+import SortIcon from '@mui/icons-material/Sort';
 import { Button, Chip, Divider, IconButton, Stack } from '@mui/material';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   SortablePopper,
   ButtonPopper,
@@ -10,9 +11,14 @@ import {
   SortField,
 } from '@dots.cool/components';
 import useHistory from '../../hooks/use-history';
+import { isEmpty } from 'lodash';
+import withContext from '../../hoc/with-context';
+import DotsFormCreate from '../../pages/dots-from-create';
+import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
 
 function MainFilterbar(props: any) {
   const {
+    context,
     // Sort
     sort,
     sortPinned,
@@ -31,19 +37,37 @@ function MainFilterbar(props: any) {
   //* HOOKS
   const { push, undo } = useHistory();
 
-  //* ACTIONS
+  const { views, sortableFields } = context;
+  const {
+    [GRAPHQL_ACTIONS.FindMany]: { fieldNames },
+  } = views;
+
+  //* Action button
+  const _actionPage = useMemo(() => {
+    if (isEmpty(actionPage)) {
+      return {
+        title: 'create',
+        path: 'create',
+        Component: withContext('storage')(DotsFormCreate),
+        width: 'md',
+      };
+    }
+    return actionPage;
+  }, []);
+
   const handleClickAction = useCallback(() => {
     const handleSubmitCallback = () => {
       undo();
       onSubmitCallback();
     };
     push({
-      ...actionPage,
+      ..._actionPage,
       componentProps: {
+        ...(actionPage?.componentProps || {}),
         onSubmitSuccessCallback: handleSubmitCallback,
       },
     });
-  }, [actionPage, push, undo, onSubmitCallback]);
+  }, [_actionPage, push, undo, onSubmitCallback]);
 
   return (
     <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -63,21 +87,30 @@ function MainFilterbar(props: any) {
         {withSort && (
           <>
             <ButtonPopper
-              startIcon={<AddIcon />}
+              startIcon={isEmpty(sort) ? <AddIcon /> : <SortIcon />}
+              variant={isEmpty(sort) ? 'text' : 'chip'}
               PopperComponent={SortablePopper}
               componentProps={{
                 popperComponent: {
                   list: sort,
+                  sortableFields,
                   onSortOrderChange: onSortChange,
                   SortItemComponent: SortField,
                 },
               }}
             >
-              Ajouter un tri
+              {isEmpty(sort)
+                ? 'ui.filterbar.sort.add'
+                : `tri :${
+                    sort.length > 1
+                      ? `${sort.length}éléments`
+                      : `${sort[0].field}`
+                  } `}
             </ButtonPopper>
             <Divider orientation="vertical" variant="middle" flexItem />
           </>
         )}
+
         {withFilter && (
           <>
             {filter.length > 0 && (
@@ -104,7 +137,7 @@ function MainFilterbar(props: any) {
                 },
               }}
             >
-              Ajouter un filtre
+              ui.filterbar.filter.add
             </ButtonPopper>
           </>
         )}
