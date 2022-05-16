@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import MoreHorizSharpIcon from '@mui/icons-material/MoreHorizSharp';
+import SearchIcon from '@mui/icons-material/Search';
 import SortIcon from '@mui/icons-material/Sort';
 import { Button, Chip, Divider, IconButton, Stack } from '@mui/material';
 import { useCallback, useMemo } from 'react';
@@ -70,7 +70,12 @@ function MainFilterbar(props: any) {
   }, [_actionPage, push, undo, onSubmitCallback]);
 
   return (
-    <Stack direction="row" justifyContent="space-between" alignItems="center">
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      alignItems="center"
+      px={1}
+    >
       <Stack
         direction="row"
         alignItems="center"
@@ -81,7 +86,7 @@ function MainFilterbar(props: any) {
         }}
       >
         <IconButton size="small">
-          <MoreHorizSharpIcon fontSize="inherit" />
+          <SearchIcon fontSize="inherit" />
         </IconButton>
         <Divider orientation="vertical" variant="middle" flexItem />
         {withSort && (

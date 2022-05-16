@@ -9,7 +9,7 @@ const storage = {
   fields: {
     name: text({
       isIndexed: true,
-      defaultValue: 'lololol',
+      defaultValue: 'Alexis',
       validation: yup.string().required(),
       ui: {
         input: forms.textField({}),

@@ -4,13 +4,15 @@ import withMiddleware from '../with-middleware/with-middleware';
 import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
 import { useQuery } from '@apollo/client';
 
+const SKIP = 0;
+const TAKE = 10;
+
 function AutocompleteWithLogic(props, ref) {
   const {
     context,
     options = [],
-    optionKey,
     onChange,
-    onCreateNew,
+    onCreateNewClick,
     onInputChange,
     formTitle,
     renderFormComponent,
@@ -21,20 +23,28 @@ function AutocompleteWithLogic(props, ref) {
   // -> Request is made 'onInputChange'
   // -> options is changed - component is re-rendered
 
-  const { indexColumn, graphql } = context;
+  // Get context infos
+  const { singular, indexColumn, graphql, plurial } = context;
+
   const makeFindManyQuery = graphql[GRAPHQL_ACTIONS.FindMany];
   const findManyQuery = makeFindManyQuery(
     indexColumn === 'id' ? [indexColumn] : ['id', indexColumn]
   );
 
-  const { data } = useQuery(findManyQuery, {
-    variables: {},
+  const { data, loading, refetch } = useQuery(findManyQuery, {
+    variables: { take: TAKE, skip: SKIP },
   });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedStorageSearch = React.useCallback(
     debounce((searchString) => {
-      onInputChange(searchString);
+      refetch({
+        take: TAKE,
+        skip: SKIP,
+        where: {
+          [indexColumn]: { contains: searchString, mode: 'insensitive' },
+        },
+      });
     }, 450),
     []
   );
@@ -62,7 +72,7 @@ function AutocompleteWithLogic(props, ref) {
         event.preventDefault();
         let _newValue = newValue;
         if (newValue.inputValue) _newValue = newValue.inputValue;
-        onCreateNew({ [optionKey]: _newValue });
+        onCreateNewClick(singular, { [indexColumn]: _newValue });
 
         // -- CHOOSE
         // User selected an option
@@ -70,7 +80,7 @@ function AutocompleteWithLogic(props, ref) {
         onChange(event, newValue);
       }
     },
-    [onCreateNew, optionKey, onChange]
+    [singular, onCreateNewClick, indexColumn, onChange]
   );
 
   // *FUNC -- filterSelectedOptions
@@ -79,12 +89,12 @@ function AutocompleteWithLogic(props, ref) {
       if (params.inputValue !== '') {
         options.push({
           inputValue: params.inputValue,
-          [optionKey]: `Ajouter "${params.inputValue}"`,
+          [indexColumn]: `Ajouter "${params.inputValue}"`,
         });
       }
       return options;
     },
-    [optionKey]
+    [indexColumn]
   );
 
   // *FUNC -- Get option label
@@ -97,10 +107,12 @@ function AutocompleteWithLogic(props, ref) {
       if (option.inputValue) {
         return option.inputValue;
       }
-      return option[optionKey];
+      return option[indexColumn];
     },
-    [optionKey]
+    [indexColumn]
   );
+
+  if (loading) return 'loading';
 
   // *RENDER
   return (
@@ -109,9 +121,11 @@ function AutocompleteWithLogic(props, ref) {
       onInputChange={handleInputChange}
       onChange={handleChange}
       filterOptions={filterOptions}
-      options={data}
+      options={data && data[plurial]}
       getOptionLabel={getOptionLabel}
-      renderOption={(props, option) => <li {...props}>{option[optionKey]}</li>}
+      renderOption={(props, option) => (
+        <li {...props}>{option[indexColumn]}</li>
+      )}
       selectOnFocus
       clearOnBlur
       handleHomeEndKeys

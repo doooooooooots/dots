@@ -4,7 +4,8 @@ import AutocompleteWithLogic from './autocomplete-with-logic';
 import withMiddleware from '../with-middleware/with-middleware';
 
 function AutocompleteWithForm(props) {
-  const { label, name, control, register, context, ...rest } = props;
+  const { label, name, control, register, context, onCreateNewClick, ...rest } =
+    props;
 
   return (
     <Stack>
@@ -16,6 +17,7 @@ function AutocompleteWithForm(props) {
             onChange={(_, data) => field.onChange(data)}
             renderInput={(params) => <TextField {...params} label={label} />}
             context={context}
+            onCreateNewClick={onCreateNewClick}
             {...rest}
           />
         )}
