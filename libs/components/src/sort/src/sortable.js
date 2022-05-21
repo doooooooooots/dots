@@ -61,7 +61,7 @@ export default function SortablePopper(props) {
   }, [sortableFields, list]);
 
   const handleAddSortClick = useCallback(() => {
-    // Todo(Adrien) : Check why spread operator onmy cause error
+    // [ ](Adrien) : Check why spread operator onmy cause error
     onSortOrderChange((current) => {
       if (isEmpty(current))
         return [

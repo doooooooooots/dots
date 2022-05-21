@@ -3,7 +3,6 @@ import { GridColDef } from '@mui/x-data-grid-pro';
 import ButtonOpenSingle from '../../components/button-open-single';
 import { DotsColumnProps } from '../types';
 import withMiddleware from '../middlewares/with-middleware';
-import { withContext } from '../../hoc';
 import { DotsSinglePage } from '../../pages';
 
 type uniqueIdProps = DotsColumnProps & {
@@ -17,10 +16,13 @@ const uniqueId = ({ Component, ...props }: uniqueIdProps): GridColDef => ({
       // History props
       path={'cartes'}
       title={'Details du rack'}
-      Component={withContext(row.__typename.toLowerCase() as EntityKey)(
-        DotsSinglePage
-      )}
-      componentProps={{ filter: { where: { id: row.id } } }}
+      Component={DotsSinglePage}
+      componentProps={{
+        filter: {
+          where: { id: row.id },
+        },
+        entityName: row.__typename.toLowerCase(),
+      }}
     />
   ),
   type: 'string',

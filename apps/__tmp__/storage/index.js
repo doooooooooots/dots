@@ -20,4 +20,4 @@ const Storages = (props) => {
 Storages.getLayout = (page) => <Layout>{page}</Layout>;
 export default Storages;
 
-// TODO(Adrien): Import SSR LOGIC -- see getStaticObjects in pages/_utils
+// [ ](Adrien): Import SSR LOGIC -- see getStaticObjects in pages/_utils

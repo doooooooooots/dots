@@ -228,7 +228,7 @@ export const DEFAULT_VALUE_BY_TIMESTAMP_TYPE = {
 
 export const PROPERTY_TYPES = Object.keys(DEFAULT_OPERATOR_BY_TYPE);
 
-// TODO(Adrien): Delete this part
+// [ ](Adrien): Delete this part
 // !Temporary
 export const PROJECT_PROPERTIES = [
   {

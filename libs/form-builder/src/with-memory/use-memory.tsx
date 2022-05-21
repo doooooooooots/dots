@@ -1,17 +1,19 @@
 import { useStateMachine } from 'little-state-machine';
 
 import {
-  deleteFormAction,
+  createFormAction,
   setFormAction,
   updateFormAction,
+  deleteFormAction,
   clearAllAction,
 } from './store';
 
 const useMemory = () =>
   useStateMachine({
-    deleteFormAction,
+    createFormAction,
     setFormAction,
     updateFormAction,
+    deleteFormAction,
     clearAllAction,
   });
 

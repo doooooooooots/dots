@@ -7,8 +7,8 @@ export const StockUnit = list({
     quantity: integer({
       defaultValue: 0,
       access: {
-        update: () => false
-      }
+        update: () => false,
+      },
     }),
     quantityVariations: relationship({
       ref: 'StockUnitQuantity.stockUnit',
@@ -23,24 +23,44 @@ export const StockUnit = list({
             query: `quantityVariations(
                         orderBy: { createdAt: desc }
                         take: 1
-                      ) { id value }`
+                      ) { id value }`,
           });
           if (quantityVariations.length > 0) {
             await context.prisma.stockUnit.update({
               where: { id: item.id.toString() },
-              data: { quantity: quantityVariations[0].value }
+              data: { quantity: quantityVariations[0].value },
             });
           } else {
             await context.prisma.stockUnit.update({
               where: { id: item.id.toString() },
-              data: { quantity: 0 }
+              data: { quantity: 0 },
             });
           }
-        }
-      }
+        },
+      },
     }),
     article: relationship({ ref: 'Article.stockUnits', many: false }),
     storage: relationship({ ref: 'Storage.stockUnits', many: false }),
-    offers: relationship({ ref: 'Offer.stockUnit', many: true })
-  }
+    offers: relationship({
+      ref: 'Offer.stockUnit',
+      many: true,
+      ui: {
+        // DISPLAY SELECT
+        // displayMode: 'select',
+        // labelField: 'pid',
+
+        // -- DISPLAY CARD
+        displayMode: 'cards',
+        cardFields: ['id', 'pid'],
+        linkToItem: true,
+        removeMode: 'disconnect',
+        inlineCreate: { fields: ['pid', 'id'] },
+        inlineEdit: { fields: ['pid'] },
+        inlineConnect: true,
+
+        // -- DISPLAY COUNT
+        // displayMode: 'count',
+      },
+    }),
+  },
 });

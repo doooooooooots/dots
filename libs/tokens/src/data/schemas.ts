@@ -21,3 +21,19 @@ export const GRAPHQL_ACTIONS = {
   UnlistOne: 'graphql_action_unlist_one',
   UnlistMany: 'graphql_action_unlist_many',
 };
+
+export enum FIELD_TYPES {
+  checkbox,
+  text,
+  timestamp,
+  relationship,
+  json,
+  float,
+  decimal,
+  password,
+  select,
+  virtual,
+  file,
+  image,
+  document,
+}

@@ -3,6 +3,8 @@ import { useCallback, useEffect } from 'react';
 import { useHistoryState } from './history-context';
 import { HistoryItem } from './index.d';
 
+const GLUE = '.';
+
 // Hook
 const useHistory = (initialPresent = null) => {
   const [state, dispatch] = useHistoryState();
@@ -38,13 +40,15 @@ const useHistory = (initialPresent = null) => {
     [dispatch]
   );
 
-  const clear = useCallback(
-    () => dispatch({ type: 'CLEAR', payload: initialPresent }),
-    [dispatch, initialPresent]
-  );
+  const clear = useCallback(() => dispatch({ type: 'CLEAR' }), [dispatch]);
 
   const goTo = useCallback(
     (index: number) => dispatch({ type: 'GOTO', payload: index }),
+    [dispatch]
+  );
+
+  const goBackTo = useCallback(
+    (id: string) => dispatch({ type: 'GOBACKTO', payload: id }),
     [dispatch]
   );
 
@@ -53,18 +57,29 @@ const useHistory = (initialPresent = null) => {
     [dispatch]
   );
 
+  const getCurrentPath = (glue: string) => {
+    if (!state.present) return '';
+    const presentPath = state.present.path;
+    const presentIndex = state.paths.indexOf(presentPath);
+    const currentPath = state.paths.slice(0, presentIndex);
+    return currentPath.join(glue);
+  };
+
   // If needed we could also return past and future state
   return {
-    state: state.present,
+    present: state.present,
+    currentPath: getCurrentPath(GLUE),
+    // Actions
     push,
     undo,
     redo,
     close,
     goTo,
+    goBackTo,
     clear,
     canUndo,
     canRedo,
-    path: state.path?.join('.'),
+    // Debug
     debug: state,
     history: state,
   };

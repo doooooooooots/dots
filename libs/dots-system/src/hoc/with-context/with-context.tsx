@@ -26,8 +26,10 @@ const withContext =
     return ComponentWithContext;
   };
 
-const getContext = (singular) => {
+const useContext = (singular: string) => {
   let context;
+
+  if (!singular) return {};
 
   if (singular in contextCache) {
     context = contextCache[singular];
@@ -41,4 +43,4 @@ const getContext = (singular) => {
 };
 
 export default withContext;
-export { withContext, getContext };
+export { withContext, useContext };

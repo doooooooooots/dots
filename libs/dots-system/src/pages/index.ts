@@ -1,2 +1,3 @@
-export { default as DotsIndexPage } from './dots-index-page';
-export { default as DotsSinglePage } from './dots-single-page';
+export { default as DotsDialogRelationship } from './dots-dialog-relationship';
+export { default as DotsPageIndex } from './dots-page-index';
+export { default as DotsSinglePage } from './dots-page-single';

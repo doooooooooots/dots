@@ -10,12 +10,14 @@ import CallSplitIcon from '@mui/icons-material/CallSplit';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import OutboxIcon from '@mui/icons-material/Outbox';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import BackupOutlinedIcon from '@mui/icons-material/BackupOutlined';
 import CloudOffOutlinedIcon from '@mui/icons-material/CloudOffOutlined';
 import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import SelectViewMode from '../select-view-mode/select-view-mode';
+import { openFullscreen, exitFullscreen } from '@dots.cool/utils';
 
 const ToolbarButton = (props: any) => {
   const { children, startIcon, onClick, disabled, color = 'primary' } = props;
@@ -34,12 +36,24 @@ const ToolbarButton = (props: any) => {
 function ToolbarData(props: any) {
   const { selectionModel, onActionClick, viewMode, onViewModeChange } = props;
 
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
   const handleButtonClick = useCallback(
     (action) => () => {
       onActionClick(action);
     },
     [onActionClick]
   );
+
+  const handleFullScreenButtonClick = useCallback(() => {
+    if (isFullscreen) {
+      exitFullscreen();
+      setIsFullscreen(false);
+    } else {
+      openFullscreen();
+      setIsFullscreen(true);
+    }
+  }, [isFullscreen, setIsFullscreen]);
 
   return (
     <Stack
@@ -57,7 +71,7 @@ function ToolbarData(props: any) {
       }}
     >
       <Stack direction="row" alignItems="center">
-        <Typography variant="caption">{`${selectionModel.length} éléments`}</Typography>
+        <Typography variant="caption">{`${selectionModel.length} élément sélectionné`}</Typography>
         {!isEmpty(selectionModel) && (
           <Stack direction="row" alignItems="center">
             <ToolbarButton
@@ -113,12 +127,21 @@ function ToolbarData(props: any) {
           viewMode={viewMode}
           onViewModeChange={onViewModeChange}
         />
-        <ToolbarButton
-          onClick={handleButtonClick(GRAPHQL_ACTIONS.MoveOne)}
-          startIcon={<FullscreenIcon />}
-        >
-          Plein écran
-        </ToolbarButton>
+        {isFullscreen ? (
+          <ToolbarButton
+            onClick={handleFullScreenButtonClick}
+            startIcon={<FullscreenExitIcon />}
+          >
+            Réduire l'écran
+          </ToolbarButton>
+        ) : (
+          <ToolbarButton
+            onClick={handleFullScreenButtonClick}
+            startIcon={<FullscreenIcon />}
+          >
+            Plein écran
+          </ToolbarButton>
+        )}
         {/* <GridToolbarExport sx={{ mr: 1, color: 'text.primary' }} /> */}
       </Stack>
     </Stack>

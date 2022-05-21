@@ -4,6 +4,7 @@ import { Button, Stack, Typography } from '@mui/material';
 import useHistory from '../../hooks/use-history';
 import { HistoryItem } from '../../hooks/use-history/index.d';
 import { ActionButtonProps } from '../buttons.d';
+import { Box } from '@mui/system';
 
 type ButtonOpenSingleProps = HistoryItem &
   ActionButtonProps & {
@@ -26,17 +27,29 @@ function ButtonOpenSingle(props: ButtonOpenSingleProps): JSX.Element {
   }, [push, path, title, Component, componentProps]);
 
   return (
-    <Stack direction="row" alignItems="center" spacing={1}>
+    <Stack
+      direction="row"
+      alignItems="center"
+      spacing={1}
+      sx={{ position: 'relative', width: '100%' }}
+    >
       <Typography>{cellText}</Typography>
-      <Button
-        className="button--open-details"
-        startIcon={<OpenInFullIcon />}
-        onClick={handleClick}
-        variant="outlined"
-        size="small"
-      >
-        {actionText}
-      </Button>
+      <Box position="absolute" right="0">
+        <Button
+          className="button--open-details"
+          startIcon={<OpenInFullIcon />}
+          onClick={handleClick}
+          variant="outlined"
+          size="small"
+          sx={{
+            '&, &:hover': {
+              bgcolor: 'background.default',
+            },
+          }}
+        >
+          {actionText}
+        </Button>
+      </Box>
     </Stack>
   );
 }

@@ -1,17 +1,17 @@
 import { FunctionComponent, useState } from 'react';
 
+const initialState = {
+  operator: 'and',
+  filters: [],
+  byId: {},
+};
+
 const withSmartFilter = (
   Component: FunctionComponent<any>
 ): FunctionComponent<any> => {
   const FilterableComponent = (props: any) => {
     const { filter: initalValue } = props;
-    const [filter, setFilter] = useState(
-      initalValue || {
-        operator: 'and',
-        filters: [],
-        byId: {},
-      }
-    );
+    const [filter, setFilter] = useState(initalValue);
 
     return (
       <Component

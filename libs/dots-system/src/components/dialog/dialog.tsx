@@ -1,7 +1,6 @@
 import { useMutation } from '@apollo/client';
 import React, { useMemo } from 'react';
 import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
-import type { GraphQlApiType } from '@dots.cool/schemas';
 import DEFAULT_DATAGRID_DIALOGS_COMPONENTS from '../dialog-default';
 
 import {
@@ -10,6 +9,7 @@ import {
   DefaultContext,
   ApolloCache,
 } from '@apollo/client';
+import { useContext } from '../../hoc';
 
 export type OnSubmitType = (
   options?:
@@ -33,9 +33,8 @@ export interface ModalComponentProps {
 }
 
 type MainDialogsPropsType = {
+  entityName: string;
   target: string[] | unknown;
-  query: string;
-  graphql: GraphQlApiType;
   lang?: string;
   open: typeof GRAPHQL_ACTIONS[keyof typeof GRAPHQL_ACTIONS] | '';
   onSubmitCallback: OnSubmitCallbackType;
@@ -47,9 +46,8 @@ type MainDialogsPropsType = {
 
 function MainDialogs(props: MainDialogsPropsType) {
   const {
+    entityName,
     target,
-    query, // graphql query for answer
-    graphql, // list of graphql schema
     lang,
     open, // is modal open ?
     onSubmitCallback,
@@ -57,7 +55,13 @@ function MainDialogs(props: MainDialogsPropsType) {
     components = {}, // For further customization
   } = props;
 
+  const { graphql } = useContext(entityName);
+
+  // [ ](Adrien): query logic to implement
+  const query = useMemo(() => ['id'], []);
+
   let action = graphql[open];
+
   if (!action) {
     if (open.endsWith('_one')) action = graphql[GRAPHQL_ACTIONS.UpdateOne];
     if (open.endsWith('_many')) action = graphql[GRAPHQL_ACTIONS.UpdateMany];

@@ -1,9 +1,10 @@
 import { createReducerContext } from 'react-use';
 import { HistoryAction, HistoryItem, HistoryState } from './index.d';
+import { cloneDeep } from 'lodash';
 
 const initialState: HistoryState = {
   // Array of path to store global paths (allow tabs)
-  path: [],
+  paths: [],
   // Array of previous state values updated each time we push a new state
   past: [],
   // Current state value
@@ -13,7 +14,7 @@ const initialState: HistoryState = {
 };
 
 const reducer = (state: HistoryState, action: HistoryAction): HistoryState => {
-  const { path, past, present, future } = state;
+  const { paths, past, present, future } = state;
 
   const combined = [...past, present, ...future].filter(
     (id) => id
@@ -23,9 +24,9 @@ const reducer = (state: HistoryState, action: HistoryAction): HistoryState => {
     case 'UNDO': {
       const previous = past[past.length - 1];
       const newPast = past.slice(0, past.length - 1);
-      const newPath = path.slice(0, path.length - 1);
+      const newPath = paths.slice(0, paths.length - 1);
       return {
-        path: newPath,
+        paths: newPath,
         past: newPast,
         present: previous,
         future: [present as HistoryItem, ...future],
@@ -36,7 +37,7 @@ const reducer = (state: HistoryState, action: HistoryAction): HistoryState => {
       const next = future[0];
       const newFuture = future.slice(1);
       return {
-        path: [...path, next.path],
+        paths: [...paths, next.path],
         past: [...(past as HistoryItem[]), present as HistoryItem],
         present: next,
         future: newFuture,
@@ -55,7 +56,7 @@ const reducer = (state: HistoryState, action: HistoryAction): HistoryState => {
       }
 
       return {
-        path: [...path, newPresent.path],
+        paths: [...paths, newPresent.path],
         past: combined,
         present: newPresent,
         future: [],
@@ -66,21 +67,33 @@ const reducer = (state: HistoryState, action: HistoryAction): HistoryState => {
       const index = action.payload as number;
 
       return {
-        path: path,
+        paths: paths,
         past: combined.slice(0, index),
         present: combined[index],
         future: combined.slice(index + 1),
       };
     }
 
+    case 'GOBACKTO': {
+      const id = action.payload as string;
+      const index = paths.indexOf(id);
+
+      return {
+        paths: paths.slice(0, index + 1),
+        past: combined.slice(0, index),
+        present: combined[index],
+        future: [],
+      };
+    }
+
     case 'CLOSE': {
       const indexClose = action.payload as number;
       combined.splice(indexClose, 1);
-      path.splice(indexClose, 1);
+      paths.splice(indexClose, 1);
       const currentIndex = Math.min(combined.length - 1, past.length);
 
       return {
-        path: path,
+        paths: paths,
         past: combined.slice(0, currentIndex),
         present: combined[currentIndex],
         future: combined.slice(currentIndex + 1),
@@ -88,19 +101,16 @@ const reducer = (state: HistoryState, action: HistoryAction): HistoryState => {
     }
 
     case 'CLEAR': {
-      const initialPresent = action.payload as HistoryItem;
-      return {
-        ...initialState,
-        present: initialPresent,
-      };
+      return cloneDeep(initialState);
     }
   }
   return state;
 };
 
-const [useHistoryState, SharedHistoryProvider] = createReducerContext(reducer, {
-  ...initialState,
-});
+const [useHistoryState, SharedHistoryProvider] = createReducerContext(
+  reducer,
+  cloneDeep(initialState)
+);
 
 export { useHistoryState };
 export default SharedHistoryProvider;

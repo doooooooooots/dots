@@ -4,6 +4,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import {
+  Divider,
   IconButton,
   MenuItem,
   Select,
@@ -71,29 +72,39 @@ function MainPagination(props: any) {
       <Box>
         <Typography>{`${totalCounts} items`}</Typography>
       </Box>
-      <Stack direction="row" justifyContent="flex-end" alignItems="center">
-        <IconButton onClick={handleGoToFirst}>
-          <KeyboardDoubleArrowLeftIcon />
-        </IconButton>
-        <IconButton onClick={handlePagePrevious}>
-          <KeyboardArrowLeftIcon />
-        </IconButton>
-        <TextField
-          value={page}
-          onChange={handleGoToPage}
-          variant="outlined"
-          sx={{
-            width: 40 + 10 * page.toString().length,
-            '& input': { textAlign: 'center' },
-          }}
-        />
-        <Typography ml={2}>{`sur ${maxPage || '?'}`}</Typography>
-        <IconButton onClick={handlePageNext}>
-          <KeyboardArrowRightIcon />
-        </IconButton>
-        <IconButton onClick={handleGoToLast}>
-          <KeyboardDoubleArrowRightIcon />
-        </IconButton>
+      <Stack
+        direction="row"
+        justifyContent="flex-end"
+        alignItems="center"
+        spacing={2}
+      >
+        <Stack direction="row">
+          <IconButton onClick={handleGoToFirst}>
+            <KeyboardDoubleArrowLeftIcon />
+          </IconButton>
+          <IconButton onClick={handlePagePrevious}>
+            <KeyboardArrowLeftIcon />
+          </IconButton>
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <TextField
+              value={page}
+              onChange={handleGoToPage}
+              variant="outlined"
+              sx={{
+                width: 40 + 10 * page.toString().length,
+                '& input': { textAlign: 'center' },
+              }}
+            />
+            <Typography>sur</Typography>
+            <Typography>{`${maxPage || '?'}`}</Typography>
+          </Stack>
+          <IconButton onClick={handlePageNext}>
+            <KeyboardArrowRightIcon />
+          </IconButton>
+          <IconButton onClick={handleGoToLast}>
+            <KeyboardDoubleArrowRightIcon />
+          </IconButton>
+        </Stack>
       </Stack>
       <Box>
         <Select

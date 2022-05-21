@@ -13,7 +13,7 @@ const columns = extractColumns(STOCK_UNIT_COLUMNS, [
   'condition',
   'isFirstEd',
   'quantity',
-  'offers'
+  'offers',
 ]);
 
 //! Langage Management logic
@@ -48,10 +48,12 @@ const query = `
 `;
 
 const StockUnits = (props) => {
-  return <StockUnitMany {...props} columns={columns} query={query} lang={'fr'} />;
+  return (
+    <StockUnitMany {...props} columns={columns} query={query} lang={'fr'} />
+  );
 };
 
 StockUnits.getLayout = (page) => <Layout>{page}</Layout>;
 export default StockUnits;
 
-// TODO(Adrien): Import SSR LOGIC -- see getStaticObjects in pages/_utils
+// [ ](Adrien): Import SSR LOGIC -- see getStaticObjects in pages/_utils

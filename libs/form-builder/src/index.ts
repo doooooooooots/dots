@@ -31,4 +31,3 @@ export { switchInput } from './switch';
 export { textField } from './textfield';
 
 export * from './with-memory';
-export * from './with-smart-form';

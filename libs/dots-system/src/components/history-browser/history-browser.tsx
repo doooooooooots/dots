@@ -11,22 +11,14 @@ import {
   Typography,
 } from '@mui/material';
 import { isEmpty } from 'lodash';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import useHistory from '../../hooks/use-history';
 
 function HistoryBrowser(props: any) {
-  const {
-    state,
-    path,
-    undo,
-    redo,
-    clear,
-    canUndo,
-    canRedo,
-    history,
-    goTo,
-    close,
-  } = useHistory();
+  const { present, undo, redo, clear, canUndo, canRedo, history, goTo, close } =
+    useHistory();
+
+  const open = !!present;
 
   const handleClose = useCallback(() => {
     clear();
@@ -46,18 +38,30 @@ function HistoryBrowser(props: any) {
     [close]
   );
 
-  if (isEmpty(state)) return null;
+  useEffect(() => {
+    if (!open) {
+      clear();
+    }
+  }, [open, clear]);
 
-  const { Component } = state;
+  if (isEmpty(present)) return null;
+
+  const {
+    title,
+    path,
+    Component,
+    componentProps,
+    width = 'xl',
+  } = present as HistoryItem;
 
   return (
     <Dialog
       {...props}
-      open={!!state}
+      open={open}
       onClose={handleClose}
       PaperProps={{ sx: { bgcolor: 'neutral.25', p: 2, height: '100%' } }}
       fullWidth
-      maxWidth={state.width || 'xl'}
+      maxWidth={width}
     >
       <Stack spacing={1}>
         <DialogTitle
@@ -85,14 +89,14 @@ function HistoryBrowser(props: any) {
                 textOverflow="ellipsis"
                 whiteSpace="nowrap"
               >
-                {`${state?.title}`}
+                {`${title}`}
               </Typography>
             </Stack>
 
             {/* Tabs */}
             <Stack direction="row" flex={1} spacing={2}>
               {!isEmpty(history) &&
-                history.path.map((path, index) => {
+                history.paths.map((path, index) => {
                   return (
                     <Chip
                       key={`${path}-${index}`}
@@ -112,7 +116,7 @@ function HistoryBrowser(props: any) {
           </Stack>
         </DialogTitle>
         <DialogContent sx={{ p: 0 }}>
-          <Component id={path} {...(state.componentProps || {})} />
+          <Component id={path} {...(componentProps || {})} />
         </DialogContent>
       </Stack>
     </Dialog>

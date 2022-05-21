@@ -23,4 +23,4 @@ Storage.getLayout = (page) => (
 );
 export default Storage;
 
-// TODO(Adrien): Import SSR LOGIC -- see getStaticObjects in pages/_utils
+// [ ](Adrien): Import SSR LOGIC -- see getStaticObjects in pages/_utils

@@ -11,7 +11,10 @@ export const Article = list({
     language: relationship({ ref: 'Language', many: false }),
     priceSuggested: relationship({ ref: 'Price', many: true }),
     stockUnits: relationship({ ref: 'StockUnit.article', many: true }),
-    reconciliations: relationship({ ref: 'ArticleReconciliation.articleId', many: true }),
+    reconciliations: relationship({
+      ref: 'ArticleReconciliation.articleId',
+      many: true,
+    }),
     ...updatedAt,
     ...updatedBy,
     //--
@@ -21,15 +24,15 @@ export const Article = list({
     isFoil: checkbox(),
     isReverseHolo: checkbox(),
     isPlayset: checkbox(),
-    // TODO(Adrien): create aggregate logic
+    // [ ](Adrien): create aggregate logic
     aggregateCount: virtual({
       field: graphql.field({
         type: graphql.Int,
         args: { something: graphql.arg({ type: graphql.Int }) },
         resolve(item, args, context, info) {
           return 0;
-        }
-      })
-    })
-  }
+        },
+      }),
+    }),
+  },
 });

@@ -1,14 +1,22 @@
-import { EntityContext } from '../../schemas';
-import { HistoryItem } from '../../hooks/use-history';
-import { GRAPHQL_REQUESTS, VIEW_MODE } from '@dots.cool/tokens';
+import { GRAPHQL_REQUESTS, VIEW_MODES } from '@dots.cool/tokens';
+import { HistoryItem } from '../../hooks/use-history/index.d';
+import {
+  DocumentNode,
+  OperationVariables,
+  TypedDocumentNode,
+} from '@apollo/client';
 
 export interface DotsIndexPageProps {
   variant: 'details' | 'preview';
-  context: EntityContext;
+  entityName: string;
 
   // --Data
   query: string;
   columns: string[];
+  rowsQuery: DocumentNode | TypedDocumentNode<unknown, OperationVariables>;
+  rowsGetter: (data: unknown) => unknown;
+  aggregateQuery: DocumentNode | TypedDocumentNode<unknown, OperationVariables>;
+  aggregateGetter: (data: unknown) => unknown;
 
   // --Filter
   filter: { [key: string]: unknown };
@@ -16,7 +24,7 @@ export interface DotsIndexPageProps {
   withFilter: boolean;
 
   // --Sort
-  sort: { [key: string]: unknown };
+  sort: { field: string; direction: string }[];
   sortPinned: string[];
   onSortChange: (args: unknown[]) => void;
   withSort: boolean;
@@ -45,7 +53,7 @@ export interface DotsIndexPageProps {
   hideDialog: boolean;
 
   // --ViewMode
-  viewMode: VIEW_MODE;
+  viewMode: typeof VIEW_MODES[keyof typeof VIEW_MODES] | '';
   onViewModeChange: (viewMode: string) => void;
 
   // --Lang

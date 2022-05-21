@@ -1,6 +1,15 @@
 import * as columns from '../../columns';
 import * as forms from '@dots.cool/form-builder';
 import * as yup from 'yup';
+import { isArray } from 'lodash';
+import { FIELD_TYPES, GRAPHQL_REQUESTS } from '@dots.cool/tokens';
+
+const CREATE_ONE = GRAPHQL_REQUESTS.CreateOne;
+const CREATE_MANY = GRAPHQL_REQUESTS.CreateOne;
+
+interface EntityType {
+  id: string;
+}
 
 function initField(field: any) {
   if (!field) throw new Error('Props are required');
@@ -11,6 +20,9 @@ function hasUiColumn(config: any) {
 }
 function hasUiInput(config: any) {
   return !!config?.ui?.input;
+}
+function hasFormatData(config: any) {
+  return typeof config?.formatData === 'function';
 }
 function hasValidation(config: any) {
   return !!config?.validation;
@@ -31,113 +43,189 @@ function addDefaultValue(config: any, defaultValue: any) {
   config.defaultValue = defaultValue;
 }
 
-// complete default values
+// [ ](Adrien): Create config for all default keys (i.e input|column|validation|...)
+
+//* CHECKBOX
 const checkbox = (config: any) => {
-  // make sure all is ok
+  //-> make sure all is ok
   initField(config);
 
-  // init all required properties
+  //-> init all required properties
   if (!hasUiInput(config)) addUiInput(config, forms.checkbox({}));
   if (!hasUiColumn(config)) addUiColumn(config, columns.checkbox({}));
   if (!hasValidation(config)) addValidation(config, yup.boolean());
   if (!hasDefaultValue(config)) addDefaultValue(config, false);
 
+  config.type = FIELD_TYPES.checkbox;
   return config;
 };
 
-const integer = (config) => {
-  return config;
-};
-
-const json = (config) => {
-  return config;
-};
-
-const float = (config) => {
-  return config;
-};
-
-const decimal = (config) => {
-  return config;
-};
-
-const password = (config) => {
-  return config;
-};
-
-const select = (config) => {
-  return config;
-};
-
+//* TEXT
 const text = (config) => {
-  // make sure all is ok
+  //-> make sure all is ok
   initField(config);
 
-  // init all required properties
+  //-> init all required properties
   if (!hasUiInput(config)) addUiInput(config, forms.textField({}));
   if (!hasUiColumn(config)) addUiColumn(config, columns.text({}));
   if (!hasValidation(config)) addValidation(config, yup.string());
   if (!hasDefaultValue(config)) addDefaultValue(config, '');
 
+  config.type = FIELD_TYPES.text;
   return config;
 };
 
+//* TIMESTAMP
 const timestamp = (config) => {
+  initField(config);
+  const { hideIn = [] } = config;
+
+  //-> init all required properties
+  if (!hasUiInput(config)) addUiInput(config, forms.textField({}));
+  if (!hasUiColumn(config)) addUiColumn(config, columns.timestamp({}));
+  if (!hasValidation(config)) addValidation(config, yup.string());
+
+  config.hideIn = [...hideIn, CREATE_ONE, CREATE_MANY];
+  config.type = FIELD_TYPES.timestamp;
   return config;
 };
 
+//* RELATIONSHIP
 const relationship = (config) => {
-  const { field, query, valueGetter, filterQuery, count = null, many } = config;
-
+  const { ref, many, ui } = config;
+  //? Create basic fields if missing
   initField(config);
 
-  // init all required properties
-  if (!hasUiInput(config)) addUiInput(config, forms.autocompleteWithForm({}));
+  const isManyRelationShip = !(many === false);
+  const { columnField } = ui;
+
+  //? Add default input
+  if (!hasUiInput(config))
+    addUiInput(
+      config,
+      forms.autocompleteWithForm({
+        multiple: isManyRelationShip,
+      })
+    );
+
+  //? Add default columns
   if (!hasUiColumn(config)) {
-    if (many === false) {
+    if (!isManyRelationShip) {
       addUiColumn(
         config,
         columns.relationshipSingle({
-          valueGetter,
-          filterQuery,
+          target: ref,
+          indexColumn: columnField,
         })
       );
     } else {
+      config.query = (plurial: string) => `${plurial}Count`;
       addUiColumn(
         config,
         columns.relationshipMany({
-          count,
+          target: ref,
         })
       );
     }
   }
+
+  //? Add default formatting data (runs before submit)
+  if (!hasFormatData(config)) {
+    if (!isManyRelationShip) {
+      config.formatData =
+        (fieldName: string) => (data: { [fieldName: string]: unknown }) => {
+          if (fieldName in data) {
+            data[fieldName] = {
+              connect: { id: (data[fieldName] as { id: string }).id },
+            };
+          }
+          return data;
+        };
+    } else {
+      config.formatData =
+        (fieldName: string) =>
+        (data: { [fieldName: string]: string | object | object[] }) => {
+          if (fieldName in data && isArray(data[fieldName])) {
+            data[fieldName] = {
+              connect: (data[fieldName] as Array<{ id: string }>).map(
+                ({ id }: EntityType) => ({
+                  id,
+                })
+              ),
+            };
+          }
+          return data;
+        };
+    }
+  }
+
+  //? Force sortable to be false (graphQL APIs does not allow linked data sort)
+  config.sortable = false;
+
   // if (!hasValidation(config)) addValidation(config, yup.boolean());
   // if (!hasDefaultValue(config)) addDefaultValue(config, false);
 
-  config.sortable = false;
-  config.needsContext = true;
+  config.many = isManyRelationShip;
+  config.type = FIELD_TYPES.relationship;
   return config;
 };
 
+//* JSON
+const json = (config) => {
+  config.type = FIELD_TYPES.json;
+  return config;
+};
+
+//* FLOAT
+const float = (config) => {
+  config.type = FIELD_TYPES.float;
+  return config;
+};
+
+//* DECIMAL
+const decimal = (config) => {
+  config.type = FIELD_TYPES.decimal;
+  return config;
+};
+
+//* PASSWORD
+const password = (config) => {
+  config.type = FIELD_TYPES.password;
+  return config;
+};
+
+//* SELECT
+const select = (config) => {
+  config.type = FIELD_TYPES.select;
+  return config;
+};
+
+//* VIRTUAL
 const virtual = (config) => {
+  config.type = FIELD_TYPES.virtual;
   return config;
 };
 
+//* FILE
 const file = (config) => {
+  config.type = FIELD_TYPES.file;
   return config;
 };
 
+//* IMAGE
 const image = (config) => {
+  config.type = FIELD_TYPES.image;
   return config;
 };
 
+//* DOCUMENT
 const document = (config) => {
+  config.type = FIELD_TYPES.document;
   return config;
 };
 
 export {
   checkbox,
-  integer,
   json,
   float,
   decimal,
@@ -151,23 +239,3 @@ export {
   image,
   document,
 };
-
-// - checkbox
-// - integer
-// - json
-// - float
-// - decimal
-// - password
-// - select
-// - text
-// - timestamp
-// Relationship type
-// - relationship
-// Virtual type
-// - virtual
-// File types
-// - file
-// - image
-// Complex types
-// - document
-// - cloudinaryImage

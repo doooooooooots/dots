@@ -1,72 +1,118 @@
-import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
-import { Button, Stack } from '@mui/material';
 import React, { useCallback, useEffect } from 'react';
+import { Button, Stack, Alert } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@apollo/client';
-import { withSmartForm } from '../with-smart-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { get } from 'lodash';
+import { useMemory } from '../with-memory';
 
 function Form(props: any) {
   const {
-    query = ' id',
-    context,
-    defaultValues: _defaultValues,
-    onSubmitSuccessCallback,
-    onUnmount,
-    children,
+    id,
+    entityName,
+    parentFormId,
+    validations,
+    defaultValues,
+    onSubmit,
+    onSubmitSuccess,
     spacing = 0,
-    formatData = (data) => data,
     direction = 'column',
+    children,
   } = props;
 
-  const { graphql, defaultValues } = context;
+  //-> Save form in local storage so manipulation error won't cause data loss
+  const { actions, state }: any = useMemory();
 
-  const { control, register, handleSubmit, getValues } = useForm({
-    defaultValues,
+  //* FORM INIT
+  //? Uses react hook forms
+  //-> Retrieve default values from local storage
+  const _defaultValues = state[id] || {};
+
+  //-> Initialize Form from react-hook-form
+  const {
+    control,
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validations),
+    defaultValues: {
+      ...defaultValues,
+      ..._defaultValues,
+    },
   });
 
-  const createOne = graphql[GRAPHQL_ACTIONS.CreateOne];
-  const [onSubmit] = useMutation(createOne(query));
+  //* REQUEST
+  //? Handles form submition
+  // [ ](Adrien): Check for errors
 
   const handleSubmitClick = useCallback(
     async (data) => {
-      const { data: res } = await onSubmit({
-        variables: { data: formatData(data) },
-      });
+      //-> Submit from@
+      const response = await onSubmit(data);
 
-      if (typeof onSubmitSuccessCallback === 'function')
-        onSubmitSuccessCallback(res);
+      //-> Send data to memory if needed
+      if (parentFormId && entityName)
+        actions.updateFormAction({
+          id: parentFormId,
+          data: { [entityName]: response },
+        });
+
+      //-> Run callback if there's one
+      if (typeof onSubmitSuccess === 'function') {
+        onSubmitSuccess(response);
+      }
+
+      //-> Delete current form saved data
+      actions.deleteFormAction(id);
     },
-    [formatData, onSubmit, onSubmitSuccessCallback]
+    [onSubmit, parentFormId, entityName, actions, onSubmitSuccess, id]
   );
 
-  //* EFFECT - mount & unmount
+  //* EFFECT - Component Life cycle
+  //? On unmount
+  //-> is submitted -> delete form in local storage
+  //-> not submitted -> save current form in local storage
   useEffect(() => {
+    actions.createFormAction(id);
     return () => {
-      if (typeof onUnmount === 'function' && getValues())
-        onUnmount(getValues());
+      actions.setFormAction({ id, data: getValues() });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  if (!id) return <Alert severity="error">Form id is missing</Alert>;
+
+  //* RENDER
+  // [ ](Adrien): Create display mode logic
   return (
-    <form onSubmit={handleSubmit(handleSubmitClick)}>
+    <form id={id} onSubmit={handleSubmit(handleSubmitClick)}>
+      <Button onClick={actions.clearAllAction}>CLEAr</Button>
       <Stack spacing={spacing} direction={direction}>
         {React.Children.map(children, (child) => {
-          return child.props.name
-            ? React.createElement(child.type, {
-                ...{
-                  ...child.props,
-                  register: register,
-                  control: control,
-                  key: child.props.name,
-                },
-              })
-            : child;
+          //-> get field error from error handler object
+          const error = get(errors, `${child.props.name}.message`);
+          //-> render each fields
+          return (
+            <>
+              {child.props.name
+                ? React.createElement(child.type, {
+                    ...{
+                      ...child.props,
+                      register: register,
+                      control: control,
+                      key: child.props.name,
+                    },
+                  })
+                : child}
+              {error && <Alert severity="error">{error}</Alert>}
+            </>
+          );
         })}
       </Stack>
-      <Button type="submit">OK</Button>
+      <Button type="submit">form-builder.ui.button.submit</Button>
     </form>
   );
 }
 
-export default withSmartForm(Form);
+export default Form;

@@ -1,7 +1,7 @@
 import createStaticPathsGetter from './create-static-paths-getter';
 import createStaticPropsGetter from './create-static-props-getter';
 
-// TODO(Adrien): https://nextjs.org/docs/api-reference/data-fetching/get-static-paths
+// [ ](Adrien): https://nextjs.org/docs/api-reference/data-fetching/get-static-paths
 export default function getStaticObjects(queryIds, querySingles, name) {
   const getStaticPaths = createStaticPathsGetter(queryIds);
 

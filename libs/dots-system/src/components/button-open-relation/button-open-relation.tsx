@@ -7,12 +7,20 @@ import { ActionButtonProps } from '../buttons';
 
 type ButtonOpenDetailsProps = HistoryItem &
   ActionButtonProps & {
-    count: number;
+    count?: number;
+    multiple?: boolean;
   };
 
 function ButtonOpenRelation(props: ButtonOpenDetailsProps): JSX.Element {
-  const { path, title, Component, componentProps, actionText, count, many } =
-    props;
+  const {
+    path,
+    title,
+    Component,
+    componentProps,
+    actionText,
+    count,
+    multiple,
+  } = props;
   const { push } = useHistory();
 
   const handleClick = useCallback(() => {
@@ -21,7 +29,7 @@ function ButtonOpenRelation(props: ButtonOpenDetailsProps): JSX.Element {
 
   return (
     <Button startIcon={<LinkIcon />} onClick={handleClick} variant="text">
-      {`${actionText}${many ? ' (' + count + ')' : ''}`}
+      {`${actionText}${multiple ? ' (' + count + ')' : ''}`}
     </Button>
   );
 }
