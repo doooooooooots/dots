@@ -4,6 +4,7 @@ import { Button } from '@mui/material';
 import useHistory from '../../hooks/use-history';
 import { HistoryItem } from '../../hooks/use-history/index.d';
 import { ActionButtonProps } from '../buttons';
+import { Box } from '@mui/system';
 
 type ButtonOpenDetailsProps = HistoryItem &
   ActionButtonProps & {
@@ -28,8 +29,26 @@ function ButtonOpenRelation(props: ButtonOpenDetailsProps): JSX.Element {
   }, [push, path, title, Component, componentProps]);
 
   return (
-    <Button startIcon={<LinkIcon />} onClick={handleClick} variant="text">
-      {`${actionText}${multiple ? ' (' + count + ')' : ''}`}
+    <Button
+      startIcon={<LinkIcon />}
+      onClick={handleClick}
+      variant="text"
+      sx={{
+        display: 'flex',
+        justifyContent: 'flex-start',
+        width: 190,
+      }}
+    >
+      <Box
+        component="span"
+        sx={{
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+        }}
+      >
+        {`${actionText}${multiple ? ' (' + count + ')' : ''}`}
+      </Box>
     </Button>
   );
 }

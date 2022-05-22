@@ -33,6 +33,7 @@ function MainDatagrid(props: any) {
 
   // *Header popper
   const [anchorEl, setAnchorEl] = React.useState(null) as AnchorElStateFunc;
+
   const handleHeaderColumnClick: GridEventListener<
     GridEvents.columnHeaderClick
   > = ({ field }, event) => {
@@ -65,6 +66,7 @@ function MainDatagrid(props: any) {
           ColumnSortedDescendingIcon: KeyboardArrowDownSharpIcon,
         }}
         onColumnHeaderClick={handleHeaderColumnClick}
+        experimentalFeatures={{ newEditingApi: true }}
         hideFooter
         checkboxSelection
         disableSelectionOnClick

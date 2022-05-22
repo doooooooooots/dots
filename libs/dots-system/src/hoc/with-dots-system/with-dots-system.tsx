@@ -4,7 +4,6 @@ import withSmartSort from '../with-sort/with-sort';
 import withSmartViews from '../with-views/with-views';
 import withSmartToolbar from '../with-toolbar/with-toolbar';
 import withSmartViewMode from '../with-view-mode/with-view-mode';
-import withSmartHistory from '../with-history';
 import { compose } from '@dots.cool/utils';
 
 const withDotsSystem = compose(
@@ -13,8 +12,7 @@ const withDotsSystem = compose(
   withSmartSort,
   withSmartViews,
   withSmartToolbar,
-  withSmartViewMode,
-  withSmartHistory
+  withSmartViewMode
 );
 
 export default withDotsSystem;

@@ -4,6 +4,7 @@ import ButtonOpenSingle from '../../components/button-open-single';
 import { DotsColumnProps } from '../types';
 import withMiddleware from '../middlewares/with-middleware';
 import { DotsSinglePage } from '../../pages';
+import { lcFirst } from '@dots.cool/utils';
 
 type uniqueIdProps = DotsColumnProps & {
   Component: FC;
@@ -21,7 +22,7 @@ const uniqueId = ({ Component, ...props }: uniqueIdProps): GridColDef => ({
         filter: {
           where: { id: row.id },
         },
-        entityName: row.__typename.toLowerCase(),
+        entityName: lcFirst(row.__typename),
       }}
     />
   ),

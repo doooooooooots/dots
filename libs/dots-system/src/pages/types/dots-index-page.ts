@@ -17,6 +17,13 @@ export interface DotsIndexPageProps {
   rowsGetter: (data: unknown) => unknown;
   aggregateQuery: DocumentNode | TypedDocumentNode<unknown, OperationVariables>;
   aggregateGetter: (data: unknown) => unknown;
+  variables: {
+    where?: object;
+    take?: number;
+    skip?: number;
+    orberBy?: object;
+    [key: string]: object | number | undefined;
+  };
 
   // --Filter
   filter: { [key: string]: unknown };
@@ -43,6 +50,7 @@ export interface DotsIndexPageProps {
   views: unknown[];
   currentView: string;
   onViewChange: (args: unknown[]) => void;
+  hideViews: boolean;
 
   // --Toolbar
   selectionModel: string[];

@@ -10,16 +10,16 @@ import { isEmpty } from 'lodash';
 import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 
+// [ ](Adrien): Check why request is send each time
 const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
   const {
     variant = 'details',
     entityName,
     // Data
+    columns,
     rowsQuery,
     rowsGetter,
-    aggregateQuery,
-    aggregateGetter,
-    columns,
+    variables,
     // Filter
     filter,
     onFilterChange,
@@ -42,6 +42,7 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
     views,
     currentView,
     onViewChange,
+    hideViews,
     // Toolbar
     selectionModel,
     onSelectionModelChange,
@@ -61,35 +62,34 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
 
   //* SORT
   //-> Sort from sort HOC
-  const _sort = sort.map(({ field, direction }) => ({
-    [field]: direction,
-  }));
+  const _sort = useMemo(
+    () =>
+      sort.map(({ field, direction }) => ({
+        [field]: direction,
+      })),
+    [sort]
+  );
 
   //* WHERE
   //-> Where from where HOC
-  const where = filter;
-  // const where = {};
+  // const where = filter;
+  const where = useMemo(() => ({}), []);
 
   //* REQUESTS
-  //-> Create variable object
-  const variables = { skip, take, where: where, orderBy: _sort, lang: '' };
-  if (lang) {
-    variables.lang = lang;
-  }
-
   //-> GET FindMany datas && extract rows
   const { loading, error, data, refetch } = useQuery(rowsQuery, {
-    variables: variables,
+    variables: {
+      ...(variables || {}),
+      ...((lang && { lang: lang }) || {}),
+      skip: skip,
+      take: take,
+      where: where,
+      orderBy: _sort,
+    },
   });
-  const rows = useMemo(() => rowsGetter(data), [rowsGetter, data]);
-
-  //-> GET Aggregates && extract total count
-  const { data: aggregate } = useQuery(aggregateQuery, {
-    variables: { where: where },
-  });
-  const totalCounts = useMemo(
-    () => aggregateGetter(aggregate),
-    [aggregateGetter, aggregate]
+  const [rows, rowsCount] = useMemo(
+    () => rowsGetter(data) || [],
+    [rowsGetter, data]
   );
 
   // *COMPONENTS
@@ -155,7 +155,7 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
             onPagePrevious={onPagePrevious}
             onGoTo={onGoTo}
             onTakeChange={onTakeChange}
-            totalCounts={totalCounts}
+            totalCounts={rowsCount}
           />
         </>
       )}
@@ -166,12 +166,14 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
   return (
     <>
       {variant === 'details' && (
-        <Stack direction="column" height="100%" overflow="hidden">
-          <ViewBar
-            views={views}
-            currentView={currentView}
-            onViewChange={onViewChange}
-          />
+        <Stack direction="column" height="100%" overflow="hidden" width="100%">
+          {!hideViews && (
+            <ViewBar
+              views={views}
+              currentView={currentView}
+              onViewChange={onViewChange}
+            />
+          )}
           <FilterBar
             entityName={entityName}
             // Sort

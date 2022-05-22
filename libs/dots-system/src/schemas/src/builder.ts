@@ -1,7 +1,7 @@
 import * as columns from '../../columns';
 import * as forms from '@dots.cool/form-builder';
 import * as yup from 'yup';
-import { isArray } from 'lodash';
+import { isArray, get } from 'lodash';
 import { FIELD_TYPES, GRAPHQL_REQUESTS } from '@dots.cool/tokens';
 
 const CREATE_ONE = GRAPHQL_REQUESTS.CreateOne;
@@ -44,7 +44,6 @@ function addDefaultValue(config: any, defaultValue: any) {
 }
 
 // [ ](Adrien): Create config for all default keys (i.e input|column|validation|...)
-
 //* CHECKBOX
 const checkbox = (config: any) => {
   //-> make sure all is ok
@@ -92,9 +91,10 @@ const timestamp = (config) => {
 
 //* RELATIONSHIP
 const relationship = (config) => {
-  const { ref, many, ui } = config;
   //? Create basic fields if missing
   initField(config);
+
+  const { ref, many, ui } = config;
 
   const isManyRelationShip = !(many === false);
   const { columnField } = ui;
@@ -170,6 +170,21 @@ const relationship = (config) => {
   return config;
 };
 
+//* SELECT
+const select = (config) => {
+  initField(config);
+
+  const { variant } = config;
+
+  //-> init all required properties
+  if (!hasUiInput(config)) addUiInput(config, forms.select({}));
+  if (!hasUiColumn(config))
+    addUiColumn(config, columns.select({ variant: variant || 'text' }));
+
+  config.type = FIELD_TYPES.select;
+  return config;
+};
+
 //* JSON
 const json = (config) => {
   config.type = FIELD_TYPES.json;
@@ -194,12 +209,6 @@ const password = (config) => {
   return config;
 };
 
-//* SELECT
-const select = (config) => {
-  config.type = FIELD_TYPES.select;
-  return config;
-};
-
 //* VIRTUAL
 const virtual = (config) => {
   config.type = FIELD_TYPES.virtual;
@@ -214,6 +223,13 @@ const file = (config) => {
 
 //* IMAGE
 const image = (config) => {
+  //-> make sure all is ok
+  initField(config);
+
+  //-> init all required properties
+  if (!hasUiInput(config)) addUiInput(config, forms.imageInput({}));
+  if (!hasUiColumn(config)) addUiColumn(config, columns.image({}));
+
   config.type = FIELD_TYPES.image;
   return config;
 };

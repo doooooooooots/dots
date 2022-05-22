@@ -8,6 +8,8 @@ const PARAMS = `
   orderBy: $orderBy
 `;
 
+const PARAMS_COUNT = `where: $where`;
+
 function findManyArgs(singular: string, lang = false) {
   const Singular = ucFirst(singular);
 
@@ -39,6 +41,7 @@ const findManyBuilder =
       ${plurial}(${PARAMS}) {
         ${query}
       }
+      ${plurial}Count(${PARAMS_COUNT})
     }
   `;
   };

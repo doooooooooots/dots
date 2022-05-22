@@ -8,6 +8,8 @@ export const GRAPHQL_REQUESTS = {
   DeleteOne: 'graphql_action_delete_one',
   DeleteMany: 'graphql_action_delete_many',
   Count: 'graphql_action_count',
+  // Relationship
+  FindManyFromParent: 'graphql_action_find_many_from_parent',
 } as const;
 
 export const GRAPHQL_ACTIONS = {

@@ -65,6 +65,7 @@ export default function ButtonPopper(props) {
         anchorEl={anchorEl}
         placement={placement}
         transition
+        sx={{ zIndex: 1300 }}
         {...popper}
       >
         {({ TransitionProps }) => (

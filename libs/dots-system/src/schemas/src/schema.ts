@@ -1,17 +1,26 @@
 import { EntitySchema, EntitySchemaEnhanced } from '../index.d';
 import { createGraphQlApi } from '@dots.cool/schemas';
-import * as columnBuilder from '../../columns';
 import { FIELD_TYPES, GRAPHQL_REQUESTS } from '@dots.cool/tokens';
 import { compose } from '@dots.cool/utils';
-import * as yup from 'yup';
 import { GridRenderCellParams } from '@mui/x-data-grid-pro';
+import pluralize from 'pluralize';
+import { getIndexColumn } from '../index';
+import * as columnBuilder from '../../columns';
+import * as yup from 'yup';
+import { get } from 'lodash';
 
 const CREATE_ONE = GRAPHQL_REQUESTS.CreateOne;
 const FIND_ONE = GRAPHQL_REQUESTS.FindOne;
 const FIND_MANY = GRAPHQL_REQUESTS.FindMany;
+const FIND_MANY_FROM_PARENT = GRAPHQL_REQUESTS.FindManyFromParent;
+
+const VIEWS = [CREATE_ONE, FIND_ONE, FIND_MANY, FIND_MANY_FROM_PARENT];
 
 interface fieldConfigType {
-  query: string | ((fieldName: string) => string);
+  ref: string;
+  type: string;
+  path: string;
+  many: boolean;
   needsContext: boolean;
   sortable: boolean;
   defaultValue: object;
@@ -30,94 +39,136 @@ interface columnArgsType {
   headerName: string;
   count?: (params: GridRenderCellParams) => number;
   filterQuery?: (params: GridRenderCellParams) => any;
+  valueGetter?: (params: GridRenderCellParams) => string;
 }
 
-function createViews(singular, fields) {
+function flattenSets(views) {
+  Object.values(views).forEach((view) => {
+    view.fieldNames = [...view.fieldNames];
+    view.query = [...view.query].join(' ');
+  });
+}
+
+function addToViews(
+  views,
+  fieldName: string,
+  { ref, hideIn = [], type, many, path }
+) {
+  VIEWS.forEach((request) => {
+    if (hideIn.includes(request)) return;
+
+    //? Add field to view
+    views[request].fieldNames.add(fieldName);
+
+    //? Transform path
+    //-> If path present in config, override
+    if (path) {
+      const pathArray = path.split('.').reverse();
+      const _query = pathArray.reduce(
+        (acc, item) => `${item} ${acc ? `{${acc}}` : acc}`
+      );
+      views[request].query.add(_query);
+      return;
+    }
+
+    //? DEFAULTS
+    //-> For non relashional fields
+    if (type !== FIELD_TYPES.relationship) {
+      views[request].query.add(fieldName);
+      return;
+    }
+
+    //? RELATIONSHIP
+    //-> For relational fields
+    if (!many) {
+      const indexCol = getIndexColumn(ref);
+      views[request].query.add(`${ref} {id ${indexCol}}`);
+    } else {
+      views[request].query.add(`${pluralize(ref)}Count`);
+    }
+  });
+
+  // [ ](Adrien): Manage link between CREATE <-> FIND FOR CACHE PURPOSE
+  //-> CREATE > FIND MANY, so we need to ask all field ?
+
+  return views;
+}
+
+function createColumn(singular, fieldName, { type, many, ui, path }) {
+  //-> DEFAULT
+  const columnArgs: columnArgsType = {
+    field: fieldName,
+    headerName: `column.${singular}.${fieldName}.headerName`,
+  };
+
+  //-> RELATIONSHIP
+  if (type === FIELD_TYPES.relationship && many === true) {
+    columnArgs.count = ({ row }) => row[`${fieldName}Count`];
+  }
+
+  //-> PATH: Create column valueGetter
+  let valueGetter = ({ row }) => get(row, fieldName);
+  if (path) {
+    valueGetter = ({ row }) => get(row, path);
+  }
+  columnArgs.valueGetter = valueGetter;
+
+  //-> Return object
+  return ui.column(columnArgs);
+}
+
+function createSchema(singular: string, fields) {
   if (!fields) return {};
+
+  const initViews = VIEWS.reduce(
+    (acc, VIEW) => ({
+      ...acc,
+      [VIEW]: {
+        fieldNames: new Set(),
+        query: new Set(['id']),
+      },
+    }),
+    {}
+  );
 
   return Object.entries(fields).reduce(
     (acc, [fieldName, fieldConfig]) => {
+      if (!fieldName) return acc;
       const {
-        query,
         type,
         ref,
-        many,
+        path,
         sortable,
         defaultValue,
         validation,
         isIndexed,
-        hideIn = [],
         ui,
         formatData,
       } = fieldConfig as fieldConfigType;
 
-      //* INPUT
-      //? Create input Component
-      const inputArgs = {
-        name: fieldName,
-        label: `form.${singular}.${fieldName}.label`,
-        placeholder: `form.${singular}.${fieldName}.placeholder`,
-        description: `form.${singular}.${fieldName}.description`,
-      };
-      const Input = ui.input(inputArgs);
-      acc.inputs[fieldName] = Input;
+      if (!ui) {
+        throw Error('schema.error.ui.required');
+      }
 
-      //* QUERIES
-      // [ ](Adrien): Manage link between CREATE <-> FIND FOR CACHE PURPOSE
-      [CREATE_ONE, FIND_ONE, FIND_MANY].forEach((request) => {
-        if (!hideIn.includes(request)) {
-          //? Add field to view
-          acc.views[request].fieldNames.add(fieldName);
-
-          //? Add field to sortable
-          if (sortable !== false) {
-            acc.sortableFields.add(fieldName);
-          }
-
-          //? Add field to query
-          if (query) {
-            if (typeof query === 'function') {
-              acc.views[request].query.add(query(fieldName));
-            } else {
-              acc.views[request].query.add(query);
-            }
-          } else {
-            if (type === FIELD_TYPES.relationship) {
-              // [ ](Adrien): Clean logic for query
-              if (!many) {
-                acc.views[request].query.add(`${fieldName} {id name}`);
-              } else {
-                acc.views[request].query.add(`${fieldName}Count`);
-              }
-            } else {
-              acc.views[request].query.add(fieldName);
-            }
-          }
-        }
-      });
+      //* VIEWS
+      addToViews(acc.views, fieldName, fieldConfig);
 
       //* COLUMNS
       //? Create column definition except for indexed
-      if (isIndexed && !acc.indexColumn) {
-        //-> CASE indexed column
+      if (isIndexed && acc.indexColumn === 'id') {
         acc.indexColumn = fieldName;
       } else {
-        //-> DEFAULT
-        const columnArgs: columnArgsType = {
-          field: fieldName,
-          headerName: `column.${singular}.${fieldName}.headerName`,
-        };
-
-        //-> RELATIONSHIP
-        if (type === FIELD_TYPES.relationship && many === true) {
-          columnArgs.count = ({ row }) => row[`${fieldName}Count`];
-        }
-
-        const column = ui.column(columnArgs);
-        acc.columns[fieldName] = column;
+        acc.columns[fieldName] = createColumn(singular, fieldName, fieldConfig);
       }
 
-      //* RELATIONSHIP
+      //* SORTABLES COLUMNS
+      // [ ](Adrien): Does not garanty that column is shown in actual view
+      //? Add field to sortable
+      if (sortable !== false && !path) {
+        acc.sortableFields.add(fieldName);
+      }
+
+      //* RELATIONSHIP SPECIAL NEEDS
       if (type === FIELD_TYPES.relationship) {
         acc.needsContext[fieldName] = { ref: ref || fieldName };
         if (typeof formatData === 'function')
@@ -137,21 +188,8 @@ function createViews(singular, fields) {
       return acc;
     },
     {
-      indexColumn: '', // allow 'open' button and automatic generation of single page
-      views: {
-        [CREATE_ONE]: {
-          fieldNames: new Set(),
-          query: new Set(['id']),
-        },
-        [FIND_ONE]: {
-          fieldNames: new Set(),
-          query: new Set(['id']),
-        },
-        [FIND_MANY]: {
-          fieldNames: new Set(),
-          query: new Set(['id']),
-        },
-      }, // allow page generations
+      indexColumn: 'id', // allow 'open' button and automatic generation of single page
+      views: initViews, // allow page generations
       columns: {}, // to be extracted form queries
       inputs: {}, // to be extracted form fields
       validations: {}, // to be given to react hook form
@@ -163,9 +201,8 @@ function createViews(singular, fields) {
   );
 }
 
-// [ ] : Should get name from key and inject it in all functions (i.e: field & column)
 const schema = (config: EntitySchema): EntitySchemaEnhanced => {
-  if (!config) return {};
+  if (!config) throw Error('error.schema.config.missing');
 
   const { singular, plurial, fields, customComponents } = config;
 
@@ -173,11 +210,8 @@ const schema = (config: EntitySchema): EntitySchemaEnhanced => {
   const graphql = createGraphQlApi(singular, plurial);
 
   //-> Create arrays of components and informations
-  const datas = createViews(singular, fields);
-  if (!datas) return config;
-
   const {
-    indexColumn = 'id',
+    indexColumn,
     views,
     columns,
     inputs,
@@ -186,10 +220,10 @@ const schema = (config: EntitySchema): EntitySchemaEnhanced => {
     sortableFields,
     needsContext,
     formatFunctions,
-  } = datas;
+  } = createSchema(singular, fields);
 
   // Create indexedColumn with view
-  if (columns) {
+  if (columns && indexColumn) {
     columns[indexColumn] = columnBuilder.uniqueId({
       field: indexColumn,
       Component: 'test',
@@ -198,10 +232,7 @@ const schema = (config: EntitySchema): EntitySchemaEnhanced => {
 
   // Flatten Queries
   if (views) {
-    Object.values(views).forEach((view) => {
-      view.fieldNames = [...view.fieldNames];
-      view.query = [...view.query].join(' ');
-    });
+    flattenSets(views);
   }
 
   return {

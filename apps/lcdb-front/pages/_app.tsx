@@ -6,6 +6,7 @@ import {
   SettingsConsumer,
   Toaster,
   CommandBar,
+  HistoryBrowser,
 } from '@dots.cool/dots-system';
 
 import { CacheProvider } from '@emotion/react';
@@ -65,6 +66,7 @@ export default function MyApp(props) {
                     }}
                   />
                   <CommandBar />
+                  <HistoryBrowser maxWidth="lg" fullWidth />
                   {getLayout(<Component {...pageProps} />)}
                 </ThemeProvider>
               );
