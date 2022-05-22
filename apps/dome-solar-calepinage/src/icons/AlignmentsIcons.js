@@ -1,0 +1,9 @@
+export { default as BottomCenter } from './AlignBottomCenter';
+export { default as BottomRight } from './AlignBottomRight';
+export { default as BottomLeft } from './AlignBottomLeft';
+export { default as MiddleCenter } from './AlignMiddleCenter';
+export { default as MiddleRight } from './AlignMiddleRight';
+export { default as MiddleLeft } from './AlignMiddleLeft';
+export { default as TopCenter } from './AlignTopCenter';
+export { default as TopRight } from './AlignTopRight';
+export { default as TopLeft } from './AlignTopLeft';

@@ -69,6 +69,90 @@
         }
       }
     },
+    "dome-solar-calepinage": {
+      "root": "apps/dome-solar-calepinage",
+      "sourceRoot": "apps/dome-solar-calepinage",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/next:build",
+          "outputs": ["{options.outputPath}"],
+          "defaultConfiguration": "production",
+          "options": {
+            "root": "apps/dome-solar-calepinage",
+            "outputPath": "dist/apps/dome-solar-calepinage"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/next:server",
+          "options": {
+            "buildTarget": "dome-solar-calepinage:build",
+            "dev": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "dome-solar-calepinage:build:production",
+              "dev": false
+            }
+          }
+        },
+        "export": {
+          "executor": "@nrwl/next:export",
+          "options": {
+            "buildTarget": "dome-solar-calepinage:build:production"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/dome-solar-calepinage"],
+          "options": {
+            "jestConfig": "apps/dome-solar-calepinage/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": [
+              "apps/dome-solar-calepinage/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        }
+      },
+      "tags": []
+    },
+    "dome-solar-calepinage-e2e": {
+      "root": "apps/dome-solar-calepinage-e2e",
+      "sourceRoot": "apps/dome-solar-calepinage-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/dome-solar-calepinage-e2e/cypress.json",
+            "devServerTarget": "dome-solar-calepinage:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "dome-solar-calepinage:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/dome-solar-calepinage-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["dome-solar-calepinage"]
+    },
     "dots-system": {
       "root": "libs/dots-system",
       "sourceRoot": "libs/dots-system/src",
