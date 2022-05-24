@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Button, TextField, Grid, Typography } from '@mui/material';
+import { Button, TextField, Grid, Typography, Stack } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { createOneBuilder } from '@dots.cool/schemas';
@@ -24,7 +24,10 @@ const CladdingCreate = () => {
   );
 
   return (
-    <Grid container spacing={2} mt={1}>
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Typography variant="h6">Informations de base</Typography>
+      </Grid>
       <Grid item xs={8}>
         <TextField
           label="Nom"
@@ -46,7 +49,7 @@ const CladdingCreate = () => {
       </Grid>
       <Grid item xs={4}>
         <TextField
-          label="Longueur (⟷)"
+          label="Largeur (⟷)"
           size="small"
           type="number"
           fullWidth
@@ -57,7 +60,7 @@ const CladdingCreate = () => {
       </Grid>
       <Grid item xs={4}>
         <TextField
-          label="Largeur (↕︎)"
+          label="Hauteur (↕︎)"
           size="small"
           type="number"
           fullWidth
@@ -79,7 +82,7 @@ const CladdingCreate = () => {
       </Grid>
       <Grid item xs={6}>
         <TextField
-          label="Hauteur d'ondes "
+          label="Hauteur d'ondes"
           size="small"
           type="number"
           fullWidth
@@ -132,7 +135,7 @@ const CladdingCreate = () => {
         />
       </Grid>
       <Grid item xs={12}>
-        <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+        <Button variant="contained" onClick={handleSubmit(onSubmit)} fullWidth>
           Enregistrer
         </Button>
       </Grid>

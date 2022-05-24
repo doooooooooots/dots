@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
-import { Button, IconButton, Stack, Typography, Divider } from '@mui/material';
+import {
+  Button,
+  IconButton,
+  Stack,
+  Typography,
+  Divider,
+  Chip,
+} from '@mui/material';
 import { styled } from '@mui/system';
 import TabProject from './tab-project';
 import TabSolarPanel from './tab-solar-module';
@@ -48,6 +55,13 @@ function LinksButtons() {
     setOpen(true);
   };
 
+  const handleDeleteButtonClick = useCallback(
+    (pageName) => () => {
+      store.setRelatedData(pageName, {});
+    },
+    [store]
+  );
+
   const handleClickHome = () => router.push('/');
 
   const handleClose = () => {
@@ -64,29 +78,31 @@ function LinksButtons() {
         {panels.map((item) => {
           const isActive = open && item.name === value;
           const _isEmpty = isEmpty(store.getRelatedData(item.name));
+
           return (
-            <Button
+            <Chip
               key={`button-${item.name}`}
+              icon={isActive || !_isEmpty ? item.Icon : <Add />}
+              label={_isEmpty ? `Ajouter un ${item.name}` : item.name}
               color={isActive || !_isEmpty ? 'primary' : 'neutral'}
-              variant={
-                (isActive && 'contained') || (!_isEmpty && 'outlined') || 'text'
-              }
-              startIcon={isActive || !_isEmpty ? item.Icon : <Add />}
-              endIcon={isActive ? <KeyboardArrowDownIcon /> : false}
-              size="small"
+              variant={isActive ? 'contained' : 'outlined'}
               onClick={handleClick(item.name)}
+              deleteIcon={isActive ? <KeyboardArrowDownIcon /> : false}
+              onDelete={
+                _isEmpty
+                  ? isActive
+                    ? handleClick(item.name)
+                    : undefined
+                  : handleDeleteButtonClick(item.name)
+              }
+              size="small"
               sx={[
-                {
-                  minHeight: 'auto',
-                  p: '2px 8px',
-                  borderRadius: '50px',
+                { px: 0.5 },
+                _isEmpty && {
+                  border: 0,
                 },
               ]}
-            >
-              {_isEmpty
-                ? `Ajouter un ${item.name}`
-                : store.getRelatedData(item.name).name}
-            </Button>
+            />
           );
         })}
       </Stack>
@@ -99,23 +115,34 @@ function LinksButtons() {
         onClose={handleClose}
         placement={'bottom-start'}
       >
-        <Stack direction="row" justifyContent="space-between" px={2}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          px={2}
+        >
           <Typography variant="h6">{value}</Typography>
-          <IconButton aria-label="delete" size="small" onClick={handleClose}>
-            <Close fontSize="inherit" />
-          </IconButton>
+          <Button
+            aria-label="delete"
+            size="small"
+            onClick={handleClose}
+            endIcon={<Close fontSize="inherit" />}
+            sx={{ py: 0.25, px: 2 }}
+          >
+            Fermer
+          </Button>
         </Stack>
         <StyledTabPanel value="project">
-          <TabProject />
+          <TabProject onClose={handleClose} />
         </StyledTabPanel>
         <StyledTabPanel value="solarModule">
           <TabSolarPanel onClose={handleClose} />
         </StyledTabPanel>
         <StyledTabPanel value="product">
-          <TabProduct />
+          <TabProduct onClose={handleClose} />
         </StyledTabPanel>
         <StyledTabPanel value="cladding">
-          <TabCladding />
+          <TabCladding onClose={handleClose} />
         </StyledTabPanel>
       </PopperGrow>
     </TabContext>

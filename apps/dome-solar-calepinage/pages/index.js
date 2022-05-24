@@ -1,6 +1,7 @@
 import {
   Alert,
   Box,
+  Button,
   Container,
   Divider,
   Stack,
@@ -9,6 +10,16 @@ import {
 import { gql, useQuery } from '@apollo/client';
 import Link from '../src/components/Link';
 import { styled } from '@mui/system';
+import { useRouter } from 'next/router';
+
+const GET_LAST_PROJECTS = gql`
+  query GetLastProjects($take: Int) {
+    projects(take: $take) {
+      id
+      name
+    }
+  }
+`;
 
 const StyledLink = styled(Link)(
   ({ theme }) => `
@@ -25,19 +36,13 @@ const StyledLink = styled(Link)(
 );
 
 export default function Home() {
-  const GET_LAST_PROJECTS = gql`
-    query GetLastProjects($take: Int) {
-      projects(take: $take) {
-        id
-        name
-      }
-    }
-  `;
   const {
     data = {},
     loading,
     error,
   } = useQuery(GET_LAST_PROJECTS, { variables: { take: 20 } });
+
+  const router = useRouter();
 
   if (loading) {
     return <div>Loading...</div>;
@@ -48,9 +53,30 @@ export default function Home() {
 
   return (
     <Container>
-      <Box my={2}>
+      <Stack
+        my={2}
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Typography variant="h1">Hello</Typography>
-      </Box>
+        <Stack direction="row" spacing={2}>
+          <Button
+            onClick={() => router.push('/project/create')}
+            variant="outlined"
+            size="small"
+          >
+            Creér un projet
+          </Button>
+          <Button
+            onClick={() => router.push('/layout/create')}
+            variant="contained"
+            size="small"
+          >
+            Creér un calepinage
+          </Button>
+        </Stack>
+      </Stack>
       <Divider variant="middle" />
       <Box my={2}>
         {data.projects.map((item) => (

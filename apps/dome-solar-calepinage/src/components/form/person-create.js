@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Button, Grid, Stack, TextField, Typography } from '@mui/material';
+import { Button, Grid, TextField } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { createOneBuilder } from '@dots.cool/schemas';
@@ -8,7 +8,7 @@ import SectionTitle from './atoms/section-title';
 
 const CREATE_SOLAR_MODULE = createOneBuilder('solarModule')('id');
 
-const SolarModuleCreate = () => {
+const PersonFormCreate = () => {
   const { renderView, closeDialog, setUserData, setRelatedData } = useStore();
   const { register, handleSubmit } = useFormContext();
 
@@ -100,4 +100,4 @@ const SolarModuleCreate = () => {
   );
 };
 
-export default SolarModuleCreate;
+export default PersonFormCreate;

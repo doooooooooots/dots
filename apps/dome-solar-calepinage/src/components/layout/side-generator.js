@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useStore } from '../context/useStore';
 import { IconButton, Stack, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
@@ -11,6 +11,14 @@ import * as AlignmentIcons from '../../icons/AlignmentsIcons';
 const SideGenerator = () => {
   const store = useStore();
   const { register } = useFormContext();
+
+  const handleGeneratorAlignmentClick = useCallback(
+    (vertKey, horizKey) => () => {
+      store.setAnchorPoint(`${vertKey}-${horizKey}`);
+      store.renderView();
+    },
+    [store]
+  );
 
   return (
     <>
@@ -31,7 +39,7 @@ const SideGenerator = () => {
                     color: 'primary.main',
                   },
                 ]}
-                onClick={() => store.setAnchorPoint(`${vertKey}-${horizKey}`)}
+                onClick={handleGeneratorAlignmentClick(vertKey, horizKey)}
               >
                 <Icon />
               </IconButton>

@@ -1,7 +1,7 @@
 import { Box, ClickAwayListener, Grow, Popper } from '@mui/material';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 
-const defaultId='popper-grow';
+const defaultId = 'popper-grow';
 const timeout = 250;
 
 function PopperGrow(props) {
@@ -11,7 +11,7 @@ function PopperGrow(props) {
     anchorEl,
     placement,
     onClose,
-    children
+    children,
   } = props;
 
   const [alreadyOpen, setAlreadyOpen] = useState(false);
@@ -23,8 +23,8 @@ function PopperGrow(props) {
     if (!alreadyOpen && open === true) {
       setTimeout(() => setAlreadyOpen(true), timeout);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   return (
     <Popper
@@ -32,7 +32,7 @@ function PopperGrow(props) {
       open={!!open}
       anchorEl={anchorEl}
       placement={placement}
-      modifiers={ [
+      modifiers={[
         {
           name: 'computeStyles',
           options: {
@@ -44,19 +44,20 @@ function PopperGrow(props) {
       className={alreadyOpen ? 'is--open' : ''}
       sx={{
         '&.is--open': {
-          transition: 'transform 0.15s ease-in-out'
-        }
+          transition: 'transform 0.15s ease-in-out',
+        },
       }}
     >
       {({ TransitionProps }) => (
         <ClickAwayListener onClickAway={onClose}>
-          <Grow direction='left' {...TransitionProps} timeout={timeout}>
-            <Box pt={2}>
+          <Grow direction="left" {...TransitionProps} timeout={timeout}>
+            <Box pt={1.4}>
               <Box
                 sx={{
                   backgroundColor: 'background.default',
                   boxShadow: (theme) => theme.shadows[18],
-                  borderRadius: 2
+                  borderRadius: 2,
+                  pt: 2,
                 }}
               >
                 {children}
@@ -69,4 +70,4 @@ function PopperGrow(props) {
   );
 }
 
-export default PopperGrow
+export default PopperGrow;

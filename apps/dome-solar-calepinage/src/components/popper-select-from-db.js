@@ -4,6 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import {
   Box,
   Button,
+  Divider,
   InputAdornment,
   List,
   ListItem,
@@ -136,7 +137,7 @@ function PopperSelectFromDb(props) {
                     alignItems="center"
                     direction="column"
                   >
-                    <Typography variant="h3">Welcome</Typography>
+                    <Typography variant="h3">Hello</Typography>
                     <Typography variant="h6">
                       Il n&apos;y a pas encore d&apos;entrée
                     </Typography>
@@ -164,37 +165,23 @@ function PopperSelectFromDb(props) {
           </PopperList>
         </>
       )}
-      {/* <PopperSectionTitle>Favoris</PopperSectionTitle> */}
+
       <PopperList>
-        {/* {!isEmpty(getDatas(data)) &&
-          getDatas(data).map((item) => {
-            const row = getRowDatas(item);
-            return (
-              <ListItemButton key={row.id} sx={{ py: 0, minHeight: 32 }}>
-                <ListItemIcon sx={{ color: 'inherit' }}>{icon}</ListItemIcon>
-                <ListItemText
-                  primary={row.name}
-                  primaryTypographyProps={{
-                    fontSize: 14,
-                    fontWeight: 'medium',
-                  }}
-                />
-              </ListItemButton>
-            );
-          })} */}
+        <Divider />
         {canAdd && (
           <ListItemButton
             key={'__create_new__'}
-            sx={{ py: 0, mt: 1, minHeight: 32 }}
+            sx={{ py: 0, minHeight: 32 }}
             onClick={store.onOpenToClick(name)}
           >
-            <ListItemIcon sx={{ color: 'inherit' }}>
+            <ListItemIcon sx={{ color: 'grey.500' }}>
               <AddIcon />
             </ListItemIcon>
             <ListItemText
               primary={'Ajouter un nouveau'}
               primaryTypographyProps={{
                 fontSize: 14,
+                color: 'grey.500',
                 fontWeight: 'medium',
               }}
             />

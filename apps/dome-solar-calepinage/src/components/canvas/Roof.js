@@ -1,32 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Group, Arrow } from 'react-konva';
 import { observer } from 'mobx-react';
-import { isEmpty } from 'lodash';
 import Module from '../Module';
 import Contour from './Contour';
 import Obsctacle from '../Obsctacle';
 
 const Roof = (props) => {
-  const {
-    store
-  } = props;
+  const { store } = props;
 
-  const [isMounted, setIsMounted] = useState(false);
-
-  const currentMaxCol = store.getCurrentMaxCol();
-  const currentMaxRow = store.getCurrentMaxRow();
   const offsetX = store.offsetX();
   const offsetY = store.offsetY();
-  /**
-   * Manage Modules
-   * ----
-   */
-
-  useEffect(() => {
-    setIsMounted(true);
-    return () => { setIsMounted(false); };
-  }, []);
 
   /**
    * Click Events
@@ -47,13 +31,12 @@ const Roof = (props) => {
       <Group>
         {
           // Obstacles
-          store.allObstacles().length > 0
-          && store.allObstacles().map((obstacle) => (
-            <Obsctacle
-              key={obstacle.id}
-              obstacle={obstacle}
-            />
-          ))
+          store.allObstacles().length > 0 &&
+            store
+              .allObstacles()
+              .map((obstacle) => (
+                <Obsctacle key={obstacle.id} obstacle={obstacle} />
+              ))
         }
       </Group>
 
@@ -62,8 +45,8 @@ const Roof = (props) => {
         x={offsetX}
         y={offsetY}
       >
-        {store.allModules()
-          && store.allModules().map((element) => {
+        {store.allModules() &&
+          store.allModules().map((element) => {
             const { index, isIntercepted } = element;
             return (
               <Module
@@ -80,20 +63,18 @@ const Roof = (props) => {
                 isIntercepted={isIntercepted.length}
                 visible
               />
-            );}
-          )}
+            );
+          })}
       </Group>
 
       {/* Arrow */}
-      <Group
-        opacity={0.15}
-      >
+      <Group opacity={0.15}>
         <Arrow
           points={[
             store.getUserDatas('Tx') / 2,
             0,
             store.getUserDatas('Tx') / 2,
-            store.getUserDatas('Ty') / 2.5
+            store.getUserDatas('Ty') / 2.5,
           ]}
           pointerLength={300}
           pointerWidth={400}
@@ -109,7 +90,7 @@ const Roof = (props) => {
 };
 
 Roof.propTypes = {
-  store: PropTypes.any
+  store: PropTypes.any,
 };
 
 export default observer(Roof);

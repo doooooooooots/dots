@@ -1,12 +1,14 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { gql } from '@apollo/client';
 import PopperSelectFromDb from '../popper-select-from-db';
 import SolarPowerOutlined from '@mui/icons-material/SolarPowerOutlined';
 import { useStore } from '../context/useStore';
 import { isEmpty } from 'lodash';
-import { Alert, Stack, Typography, Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Box, Button, Divider, Stack } from '@mui/material';
 import { PAGE_SOLAR_MODULE } from '../../constants';
+import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
+import CompareArrowsOutlinedIcon from '@mui/icons-material/CompareArrowsOutlined';
+import FielGroup from '../field-group';
 
 const GET_SOLAR_MODULES = gql`
   query GetSolarModules($search: String, $take: Int) {
@@ -26,46 +28,82 @@ const GET_SOLAR_MODULES = gql`
 
 const TabSolarModule = (props) => {
   const { onClose } = props;
-  const store = useStore();
+  const { getRelatedData, setRelatedData, setUserData, renderView } =
+    useStore();
 
-  const handleClick = useCallback(
+  const handleChoiceClick = useCallback(
     (element) => () => {
-      store.setUserData('Mx', element.lengthX);
-      store.setUserData('My', element.lengthY);
-      store.setRelatedData('solarModule', element);
-      onClose();
+      setUserData('Mx', element.lengthX);
+      setUserData('My', element.lengthY);
+      setUserData('Mz', element.lengthZ);
+      setUserData('MPw', element.electricalPower);
+      setRelatedData('solarModule', element);
+      renderView();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [store.setUserData]
+    [renderView, setRelatedData, setUserData]
   );
+
+  const handleRemoveClick = useCallback(() => {
+    setRelatedData('solarModule', {});
+  }, [setRelatedData]);
+
+  const solarModule = getRelatedData('solarModule');
 
   return (
     <>
-      <PopperSelectFromDb
-        name={PAGE_SOLAR_MODULE}
-        query={GET_SOLAR_MODULES}
-        icon={<SolarPowerOutlined />}
-        onClick={handleClick}
-        getDatas={(data) => data?.solarModules}
-        getRowDatas={(row) => ({
-          id: row.id,
-          name: row.name,
-        })}
-        canAdd
-      />
-      {!isEmpty(store.getRelatedData('solarModule')) && (
-        <Alert severity="info">
-          <Stack>
-            <Typography variant="h6">Actuellement</Typography>
-            <Typography>{store.getRelatedData('solarModule').name}</Typography>
-            <Typography>
-              X: {store.getRelatedData('solarModule').lengthX}
-            </Typography>
-            <Typography>
-              Y: {store.getRelatedData('solarModule').lengthY}
-            </Typography>
+      {isEmpty(solarModule) ? (
+        <PopperSelectFromDb
+          name={PAGE_SOLAR_MODULE}
+          query={GET_SOLAR_MODULES}
+          icon={<SolarPowerOutlined />}
+          onClick={handleChoiceClick}
+          getDatas={(data) => data?.solarModules}
+          getRowDatas={(row) => ({
+            id: row.id,
+            name: row.name,
+          })}
+          canAdd
+        />
+      ) : (
+        <Stack p={2} sx={{ minWidth: 385 }} spacing={1}>
+          <Stack direction="column">
+            <FielGroup
+              icon={<EventNoteOutlinedIcon />}
+              label={'Largeur (⟷)'}
+              value={solarModule.lengthX}
+            />
+            <FielGroup
+              icon={<EventNoteOutlinedIcon />}
+              label={'Hauteur (↕︎)'}
+              value={solarModule.lengthY}
+            />
+            <FielGroup
+              icon={<EventNoteOutlinedIcon />}
+              label={'Frame'}
+              value={solarModule.frameType}
+            />
+            <FielGroup
+              icon={<EventNoteOutlinedIcon />}
+              label={'Puissance électrique'}
+              value={solarModule.electricalPower}
+            />
           </Stack>
-        </Alert>
+          <Divider />
+          <Box>
+            <Button
+              onClick={handleRemoveClick}
+              startIcon={<CompareArrowsOutlinedIcon fontSize="small" />}
+              sx={{
+                color: 'grey.500',
+                borderColor: 'grey.500',
+                p: 0,
+                px: 1,
+              }}
+            >
+              Changer de panneau solaire
+            </Button>
+          </Box>
+        </Stack>
       )}
     </>
   );
