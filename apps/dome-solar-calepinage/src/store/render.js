@@ -4,19 +4,19 @@ export const withRender = (app) => ({
   stage: {
     x: 0,
     y: 0,
-    isCentered: true
+    isCentered: true,
   },
   canvas: {
     x: 0,
     y: 0,
     scale: 1,
     isDragging: false,
-    anchorPoint: 'top-left'
+    anchorPoint: 'top-left',
   },
   renderZone: {
     x: 0,
     y: 0,
-    scale: 1
+    scale: 1,
   },
 
   /**
@@ -68,8 +68,11 @@ export const withRender = (app) => ({
   reloadSize() {
     this.resetView();
     this.updateStageState({
-      x: window.innerWidth - this.config.drawerWidth,
-      y: window.innerHeight - this.config.topBarHeight - this.config.formTopBarHeight
+      x: window.innerWidth - this.config.drawerWidth - this.config.toolbarWidth,
+      y:
+        window.innerHeight -
+        this.config.topBarHeight -
+        this.config.formTopBarHeight,
     });
     this.draw();
   },
@@ -81,19 +84,19 @@ export const withRender = (app) => ({
   updateCanvasState(state) {
     this.canvas = {
       ...this.canvas,
-      ...state
+      ...state,
     };
   },
   updateRenderZoneState(state) {
     this.renderZone = {
       ...this.renderZone,
-      ...state
+      ...state,
     };
   },
   updateStageState(state) {
     this.stage = {
       ...this.stage,
-      ...state
+      ...state,
     };
   },
 
@@ -105,7 +108,7 @@ export const withRender = (app) => ({
     this.updateCanvasState({
       x: 0,
       y: 0,
-      scale: 1
+      scale: 1,
     });
   },
 
@@ -113,7 +116,7 @@ export const withRender = (app) => ({
     this.resetView();
     this.updateStageState({
       x,
-      y
+      y,
     });
     this.draw();
   },
@@ -123,13 +126,17 @@ export const withRender = (app) => ({
     const currentMaxRow = this.getCurrentMaxRow();
     this.resetModules();
     if (currentMaxCol * currentMaxRow >= 0) {
-      new Array(currentMaxCol * currentMaxRow).fill().forEach((element, index) => {
-        this.addModule({ index });
-      });
+      new Array(currentMaxCol * currentMaxRow)
+        .fill()
+        .forEach((element, index) => {
+          this.addModule({ index });
+        });
       this.resetModuleInterceptions();
-      this.allObstacles().forEach((obstacle) => this.addObstacleInterceptions(obstacle));
+      this.allObstacles().forEach((obstacle) =>
+        this.addObstacleInterceptions(obstacle)
+      );
       this.reloadSize();
       this.setNeedRerender(false);
     }
-  }
+  },
 });

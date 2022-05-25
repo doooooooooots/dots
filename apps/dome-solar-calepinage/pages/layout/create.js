@@ -1,54 +1,16 @@
-import Box from '@mui/material/Box';
 import { observer } from 'mobx-react';
-import {
-  alpha,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  Grid,
-  IconButton,
-  Stack,
-  Typography,
-} from '@mui/material';
-import TabLayout from '../../src/components/layout/tab-layout';
-import LayoutSidebar from '../../src/components/layout/layout-sidebar';
+import { Dialog, Grid, Box } from '@mui/material';
 import Toolbar from '../../src/components/layout/toolbar';
-import LinksButtons from '../../src/components/layout/links-buttons';
-import TabPreview from '../../src/components/layout/tab-preview';
+import TopBar from '../../src/components/layout/topbar-tabs';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useStore } from '../../src/components/context/useStore';
-import StepSummary from '../../src/components/StepSummary';
-import {
-  PAGE_PRODUCT,
-  PAGE_SOLAR_MODULE,
-  PAGE_PROJECT,
-  PAGE_CLADDING,
-} from '../../src/constants';
-import SolarModuleCreate from '../../src/components/form/solar-module-create';
-import CladdingCreate from '../../src/components/form/cladding-create';
-import { Close } from '@mui/icons-material';
-import ProjectFormCreate from '../../src/components/form/project-create';
-import { isEmpty } from 'lodash';
-import RenderActionOverlay from '../../src/components/render-action-overlay';
-import OnboardingLayout from '../../src/components/onboarding-layout';
-
-const getDialogTitle = (open) => {
-  switch (open) {
-    case PAGE_SOLAR_MODULE:
-      return 'Créer un panneau solaire';
-    case PAGE_PRODUCT:
-      return 'Creér un produit';
-    case PAGE_PROJECT:
-      return 'Créer un projet';
-    case PAGE_CLADDING:
-      return 'Créer un panneau';
-    default:
-      return '';
-  }
-};
+import { PAGE_PROJECT, SIDEBAR_WIDTH, TOPBAR_SIZE } from '../../src/constants';
+import MainCanvas from '../../src/components/layout/main-canvas';
+import LayoutSidebar from '../../src/components/layout/sidebar';
+import MainOnboarding from '../../src/components/layout/main-onboarding';
+import DialogForms from '../../src/components/layout/dialog-forms';
+import SidePreview from '../../src/components/layout/sidebar-preview';
 
 const LayoutByProjectId = () => {
   const store = useStore();
@@ -72,86 +34,70 @@ const LayoutByProjectId = () => {
 
   return (
     <FormProvider {...methods}>
-      <Grid
-        container
-        sx={{
-          width: '100%',
-          height: '100vh',
-          typography: 'body1',
-          overflow: 'hidden',
-        }}
-      >
+      <Box position="relative" height="100vh" overflow="hidden">
         {/*//* TOPBAR */}
-        <Grid item xs={12}>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            px={2}
-            sx={{ borderBottom: 1, borderColor: 'divider' }}
-          >
-            <LinksButtons />
-          </Stack>
-        </Grid>
+        <Box
+          sx={{
+            position: 'fixed',
+            width: '100%',
+            height: (theme) => theme.spacing(TOPBAR_SIZE),
+            overflow: 'hidden',
+          }}
+        >
+          <TopBar />
+        </Box>
 
         {/*//* MAIN */}
-        <Grid container item xs={12} sx={{ height: '100%' }}>
+        <Grid
+          container
+          sx={{
+            pt: TOPBAR_SIZE,
+            width: '100%',
+            height: '100vh',
+            typography: 'body1',
+            overflow: 'hidden',
+            flexWrap: 'nowrap',
+          }}
+        >
           {/*//? Toolbar */}
           <Grid item width={36} sx={{ borderRight: 1, borderColor: 'divider' }}>
             <Toolbar />
           </Grid>
-          {/*//? Main */}
-          <Grid item xs sx={{ overflow: 'hidden', position: 'relative' }}>
-            {/*//? We need at least solarModules and a product */}
-            {isEmpty(store.getRelatedData('solarModule')) ||
-            isEmpty(store.getRelatedData('product')) ? (
-              <OnboardingLayout />
+
+          {/*//? Canvas */}
+          {/*-> We need at least solarModules and a product */}
+          <Grid item xs>
+            {store.hasRequiredInfos() && store.hasConfirmedOnBoarding() ? (
+              <MainCanvas />
             ) : (
-              <>
-                {store.getCurrentPage() === 'layout' && <TabLayout />}
-                {store.getCurrentPage() === 'render' && <TabPreview />}
-                {store.getCurrentPage() === 'preview' && <StepSummary />}
-                {store.getNeedRerender() && <RenderActionOverlay />}
-              </>
+              <MainOnboarding />
             )}
           </Grid>
+
           {/*//? Side */}
-          <Grid item width={280} sx={{ borderLeft: 1, borderColor: 'divider' }}>
-            <LayoutSidebar />
+          <Grid
+            item
+            flex={`0 0 ${store.hasRequiredInfos() ? SIDEBAR_WIDTH : 35}px`}
+            sx={{ borderLeft: 1, borderColor: 'divider' }}
+          >
+            {store.getCurrentPage() !== 'preview' ? (
+              <LayoutSidebar />
+            ) : (
+              <SidePreview />
+            )}
           </Grid>
         </Grid>
-      </Grid>
 
-      {/*//* Dialog */}
-      <Dialog
-        fullWidth
-        maxWidth={store.dialog.open === PAGE_PROJECT ? 'lg' : 'sm'}
-        open={store.isDialogOpen()}
-        onClose={store.closeDialog}
-      >
-        <DialogTitle>
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Typography variant="h5">
-              {getDialogTitle(store.dialog.open)}
-            </Typography>
-            <IconButton size="small" onClick={store.closeDialog}>
-              <Close />
-            </IconButton>
-          </Stack>
-        </DialogTitle>
-        <Divider />
-        <DialogContent>
-          {store.dialog.open === PAGE_SOLAR_MODULE && <SolarModuleCreate />}
-          {store.dialog.open === PAGE_PRODUCT && <div>Product</div>}
-          {store.dialog.open === PAGE_PROJECT && <ProjectFormCreate />}
-          {store.dialog.open === PAGE_CLADDING && <CladdingCreate />}
-          {store.dialog.open === false && <Box sx={{ height: 400 }} />}
-        </DialogContent>
-      </Dialog>
+        {/*//* Dialog */}
+        <Dialog
+          open={store.isDialogOpen()}
+          onClose={store.closeDialog}
+          maxWidth={store.dialog.open === PAGE_PROJECT ? 'lg' : 'sm'}
+          fullWidth
+        >
+          <DialogForms />
+        </Dialog>
+      </Box>
     </FormProvider>
   );
 };

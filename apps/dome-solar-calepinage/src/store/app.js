@@ -1,4 +1,4 @@
-import { uniqueId } from 'lodash';
+import { uniqueId, isEmpty } from 'lodash';
 
 const withApp = (config) => ({
   config,
@@ -10,6 +10,8 @@ const withApp = (config) => ({
     cacheId: uniqueId(),
     currentPage: 'layout',
     needRerender: false,
+    hasConfirmedOnBoarding: false,
+    isPassingTests: false,
   },
 
   refs: {
@@ -61,6 +63,24 @@ const withApp = (config) => ({
     this.app.isReady = state;
   },
 
+  hasConfirmedOnBoarding() {
+    return this.app.hasConfirmedOnBoarding;
+  },
+  sethasConfirmedOnBoarding(state) {
+    this.app.hasConfirmedOnBoarding = state;
+  },
+  hasRequiredInfos() {
+    return (
+      !isEmpty(this.getRelatedData('solarModule')) &&
+      !isEmpty(this.getRelatedData('product'))
+    );
+  },
+  isPassingTests() {
+    return this.app.isPassingTests;
+  },
+  setIsPassingTests(state) {
+    this.app.isPassingTests = state;
+  },
   isLoading() {
     return this.app.isLoading;
   },

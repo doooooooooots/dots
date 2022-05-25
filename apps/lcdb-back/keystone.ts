@@ -16,13 +16,13 @@ const { withAuth } = createAuth({
   identityField: 'email',
   secretField: 'password',
   initFirstItem: {
-    fields: ['name', 'email', 'password']
-  }
+    fields: ['name', 'email', 'password'],
+  },
 });
 
 const session = statelessSessions({
   maxAge: SESSION_MAX_AGE,
-  secret: SESSION_SECRET
+  secret: SESSION_SECRET,
 });
 
 export default withAuth(
@@ -30,13 +30,13 @@ export default withAuth(
     db: {
       provider: 'postgresql',
       useMigrations: true,
-      url: DATABASE_URL
+      url: DATABASE_URL,
     },
     server: {
       port: PORT,
       cors: {
         origin: true,
-        credentials: true
+        credentials: true,
       },
       extendExpressApp: (app, createContext) => {
         app.use('/api', async (req, res, next) => {
@@ -47,10 +47,10 @@ export default withAuth(
         app.get('/api/seed-stockfile', seedStockfile);
         app.get('/api/aggregate', aggregate);
         app.get('/api/tmp-change-pids', tmpChangePids);
-      }
+      },
     },
     lists,
     session,
-    extendGraphqlSchema
+    extendGraphqlSchema,
   })
 );

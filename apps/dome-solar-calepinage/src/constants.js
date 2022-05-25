@@ -1,3 +1,7 @@
+export const TOPBAR_SIZE = 5;
+export const TOOLBAR_WIDTH = 35;
+export const SIDEBAR_WIDTH = 280;
+
 /**
  * ALIGNMENTS
  */

@@ -19,10 +19,17 @@ const Canvas = (props) => {
   const buffer = useRef();
 
   // Markups - Stage padding
-  const markupMaxLevel = markups.reduce((acc, current) => (current.level > acc ? current.level : acc), 0);
+  const markupMaxLevel = markups.reduce(
+    (acc, current) => (current.level > acc ? current.level : acc),
+    0
+  );
 
-  const paddingX = (markupMaxLevel - (markupMaxLevel >= 2) || 1) * store.config.markupPadding.x;
-  const paddingY = (markupMaxLevel - (markupMaxLevel >= 2) || 1) * store.config.markupPadding.y;
+  const paddingX =
+    (markupMaxLevel - (markupMaxLevel >= 2) || 1) *
+    store.config.markupPadding.x;
+  const paddingY =
+    (markupMaxLevel - (markupMaxLevel >= 2) || 1) *
+    store.config.markupPadding.y;
 
   // Canvas Zone
   const canvasZoneX = store.getStageState().x - 2 * paddingX;
@@ -30,22 +37,27 @@ const Canvas = (props) => {
 
   // Pointer position - relative to Stage
   const getPointer = useCallback(() => {
-    const pointerPosition = stageRef.current && stageRef.current.getPointerPosition();
+    const pointerPosition =
+      stageRef.current && stageRef.current.getPointerPosition();
     if (!pointerPosition) return { x: 0, y: 0 };
     return {
       x: pointerPosition.x,
-      y: pointerPosition.y
+      y: pointerPosition.y,
     };
   }, []);
 
-  const isDraggable = store.getViewMode() === 'pan' || store.getKeyboardState('isSpaceDown');
+  const isDraggable =
+    store.getViewMode() === 'pan' || store.getKeyboardState('isSpaceDown');
 
   /**
    * *Events -- Mouse
    * -------
    */
   const handleMouseDown = (e) => {
-    if (store.getViewMode() !== 'select' || store.getKeyboardState('isSpaceDown')) {
+    if (
+      store.getViewMode() !== 'select' ||
+      store.getKeyboardState('isSpaceDown')
+    ) {
       return;
     }
     e.evt.preventDefault();
@@ -55,7 +67,7 @@ const Canvas = (props) => {
       y0: pointer.y,
       x1: pointer.x,
       y1: pointer.y,
-      visible: true
+      visible: true,
     });
   };
 
@@ -68,7 +80,7 @@ const Canvas = (props) => {
     e.evt.preventDefault();
     store.updateSelectionState({
       x1: (pointer.x - store.getCanvasState().x) / store.getCanvasState().scale,
-      y1: (pointer.y - store.getCanvasState().y) / store.getCanvasState().scale
+      y1: (pointer.y - store.getCanvasState().y) / store.getCanvasState().scale,
     });
   };
 
@@ -83,7 +95,10 @@ const Canvas = (props) => {
       case 'default':
         if (clickedIndex === undefined) return;
 
-        if (store.getKeyboardState('isShiftDown') && !store.getKeyboardState('isSpaceDown')) {
+        if (
+          store.getKeyboardState('isShiftDown') &&
+          !store.getKeyboardState('isSpaceDown')
+        ) {
           store.toggleAllRange(clickedIndex, true);
         } else {
           store.toggleModule(clickedIndex);
@@ -96,7 +111,7 @@ const Canvas = (props) => {
     }
 
     store.updateSelectionState({
-      visible: false
+      visible: false,
     });
     store.updateLastSelectedIndex(clickedIndex);
   };
@@ -109,7 +124,7 @@ const Canvas = (props) => {
 
     const mousePointTo = {
       x: (pointer.x - canvasRef.current.x()) / oldScale,
-      y: (pointer.y - canvasRef.current.y()) / oldScale
+      y: (pointer.y - canvasRef.current.y()) / oldScale,
     };
 
     const newScale = e.evt.deltaY > 0 ? oldScale / 1.04 : oldScale * 1.04;
@@ -117,7 +132,7 @@ const Canvas = (props) => {
     store.updateCanvasState({
       x: pointer.x - mousePointTo.x * newScale,
       y: pointer.y - mousePointTo.y * newScale,
-      scale: newScale
+      scale: newScale,
     });
   };
 
@@ -146,7 +161,9 @@ const Canvas = (props) => {
       posX = Number.isNaN(parseFloat(posX, 10)) ? 0 : parseFloat(posX, 10);
       posY = Number.isNaN(parseFloat(posY, 10)) ? 0 : parseFloat(posY, 10);
 
-      newRatio = Number.isNaN(parseFloat(newRatio, 10)) ? 1 : parseFloat(newRatio, 10);
+      newRatio = Number.isNaN(parseFloat(newRatio, 10))
+        ? 1
+        : parseFloat(newRatio, 10);
 
       store.updateRenderZoneState({ x: posX, y: posY, scale: newRatio });
     }
@@ -164,7 +181,7 @@ const Canvas = (props) => {
         stage: stageRef,
         canvas: canvasRef,
         selection: selectionRef,
-        render: renderRef
+        render: renderRef,
       });
       store.setIsRendered(true);
     }
@@ -180,11 +197,17 @@ const Canvas = (props) => {
     store.init();
 
     const handleKeyDown = (event) => {
-      if (event.key === 'Shift' && store.getKeyboardState('isShiftDown') === false) {
+      if (
+        event.key === 'Shift' &&
+        store.getKeyboardState('isShiftDown') === false
+      ) {
         store.updateKeyboardState({ isShiftDown: true });
       }
 
-      if (event.key === ' ' && store.getKeyboardState('isSpaceDown') === false) {
+      if (
+        event.key === ' ' &&
+        store.getKeyboardState('isSpaceDown') === false
+      ) {
         store.updateKeyboardState({ isSpaceDown: true });
       }
     };
@@ -219,7 +242,7 @@ const Canvas = (props) => {
         stage: null,
         canvas: null,
         selection: null,
-        render: null
+        render: null,
       });
     };
 
@@ -231,7 +254,6 @@ const Canvas = (props) => {
    */
 
   if (!store.isReady()) {
-    console.log('CANVAS -- NOT READY')
     return null;
   }
 
@@ -239,7 +261,7 @@ const Canvas = (props) => {
     <>
       {/* Container */}
       <Stage
-        id='container'
+        id="container"
         ref={stageRef}
         width={store.getStageState().x}
         height={store.getStageState().y}
@@ -249,11 +271,23 @@ const Canvas = (props) => {
         onWheel={handleOnWheel}
       >
         <Layer>
-          <Rect y={0} x={0} width={store.getStageState().x} height={store.getStageState().y} fill='white' />
+          <Rect
+            y={0}
+            x={0}
+            width={store.getStageState().x}
+            height={store.getStageState().y}
+            fill="white"
+          />
         </Layer>
 
         {/* Buffer */}
-        <Layer scaleX={1} scaleY={1} ref={buffer} visible={false} fill='transparent'>
+        <Layer
+          scaleX={1}
+          scaleY={1}
+          ref={buffer}
+          visible={false}
+          fill="transparent"
+        >
           {renderRef.current}
         </Layer>
 
@@ -266,26 +300,32 @@ const Canvas = (props) => {
           scaleY={store.getCanvasState().scale}
           onDragStart={() =>
             store.updateCanvasState({
-              isDragging: true
+              isDragging: true,
             })
           }
           onDragEnd={(e) =>
             store.updateCanvasState({
               isDragging: false,
               x: e.target.x(),
-              y: e.target.y()
+              y: e.target.y(),
             })
           }
           draggable={isDraggable}
         >
           {/* Padding for markups */}
-          <Group id='markupZone' x={paddingX} y={paddingY}>
+          <Group id="markupZone" x={paddingX} y={paddingY}>
             {/* Make background white */}
-            <Rect x={0} y={0} width={canvasZoneX} height={canvasZoneY} fill='white' />
+            <Rect
+              x={0}
+              y={0}
+              width={canvasZoneX}
+              height={canvasZoneY}
+              fill="white"
+            />
 
             {/* Scale and position group */}
             <Group
-              id='renderZone'
+              id="renderZone"
               x={store.getRenderZoneState().x}
               y={store.getRenderZoneState().y}
               scaleX={store.getRenderZoneState().scale}
@@ -299,8 +339,14 @@ const Canvas = (props) => {
                 !isEmpty(markup) ? (
                   <Group
                     key={index.toString()}
-                    x={store.toPx(markup?.offset?.x || 0) + (!!markup.isInner && store.getRenderZoneState().x)}
-                    y={store.toPx(markup?.offset?.y || 0) + (!!markup.isInner && store.getRenderZoneState().y)}
+                    x={
+                      store.toPx(markup?.offset?.x || 0) +
+                      (!!markup.isInner && store.getRenderZoneState().x)
+                    }
+                    y={
+                      store.toPx(markup?.offset?.y || 0) +
+                      (!!markup.isInner && store.getRenderZoneState().y)
+                    }
                   >
                     <Markup markup={markup} store={store} />
                   </Group>
@@ -309,23 +355,40 @@ const Canvas = (props) => {
           </Group>
 
           {/* Select visualisation rectangle */}
-          <Group x={paddingX + store.getRenderZoneState().x} y={paddingY + store.getRenderZoneState().y}>
+          <Group
+            x={paddingX + store.getRenderZoneState().x}
+            y={paddingY + store.getRenderZoneState().y}
+          >
             <Rect
               ref={selectionRef}
-              fill='rgba(0,0,255,0.5)'
+              fill="rgba(0,0,255,0.5)"
               visible={store.getSelectionState().visible}
               x={
-                Math.min(store.getSelectionState().x0, store.getSelectionState().x1) -
+                Math.min(
+                  store.getSelectionState().x0,
+                  store.getSelectionState().x1
+                ) -
                   paddingX -
                   store.getRenderZoneState().x || 0
               }
               y={
-                Math.min(store.getSelectionState().y0, store.getSelectionState().y1) -
+                Math.min(
+                  store.getSelectionState().y0,
+                  store.getSelectionState().y1
+                ) -
                   paddingY -
                   store.getRenderZoneState().y || 0
               }
-              width={Math.abs(store.getSelectionState().x1 - store.getSelectionState().x0) || 0}
-              height={Math.abs(store.getSelectionState().y1 - store.getSelectionState().y0) || 0}
+              width={
+                Math.abs(
+                  store.getSelectionState().x1 - store.getSelectionState().x0
+                ) || 0
+              }
+              height={
+                Math.abs(
+                  store.getSelectionState().y1 - store.getSelectionState().y0
+                ) || 0
+              }
             />
           </Group>
         </Layer>
@@ -336,7 +399,7 @@ const Canvas = (props) => {
 
 Canvas.propTypes = {
   markups: PropTypes.any,
-  children: PropTypes.any
+  children: PropTypes.any,
 };
 
 export default observer(Canvas);

@@ -14,6 +14,7 @@ import withUtils from './utils';
 import withPreview from './preview';
 import withRelatedData from './related-data';
 import withAnalytics from './analytics';
+import { SIDEBAR_WIDTH, TOOLBAR_WIDTH } from '../constants';
 
 export const config = {
   debounceTime: 500,
@@ -27,7 +28,8 @@ export const config = {
   topBarHeight: 40,
   formTopBarHeight: 0,
   mainMenuWidth: 0,
-  drawerWidth: 280,
+  drawerWidth: SIDEBAR_WIDTH,
+  toolbarWidth: TOOLBAR_WIDTH,
   // Markup
   markupPadding: { x: 90, y: 60 },
   markupSize: { x: 15, y: 15 },

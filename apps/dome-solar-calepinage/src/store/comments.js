@@ -3,7 +3,7 @@ export const withComments = (app) => ({
 
   comments: {
     current: null,
-    byId: {}
+    byId: {},
   },
 
   /**
@@ -11,7 +11,7 @@ export const withComments = (app) => ({
    */
 
   getCommentById(id) {
-    this.comments.byId[id];
+    return this.comments.byId[id];
   },
   getAllComments() {
     return this.comments.byId;
@@ -24,5 +24,5 @@ export const withComments = (app) => ({
   },
   saveComments(comments) {
     this.comments.byId = comments;
-  }
+  },
 });

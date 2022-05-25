@@ -2,6 +2,7 @@ import React from 'react';
 import { alpha, Box, Stack, Typography, Button } from '@mui/material';
 import { useStore } from './context/useStore';
 import { useFormContext } from 'react-hook-form';
+import { SIDEBAR_WIDTH } from '../constants';
 
 function RenderActionOverlay() {
   const store = useStore();
@@ -22,7 +23,7 @@ function RenderActionOverlay() {
       position="absolute"
       top={0}
       left={0}
-      right={0}
+      right={SIDEBAR_WIDTH}
       height="100%"
       backgroundColor={(theme) => alpha(theme.palette.neutralTints[700], 0.5)}
       display="flex"

@@ -13,13 +13,14 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography
+  Typography,
 } from '@mui/material';
+
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
-import { round } from 'lodash';
-import DialogQuantitativeEdit from './DialogQuantitativeEdit';
+import { round, isEmpty } from 'lodash';
 import useDialog from '../../hooks/use-dialog';
-import { useStore } from './context/useStore';
+import { useStore } from '../context/useStore';
+import DialogQuantitativeEdit from '../DialogQuantitativeEdit';
 
 export default function StepSummaryQuantitative(props) {
   const { defaultTargets, analytic, useSolarEdge, sx = {} } = props;
@@ -35,11 +36,15 @@ export default function StepSummaryQuantitative(props) {
     [onOpen, setTagName]
   );
 
+  if (!isEmpty(analytic)) return null;
+  const { bilan = {}, totalPower, totalModules } = analytic;
+  const { references } = bilan;
+
   return (
     <Box sx={sx}>
       <Stack spacing={1}>
-        <Typography variant='body2' fontWeight='bold'>
-          {`Puissance installée : ${round(analytic?.totalPower, 2)} kWc`}
+        <Typography variant="body2" fontWeight="bold">
+          {`Puissance installée : ${round(totalPower, 2)} kWc`}
         </Typography>
 
         {/* <Typography
@@ -57,26 +62,26 @@ export default function StepSummaryQuantitative(props) {
           sx={{
             minWidth: 650,
             '& .MuiTableBody-root .MuiTableRow-root:hover': {
-              backgroundColor: 'grey.100'
+              backgroundColor: 'grey.100',
             },
             '& .MuiButtonBase-root': {
-              visibility: 'hidden'
+              visibility: 'hidden',
             },
             '& .MuiTableRow-root:hover .MuiButtonBase-root': {
-              visibility: 'visible'
-            }
+              visibility: 'visible',
+            },
           }}
-          size='small'
-          aria-label='quantitatif'
+          size="small"
+          aria-label="quantitatif"
         >
           <TableHead>
             <TableRow>
               <TableCell sx={{ fontWeight: 'bold' }}>Références</TableCell>
               <TableCell sx={{ fontWeight: 'bold' }}>Désignation</TableCell>
-              <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+              <TableCell align="center" sx={{ fontWeight: 'bold' }}>
                 Total
               </TableCell>
-              <TableCell align='right' sx={{ fontWeight: 'bold' }}>
+              <TableCell align="right" sx={{ fontWeight: 'bold' }}>
                 Livré par Dome Solar
               </TableCell>
               <TableCell />
@@ -87,7 +92,7 @@ export default function StepSummaryQuantitative(props) {
             <TableRow
               sx={{
                 '& td, & th': { borderColor: 'grey.300' },
-                '&:last-child td, &:last-child th': { border: 0 }
+                '&:last-child td, &:last-child th': { border: 0 },
               }}
             >
               <TableCell>Modules</TableCell>
@@ -96,16 +101,15 @@ export default function StepSummaryQuantitative(props) {
                   defaultTargets?.useSolarPanel[0] &&
                   defaultTargets.useSolarPanel[0].target.name}
               </TableCell>
-              <TableCell align='center'>{analytic.totalModules}</TableCell>
-              <TableCell align='right'>-</TableCell>
+              <TableCell align="center">{totalModules}</TableCell>
+              <TableCell align="right">-</TableCell>
               <TableCell />
             </TableRow>
-
             {/* Bac */}
             <TableRow
               sx={{
                 '& td, & th': { borderColor: 'grey.800', pb: 2 },
-                '&:last-child td, &:last-child th': { border: 0 }
+                '&:last-child td, &:last-child th': { border: 0 },
               }}
             >
               <TableCell>Bac</TableCell>
@@ -114,50 +118,57 @@ export default function StepSummaryQuantitative(props) {
                   defaultTargets?.useCladding[0] &&
                   defaultTargets.useCladding[0].target.name}
               </TableCell>
-              <TableCell align='center'>-</TableCell>
-              <TableCell align='right'>-</TableCell>
+              <TableCell align="center">-</TableCell>
+              <TableCell align="right">-</TableCell>
               <TableCell />
             </TableRow>
-
             {/* Bilan */}
-            {Object.keys(analytic?.bilan.references).map((key, index) => {
-              const currentRef = store.getFinalAnalytic(key);
-              if (key === 'solar_edge' && !useSolarEdge) return null;
-              return (
-                <TableRow
-                  key={key}
-                  sx={{
-                    '& td, & th': { borderColor: 'grey.300', ...(index === 0 ? { pt: 2 } : {}) },
-                    '&:last-child td, &:last-child th': { border: 0 }
-                  }}
-                >
-                  <TableCell>
-                    {currentRef.ref.guid ?? (
-                      <Box sx={{ color: 'red' }} component='span'>
-                        Opérateur requis
-                      </Box>
-                    )}
-                  </TableCell>
-                  <TableCell>{currentRef.ref.name}</TableCell>
-                  <TableCell align='center'>{currentRef.count || '-'}</TableCell>
-                  <TableCell align='right'>{currentRef.delivery ? 'X' : ''}</TableCell>
-                  <TableCell>
-                    <IconButton size='small' onClick={handleEditClick(key)}>
-                      <ModeEditOutlinedIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+            {!isEmpty(references) &&
+              Object.keys(references).map((key, index) => {
+                const currentRef = store.getFinalAnalytic(key);
+                if (key === 'solar_edge' && !useSolarEdge) return null;
+                return (
+                  <TableRow
+                    key={key}
+                    sx={{
+                      '& td, & th': {
+                        borderColor: 'grey.300',
+                        ...(index === 0 ? { pt: 2 } : {}),
+                      },
+                      '&:last-child td, &:last-child th': { border: 0 },
+                    }}
+                  >
+                    <TableCell>
+                      {currentRef.ref.guid ?? (
+                        <Box sx={{ color: 'red' }} component="span">
+                          Opérateur requis
+                        </Box>
+                      )}
+                    </TableCell>
+                    <TableCell>{currentRef.ref.name}</TableCell>
+                    <TableCell align="center">
+                      {currentRef.count || '-'}
+                    </TableCell>
+                    <TableCell align="right">
+                      {currentRef.delivery ? 'X' : ''}
+                    </TableCell>
+                    <TableCell>
+                      <IconButton size="small" onClick={handleEditClick(key)}>
+                        <ModeEditOutlinedIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </TableContainer>
 
-      <Alert severity='info' sx={{ mt: 2 }}>
+      <Alert severity="info" sx={{ mt: 2 }}>
         Vous pouvez modifier le tableau en cliquant directement sur les cellules
       </Alert>
 
-      <Dialog open={isOpen} onClose={onClose} maxWidth='md' fullWidth>
+      <Dialog open={isOpen} onClose={onClose} maxWidth="md" fullWidth>
         <DialogQuantitativeEdit tagName={tagName} onClose={onClose} />
       </Dialog>
     </Box>
@@ -168,5 +179,5 @@ StepSummaryQuantitative.propTypes = {
   defaultTargets: PropTypes.any,
   analytic: PropTypes.any,
   useSolarEdge: PropTypes.any,
-  sx: PropTypes.any
+  sx: PropTypes.any,
 };

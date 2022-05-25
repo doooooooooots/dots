@@ -4,10 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import {
   Box,
   Button,
-  Divider,
   InputAdornment,
-  List,
-  ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
@@ -15,32 +12,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { styled } from '@mui/system';
 import ProgressCircular from '../../design-system/progress-circular';
 import { isEmpty } from 'lodash';
 import { useStore } from './context/useStore';
 import { useCallback, useState } from 'react';
-
-const PopperList = styled(List)(({ theme }) => ({
-  '& .MuiListItemButton-root': {
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
-  },
-  '& .MuiListItemIcon-root': {
-    minWidth: 0,
-    marginRight: theme.spacing(2),
-  },
-  '& .MuiSvgIcon-root': {
-    fontSize: 20,
-  },
-}));
-
-const PopperSectionTitle = styled((props) => (
-  <Typography {...props} variant="overline" />
-))(({ theme }) => ({
-  paddingLeft: theme.spacing(3),
-  paddingRight: theme.spacing(3),
-}));
+import PopperSectionTitle from './popper-section-title';
+import PopperList from './popper-list';
 
 function PopperSelectFromDb(props) {
   const {
@@ -82,13 +59,16 @@ function PopperSelectFromDb(props) {
           ),
         }}
         fullWidth
-        sx={{ mb: 1, pt: 2, px: 2, minWidth: 385 }}
+        sx={{ mb: 1, pt: 2, px: 2 }}
       />
 
-      {loading ? (
+      <PopperSectionTitle>
+        {seachInput ? 'Résultats' : 'Récents'}
+      </PopperSectionTitle>
+
+      {loading && (
         <Box
           sx={{
-            minHeight: 250,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -96,79 +76,76 @@ function PopperSelectFromDb(props) {
         >
           <ProgressCircular />
         </Box>
-      ) : (
+      )}
+
+      {/*//? If there are results */}
+      {!loading && !isEmpty(getDatas(data)) && (
         <>
-          <PopperSectionTitle>
-            {seachInput ? 'Résultats' : 'Récents'}
-          </PopperSectionTitle>
           <PopperList>
-            {!isEmpty(getDatas(data)) ? (
-              <>
-                {!isEmpty(getDatas(data)) &&
-                  getDatas(data).map((item) => {
-                    const row = getRowDatas(item);
-                    return (
-                      <ListItemButton
-                        key={row.id}
-                        sx={{ py: 0, minHeight: 32 }}
-                        onClick={onClick(item)}
-                      >
-                        <ListItemIcon sx={{ color: 'inherit' }}>
-                          {icon}
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={row.name}
-                          primaryTypographyProps={{
-                            fontSize: 14,
-                            fontWeight: 'medium',
-                          }}
-                        />
-                      </ListItemButton>
-                    );
-                  })}
-              </>
-            ) : (
-              <>
-                {!seachInput && canAdd ? (
-                  <Stack
-                    p={2}
-                    spacing={0}
-                    justifyContent="center"
-                    alignItems="center"
-                    direction="column"
-                  >
-                    <Typography variant="h3">Hello</Typography>
-                    <Typography variant="h6">
-                      Il n&apos;y a pas encore d&apos;entrée
-                    </Typography>
-                    <Button
-                      variant="contained"
-                      onClick={store.onOpenToClick(name)}
-                      sx={{ mt: 2 }}
-                    >
-                      Ajouter un nouveau
-                    </Button>
-                  </Stack>
-                ) : (
-                  <ListItem sx={{ py: 0, minHeight: 32 }}>
-                    <ListItemText
-                      primary="Pas de résultat"
-                      primaryTypographyProps={{
-                        fontSize: 14,
-                        fontWeight: 'medium',
-                      }}
-                    />
-                  </ListItem>
-                )}
-              </>
-            )}
+            {getDatas(data).map((item) => {
+              const row = getRowDatas(item);
+              return (
+                <ListItemButton
+                  key={row.id}
+                  sx={{ py: 0, minHeight: 32 }}
+                  onClick={onClick(item)}
+                >
+                  <ListItemIcon sx={{ color: 'inherit' }}>{icon}</ListItemIcon>
+                  <ListItemText
+                    primary={row.name}
+                    primaryTypographyProps={{
+                      fontSize: 14,
+                      fontWeight: 'medium',
+                    }}
+                  />
+                </ListItemButton>
+              );
+            })}
           </PopperList>
         </>
       )}
 
-      <PopperList>
-        <Divider />
-        {canAdd && (
+      {/*//? If there are no results after research */}
+      {!loading && isEmpty(getDatas(data)) && seachInput && (
+        <PopperList>
+          <ListItemButton sx={{ py: 0, minHeight: 32 }}>
+            <ListItemText
+              primary="Pas de résultat"
+              primaryTypographyProps={{
+                fontSize: 14,
+                fontWeight: 'medium',
+                color: 'grey.600',
+              }}
+            />
+          </ListItemButton>
+        </PopperList>
+      )}
+
+      {/*//? If there are no existing extries and adding is allowed */}
+      {!loading && isEmpty(getDatas(data)) && !seachInput && canAdd && (
+        <Stack
+          p={2}
+          spacing={0}
+          justifyContent="center"
+          alignItems="center"
+          direction="column"
+        >
+          <Typography variant="h3">Hello</Typography>
+          <Typography variant="h6">
+            Il n&apos;y a pas encore d&apos;entrée
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={store.onOpenToClick(name)}
+            sx={{ mt: 2 }}
+          >
+            Ajouter un nouveau
+          </Button>
+        </Stack>
+      )}
+
+      {!loading && canAdd && (
+        <PopperList>
           <ListItemButton
             key={'__create_new__'}
             sx={{ py: 0, minHeight: 32 }}
@@ -186,8 +163,8 @@ function PopperSelectFromDb(props) {
               }}
             />
           </ListItemButton>
-        )}
-      </PopperList>
+        </PopperList>
+      )}
     </>
   );
 }

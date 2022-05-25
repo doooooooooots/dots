@@ -15,45 +15,44 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Stack
+  Stack,
 } from '@mui/material';
-import { getMultiple as getEntities } from '../../api/entity-api';
 import { useStore } from './context/useStore';
 
 const TAGS = {
   vis: {
     id: '3',
-    name: 'Vis'
+    name: 'Vis',
   },
   rail: {
     id: '4',
-    name: 'Rail'
+    name: 'Rail',
   },
   fixation_universelle: {
     id: '5',
-    name: 'Fixation universelle'
+    name: 'Fixation universelle',
   },
   fixation_exterieure: {
     id: '6',
-    name: 'Fixation extérieure'
+    name: 'Fixation extérieure',
   },
   solar_edge: {
     id: '7',
-    name: 'Solar Edge'
+    name: 'Solar Edge',
   },
   ctm: {
     id: '8',
     name: 'CTM',
-    slug: 'ctm'
+    slug: 'ctm',
   },
   ctr: {
     id: '9',
-    name: 'CTR'
+    name: 'CTR',
   },
   other: {
     id: '10',
-    name: 'Autres'
-  }
+    name: 'Autres',
+  },
 };
 
 export default function DialogQuantitativeEdit(props) {
@@ -67,47 +66,48 @@ export default function DialogQuantitativeEdit(props) {
   const [localForm, setLocalForm] = React.useState({
     ref: currentRef.ref,
     count: currentRef.count,
-    delivery: currentRef.delivery
+    delivery: currentRef.delivery,
   });
 
   const handleChangeRefGuid = (event) => {
     const ref = options.find((item) => item.guid === event.target.value);
     setLocalForm((current) => ({
       ...current,
-      ref
+      ref,
     }));
   };
   const handleChangeCount = (event) => {
     setLocalForm((current) => ({
       ...current,
-      count: event.target.value
+      count: event.target.value,
     }));
   };
   const handleChangeDelivery = (event) => {
     setLocalForm((current) => ({
       ...current,
-      delivery: event.target.checked
+      delivery: event.target.checked,
     }));
   };
 
   const handleSave = () => {
     store.setOverrideAnalytic(tagName, {
-      ...localForm
+      ...localForm,
     });
     onClose();
   };
 
   React.useEffect(() => {
     const asyncFetch = async () => {
-      const fetchOptions = await getEntities(
-        {
-          filter: {
-            typeOf: 'reference',
-            tagIds: [TAGS[tagName].id]
-          }
-        },
-        ['id', 'guid', 'name']
-      );
+      const fetchOptions = {};
+      // const fetchOptions = await getEntities(
+      //   {
+      //     filter: {
+      //       typeOf: 'reference',
+      //       tagIds: [TAGS[tagName].id],
+      //     },
+      //   },
+      //   ['id', 'guid', 'name']
+      // );
       if (fetchOptions?.allEntities) {
         setOptions(fetchOptions?.allEntities);
       }
@@ -123,14 +123,16 @@ export default function DialogQuantitativeEdit(props) {
     <>
       <DialogTitle>Modifier une référence</DialogTitle>
       <DialogContent>
-        <DialogContentText>Par quelle référence est-ce que je dois modifier ?</DialogContentText>
-        <Stack spacing={3} sx={{ mt: 3 }} direction='row' alignItems='flex-end'>
-          <FormControl size='small' fullWidth>
-            <InputLabel id='demo-simple-select-label'>Référence</InputLabel>
+        <DialogContentText>
+          Par quelle référence est-ce que je dois modifier ?
+        </DialogContentText>
+        <Stack spacing={3} sx={{ mt: 3 }} direction="row" alignItems="flex-end">
+          <FormControl size="small" fullWidth>
+            <InputLabel id="demo-simple-select-label">Référence</InputLabel>
             <Select
-              labelId='demo-simple-select-label'
-              id='demo-simple-select'
-              label='Référence'
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              label="Référence"
               value={localForm.ref.guid || ''}
               onChange={handleChangeRefGuid}
             >
@@ -142,29 +144,34 @@ export default function DialogQuantitativeEdit(props) {
             </Select>
           </FormControl>
           <Input
-            id='name'
-            label='Count'
-            type='number'
-            variant='standard'
+            id="name"
+            label="Count"
+            type="number"
+            variant="standard"
             value={localForm.count}
             onChange={handleChangeCount}
             fullWidth
           />
           <FormControl fullWidth>
             <FormControlLabel
-              control={<Checkbox checked={localForm.delivery} onChange={handleChangeDelivery} />}
-              label='Livré par DomeSolar'
+              control={
+                <Checkbox
+                  checked={localForm.delivery}
+                  onChange={handleChangeDelivery}
+                />
+              }
+              label="Livré par DomeSolar"
             />
           </FormControl>
         </Stack>
-        <Alert severity='info' sx={{ mt: 2 }}>
+        <Alert severity="info" sx={{ mt: 2 }}>
           Une référence est manquante ?
         </Alert>
         {isLoading && <CircularProgress />}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Annuler</Button>
-        <Button variant='contained' onClick={handleSave}>
+        <Button variant="contained" onClick={handleSave}>
           Enregistrer
         </Button>
       </DialogActions>
@@ -174,5 +181,5 @@ export default function DialogQuantitativeEdit(props) {
 
 DialogQuantitativeEdit.propTypes = {
   onClose: PropTypes.any,
-  tagName: PropTypes.any
+  tagName: PropTypes.any,
 };

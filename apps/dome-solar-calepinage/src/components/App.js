@@ -1,28 +1,39 @@
 import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Box, IconButton, Stepper, Step, StepLabel, Dialog, DialogTitle } from '@mui/material';
+import {
+  Box,
+  IconButton,
+  Stepper,
+  Step,
+  StepLabel,
+  Dialog,
+  DialogTitle,
+} from '@mui/material';
 import { debounce, isEmpty, last } from 'lodash';
 import { observer } from 'mobx-react';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useDispatch, useSelector } from '../store/store';
 import { resetForms } from '../../slices/form-slice';
 import { getEntity, addAction, updateAction } from '../../slices/entity-slice';
-import { AppBarLeftSource, AppBarRightSource } from '../../components/teleporters/AppBarTeleporter';
+import {
+  AppBarLeftSource,
+  AppBarRightSource,
+} from '../../components/teleporters/AppBarTeleporter';
 import { useStore } from './context/useStore';
 import * as actionsBdd from '../../libraries/actions';
 import BtnBack from '../../components/atoms/buttons/ButtonBack';
-import StepPreview from './StepPreview';
+import StepPreview from './steps/StepShowPdf';
 import SmallChip from '../../components/atoms/chips/SmallChip';
 import useDrawer from '../../hooks/useDrawer';
-import StepIsLayoutOf from './Steps/StepIsLayoutOf';
-import StepUseSolarPanel from './Steps/StepUseSolarPanel';
-import StepHasProduct from './Steps/StepHasProduct';
-import StepUseCladding from './Steps/StepUseCladding';
-import StepTemplate from './Steps/StepTemplate';
-import StepLayout from './Steps/StepLayout';
-import StepHasTechnician from './Steps/StepHasTechnician';
-import StepRails from './Steps/StepRails';
-import StepMarkup from './Steps/StepMarkup';
+import StepIsLayoutOf from './steps/StepIsLayoutOf';
+import StepUseSolarPanel from './steps/StepUseSolarPanel';
+import StepHasProduct from './steps/StepHasProduct';
+import StepUseCladding from './steps/StepUseCladding';
+import StepTemplate from './steps/StepTemplate';
+import StepLayout from './steps/StepLayout';
+import StepHasTechnician from './steps/StepHasTechnician';
+import StepRails from './steps/StepRails';
+import StepMarkup from './steps/StepMarkup';
 import ModeToggle from './ModeToggle';
 import { QontoConnector, QontoStepIcon } from './Stepper';
 import StepSummary from './StepSummary';
@@ -32,19 +43,19 @@ const correspondanceTable = {
     lengthX: 'Mx',
     lengthY: 'My',
     lengthZ: 'Mh',
-    electricalPower: 'MPw'
+    electricalPower: 'MPw',
   },
   product: {
     lengthX: 'Px',
     lengthY: 'Py',
-    lengthZ: 'Pz'
+    lengthZ: 'Pz',
   },
   cladding: {
     numberOfWaves: 'CnbOfWaves',
     lengthX: 'Cx',
     lengthY: 'Cy',
-    lengthZ: 'Cz'
-  }
+    lengthZ: 'Cz',
+  },
 };
 
 const App = ({ mode = 'create' }) => {
@@ -62,13 +73,16 @@ const App = ({ mode = 'create' }) => {
       // Keep mobx store up to date
       res.entityFields.forEach((field) => {
         if (!isEmpty(correspondanceTable[res.typeOf])) {
-          store.setUserData(correspondanceTable[res.typeOf][field.name], field.value);
+          store.setUserData(
+            correspondanceTable[res.typeOf][field.name],
+            field.value
+          );
         }
       });
 
       // Save data to be send in db
       store.setCurrentDefaultTarget({
-        target: res
+        target: res,
       });
 
       // If we know the id of current Layout, then save action (create or updates)
@@ -80,7 +94,7 @@ const App = ({ mode = 'create' }) => {
               property: { guid: store.form.currentStep },
               agentId: parseInt(store.form.currentLayout.id, 10),
               targetId: parseInt(res.id, 10),
-              isDefault: true
+              isDefault: true,
             })
           );
         } else {
@@ -89,7 +103,7 @@ const App = ({ mode = 'create' }) => {
               property: { guid: store.form.currentStep },
               agentId: parseInt(store.form.currentLayout.id, 10),
               targetId: parseInt(res.id, 10),
-              isDefault: true
+              isDefault: true,
             })
           ).then((action) => {
             store.setCurrentAction(action.id);
@@ -101,7 +115,7 @@ const App = ({ mode = 'create' }) => {
         agent: {},
         target: row,
         property: actionsBdd[store.form.currentStep],
-        isDefault: true
+        isDefault: true,
       };
     });
 
@@ -158,7 +172,7 @@ const App = ({ mode = 'create' }) => {
     setAppDrawer({
       side: 'right',
       width: store.config.drawerWidth,
-      open: false
+      open: false,
     });
 
     const debouncedHandleResize = debounce(() => {
@@ -184,7 +198,15 @@ const App = ({ mode = 'create' }) => {
    */
 
   useEffect(() => {
-    if (['useSolarPanel', 'hasProduct', 'useCladding', 'template', 'layout'].includes(store.form.currentStep))
+    if (
+      [
+        'useSolarPanel',
+        'hasProduct',
+        'useCladding',
+        'template',
+        'layout',
+      ].includes(store.form.currentStep)
+    )
       openDrawer();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [store.form.currentStep]);
@@ -199,7 +221,10 @@ const App = ({ mode = 'create' }) => {
     if (!isEmpty(lastForm)) {
       Object.keys(lastForm).forEach((key) => {
         if (!isEmpty(correspondanceTable[lastForm.typeOf])) {
-          store.setUserData(correspondanceTable[lastForm.typeOf][key], parseInt(lastForm[key], 10));
+          store.setUserData(
+            correspondanceTable[lastForm.typeOf][key],
+            parseInt(lastForm[key], 10)
+          );
         }
       });
     }
@@ -214,8 +239,18 @@ const App = ({ mode = 'create' }) => {
     <>
       <AppBarLeftSource>
         <BtnBack />
-        <SmallChip label='Roof' color='primary' variant='contained' size='small' />
-        <Box width='100%' display='flex' justifyContent='center' sx={{ mx: 'auto', maxWidth: 800 }}>
+        <SmallChip
+          label="Roof"
+          color="primary"
+          variant="contained"
+          size="small"
+        />
+        <Box
+          width="100%"
+          display="flex"
+          justifyContent="center"
+          sx={{ mx: 'auto', maxWidth: 800 }}
+        >
           <Stepper
             alternativeLabel
             activeStep={store.steps.indexOf(store.form.currentStep)}
@@ -223,7 +258,11 @@ const App = ({ mode = 'create' }) => {
           >
             {store.steps.map((label) => (
               <Step key={label}>
-                <StepLabel StepIconComponent={QontoStepIcon} StepIconProps={{ label }} sx={{ width: 50 }} />
+                <StepLabel
+                  StepIconComponent={QontoStepIcon}
+                  StepIconProps={{ label }}
+                  sx={{ width: 50 }}
+                />
               </Step>
             ))}
           </Stepper>
@@ -234,7 +273,7 @@ const App = ({ mode = 'create' }) => {
         {['layout', 'rails', 'markup'].includes(store.form.currentStep) && (
           <>
             <Box sx={{ '& > *': { mr: 2 } }}>
-              <IconButton size='small' onClick={store.resetView}>
+              <IconButton size="small" onClick={store.resetView}>
                 <RestartAltIcon />
               </IconButton>
             </Box>
@@ -247,21 +286,37 @@ const App = ({ mode = 'create' }) => {
         <StepIsLayoutOf mode={mode} onChangeCallback={handleChangeCallback} />
       )}
 
-      {store.form.currentStep === 'hasTechnician' && <StepHasTechnician onChangeCallback={handleChangeCallback} />}
+      {store.form.currentStep === 'hasTechnician' && (
+        <StepHasTechnician onChangeCallback={handleChangeCallback} />
+      )}
 
-      {store.form.currentStep === 'markup' && <StepMarkup onChangeCallback={handleChangeCallback} />}
+      {store.form.currentStep === 'markup' && (
+        <StepMarkup onChangeCallback={handleChangeCallback} />
+      )}
 
-      {store.form.currentStep === 'useSolarPanel' && <StepUseSolarPanel onChangeCallback={handleChangeCallback} />}
+      {store.form.currentStep === 'useSolarPanel' && (
+        <StepUseSolarPanel onChangeCallback={handleChangeCallback} />
+      )}
 
-      {store.form.currentStep === 'hasProduct' && <StepHasProduct onChangeCallback={handleChangeCallback} />}
+      {store.form.currentStep === 'hasProduct' && (
+        <StepHasProduct onChangeCallback={handleChangeCallback} />
+      )}
 
-      {store.form.currentStep === 'useCladding' && <StepUseCladding onChangeCallback={handleChangeCallback} />}
+      {store.form.currentStep === 'useCladding' && (
+        <StepUseCladding onChangeCallback={handleChangeCallback} />
+      )}
 
-      {store.form.currentStep === 'template' && <StepTemplate onChangeCallback={handleChangeCallback} />}
+      {store.form.currentStep === 'template' && (
+        <StepTemplate onChangeCallback={handleChangeCallback} />
+      )}
 
-      {store.form.currentStep === 'layout' && <StepLayout onChangeCallback={handleChangeCallback} />}
+      {store.form.currentStep === 'layout' && (
+        <StepLayout onChangeCallback={handleChangeCallback} />
+      )}
 
-      {store.form.currentStep === 'rails' && <StepRails onChangeCallback={handleChangeCallback} />}
+      {store.form.currentStep === 'rails' && (
+        <StepRails onChangeCallback={handleChangeCallback} />
+      )}
 
       {store.form.currentStep === 'summary' && <StepSummary />}
 
@@ -275,7 +330,7 @@ const App = ({ mode = 'create' }) => {
 };
 
 App.propTypes = {
-  mode: PropTypes.string
+  mode: PropTypes.string,
 };
 
 export default observer(App);

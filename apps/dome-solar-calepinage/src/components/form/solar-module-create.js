@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import { Button, Grid, Stack, TextField, Typography } from '@mui/material';
-import { useFormContext } from 'react-hook-form';
+import { Button, Grid, MenuItem, Select, TextField } from '@mui/material';
+import { Controller, useFormContext } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { createOneBuilder } from '@dots.cool/schemas';
 import { useStore } from '../context/useStore';
@@ -10,7 +10,7 @@ const CREATE_SOLAR_MODULE = createOneBuilder('solarModule')('id');
 
 const SolarModuleCreate = () => {
   const { renderView, closeDialog, setUserData, setRelatedData } = useStore();
-  const { register, handleSubmit } = useFormContext();
+  const { register, handleSubmit, control } = useFormContext();
 
   const [createSolarModule] = useMutation(CREATE_SOLAR_MODULE);
 
@@ -38,11 +38,17 @@ const SolarModuleCreate = () => {
         />
       </Grid>
       <Grid item xs={4}>
-        <TextField
-          label="Status"
-          size="small"
-          fullWidth
-          {...register('solarModule.status')}
+        <Controller
+          render={({ field }) => (
+            <Select {...field} size="small" fullWidth>
+              <MenuItem value={'status_draft'}>Draft</MenuItem>
+              <MenuItem value={'status_available'}>Available</MenuItem>
+              <MenuItem value={'status_archived'}>Archived</MenuItem>
+            </Select>
+          )}
+          name="solarModule.status"
+          control={control}
+          defaultValue="status_draft"
         />
       </Grid>
       <SectionTitle primary="Dimensions" />

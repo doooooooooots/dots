@@ -4,7 +4,7 @@ import { Box } from '@mui/system';
 import { useStore } from '../context/useStore';
 import { observer } from 'mobx-react';
 
-const StepLayout = dynamic(() => import('../Steps/StepLayout'), { ssr: false });
+const StepLayout = dynamic(() => import('../steps/StepLayout'), { ssr: false });
 
 const TabLayout = () => {
   const store = useStore();
