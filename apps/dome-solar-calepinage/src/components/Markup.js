@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
 import { uniqueId } from 'lodash';
-import { HorizontalMarkup } from './HorizontalMarkup';
-import { VerticalMarkup } from './VerticalMarkup';
-import HorizontalMarks from './HorizontalMarks';
+import { HorizontalMarkup } from './horizontal-markup';
+import { VerticalMarkup } from './vertical-markup';
+import HorizontalMarks from './horizontal-marks';
 
 function Markup(props) {
   const { markup, store } = props;
@@ -13,11 +13,7 @@ function Markup(props) {
 
   if (markup?.variant === 'marks') {
     return (
-      <HorizontalMarks
-        store={store}
-        marks={markup.marks}
-        markup={markup}
-      />
+      <HorizontalMarks store={store} marks={markup.marks} markup={markup} />
     );
   }
 
@@ -37,28 +33,29 @@ function Markup(props) {
           attrs = {
             key: element.id,
             length: store.px(element.id),
-            label: store.userDatas[element.id]
+            label: store.userDatas[element.id],
           };
           if (element.offset) {
-            offset = typeof element.offset === 'string'
-              ? store.getUserDatas(element.offset)
-              : element.offset;
+            offset =
+              typeof element.offset === 'string'
+                ? store.getUserDatas(element.offset)
+                : element.offset;
           }
 
-        /**
-         * User gives a size with real dimensions
-         */
+          /**
+           * User gives a size with real dimensions
+           */
         } else if (keys.includes('size')) {
           attrs = {
             key: uniqueId(),
             length: store.toPx(element.size),
-            label: element.label || element.size
+            label: element.label || element.size,
           };
           offset = element.offset;
 
-        /**
-         * User gives a range
-         */
+          /**
+           * User gives a range
+           */
         } else if (keys.includes('from')) {
           if (typeof element.from === 'string') {
             element.from = store.getUserDatas(element.from);
@@ -74,7 +71,7 @@ function Markup(props) {
           attrs = {
             key: uniqueId(),
             length: store.toPx(element.to - element.from),
-            label: element.to - element.from
+            label: element.to - element.from,
           };
           offset = element.from;
         }
@@ -108,6 +105,6 @@ Markup.propTypes = {
   isInner: PropTypes.any,
   marks: PropTypes.any,
   size: PropTypes.any,
-  store: PropTypes.any
+  store: PropTypes.any,
 };
 export default observer(Markup);

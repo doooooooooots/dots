@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
 import dynamic from 'next/dynamic';
 
-const StepTemplate = dynamic(() => import('../steps/StepTemplate'), {
+const StepTemplate = dynamic(() => import('../steps/show-template'), {
   ssr: false,
 });
 

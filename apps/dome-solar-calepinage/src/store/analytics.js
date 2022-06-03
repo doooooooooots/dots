@@ -10,19 +10,16 @@ const withAnalytics = (app) => ({
 
   getSummaryModules() {
     return this.modules.allIndexes.reduce(
-      (acc, moduleObj) => {
-        if (!this.isActive(moduleObj.index)) return acc;
+      (acc, index) => {
+        if (!this.isActive(index)) return acc;
 
-        if (this.isStartBlock(moduleObj.index)) {
+        if (this.isStartBlock(index)) {
           acc.top++;
         }
-        if (this.isEndBlock(moduleObj.index)) {
+        if (this.isEndBlock(index)) {
           acc.bottom++;
         }
-        if (
-          !this.isStartBlock(moduleObj.index) &&
-          !this.isEndBlock(moduleObj.index)
-        ) {
+        if (!this.isStartBlock(index) && !this.isEndBlock(index)) {
           acc.middle++;
         }
         acc.total++;

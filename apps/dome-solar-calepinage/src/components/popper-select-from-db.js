@@ -2,8 +2,10 @@ import { useQuery } from '@apollo/client';
 import { SearchOutlined } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import {
+  Alert,
   Box,
   Button,
+  Divider,
   InputAdornment,
   ListItemButton,
   ListItemIcon,
@@ -18,13 +20,13 @@ import { useStore } from './context/useStore';
 import { useCallback, useState } from 'react';
 import PopperSectionTitle from './popper-section-title';
 import PopperList from './popper-list';
+import { observer } from 'mobx-react';
 
 function PopperSelectFromDb(props) {
   const {
     name,
     query,
     icon,
-    getDatas,
     getRowDatas,
     canAdd,
     onClick = () => null,
@@ -44,28 +46,31 @@ function PopperSelectFromDb(props) {
 
   return (
     <>
-      <TextField
-        type="text"
-        placeholder="Rechercher"
-        variant="outlined"
-        size="small"
-        value={seachInput}
-        onChange={handleChangeInput}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchOutlined />
-            </InputAdornment>
-          ),
-        }}
-        fullWidth
-        sx={{ mb: 1, pt: 2, px: 2 }}
-      />
+      {/*//? Search input */}
+      <>
+        <TextField
+          type="text"
+          placeholder="Rechercher"
+          variant="outlined"
+          size="small"
+          value={seachInput}
+          onChange={handleChangeInput}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchOutlined />
+              </InputAdornment>
+            ),
+          }}
+          fullWidth
+          sx={{ mb: 1, pt: 2, px: 2 }}
+        />
+        <PopperSectionTitle>
+          {seachInput ? 'Résultats' : 'Récents'}
+        </PopperSectionTitle>
+      </>
 
-      <PopperSectionTitle>
-        {seachInput ? 'Résultats' : 'Récents'}
-      </PopperSectionTitle>
-
+      {/*//? Loading */}
       {loading && (
         <Box
           sx={{
@@ -79,10 +84,10 @@ function PopperSelectFromDb(props) {
       )}
 
       {/*//? If there are results */}
-      {!loading && !isEmpty(getDatas(data)) && (
+      {!loading && !isEmpty(data.rows) && (
         <>
           <PopperList>
-            {getDatas(data).map((item) => {
+            {data.rows.map((item) => {
               const row = getRowDatas(item);
               return (
                 <ListItemButton
@@ -106,7 +111,7 @@ function PopperSelectFromDb(props) {
       )}
 
       {/*//? If there are no results after research */}
-      {!loading && isEmpty(getDatas(data)) && seachInput && (
+      {!loading && isEmpty(data.rows) && seachInput && (
         <PopperList>
           <ListItemButton sx={{ py: 0, minHeight: 32 }}>
             <ListItemText
@@ -122,7 +127,7 @@ function PopperSelectFromDb(props) {
       )}
 
       {/*//? If there are no existing extries and adding is allowed */}
-      {!loading && isEmpty(getDatas(data)) && !seachInput && canAdd && (
+      {!loading && isEmpty(data.rows) && !seachInput && (
         <Stack
           p={2}
           spacing={0}
@@ -134,39 +139,41 @@ function PopperSelectFromDb(props) {
           <Typography variant="h6">
             Il n&apos;y a pas encore d&apos;entrée
           </Typography>
-          <Button
-            variant="contained"
-            onClick={store.onOpenToClick(name)}
-            sx={{ mt: 2 }}
-          >
-            Ajouter un nouveau
-          </Button>
         </Stack>
       )}
 
-      {!loading && canAdd && (
-        <PopperList>
-          <ListItemButton
-            key={'__create_new__'}
-            sx={{ py: 0, minHeight: 32 }}
+      {/*//? Error message */}
+      {!loading && isEmpty(data.rows) && !seachInput && !canAdd && (
+        <Alert severity="info">
+          Vous n&apos;avez pas l&apos;autorisation d&apos;ajouter un élément
+        </Alert>
+      )}
+
+      {/*//* Action */}
+      {canAdd && (
+        <>
+          <Divider />
+          <Button
             onClick={store.onOpenToClick(name)}
+            startIcon={<AddIcon fontSize="small" />}
+            fullWidth
+            sx={{
+              color: 'grey.500',
+              borderColor: 'grey.500',
+              borderTopLeftRadius: 0,
+              borderTopRightRadius: 0,
+              '&:hover': {
+                bgcolor: 'primary.main',
+                color: 'background.default',
+              },
+            }}
           >
-            <ListItemIcon sx={{ color: 'grey.500' }}>
-              <AddIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary={'Ajouter un nouveau'}
-              primaryTypographyProps={{
-                fontSize: 14,
-                color: 'grey.500',
-                fontWeight: 'medium',
-              }}
-            />
-          </ListItemButton>
-        </PopperList>
+            {`Ajouter un nouveau`}
+          </Button>
+        </>
       )}
     </>
   );
 }
 
-export default PopperSelectFromDb;
+export default observer(PopperSelectFromDb);

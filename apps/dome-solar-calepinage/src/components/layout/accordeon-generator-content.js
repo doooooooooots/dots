@@ -1,16 +1,23 @@
 import React, { useCallback } from 'react';
 import { useStore } from '../context/useStore';
-import { IconButton, Stack, TextField, Typography } from '@mui/material';
+import {
+  Button,
+  IconButton,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { Box } from '@mui/system';
 import { observer } from 'mobx-react';
-import { useFormContext } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { ALIGNMENTS } from '../../constants';
 import ucFirst from '../../utils/uc-first';
-import * as AlignmentIcons from '../../icons/AlignmentsIcons';
+import * as AlignmentIcons from '../../icons/alignments-icons';
 
 const SideGenerator = () => {
   const store = useStore();
-  const { register } = useFormContext();
+  const { setUserData, renderView } = store;
+  const { handleSubmit, register } = useForm();
 
   const handleGeneratorAlignmentClick = useCallback(
     (vertKey, horizKey) => () => {
@@ -18,6 +25,17 @@ const SideGenerator = () => {
       store.renderView();
     },
     [store]
+  );
+
+  const handleSubmitClick = useCallback(
+    (data) => {
+      setUserData('userMaxCol', data.userMaxCol);
+      setUserData('X0', data.X0);
+      setUserData('userMaxRow', data.userMaxRow);
+      setUserData('Y0', data.Y0);
+      renderView();
+    },
+    [renderView, setUserData]
   );
 
   return (
@@ -83,6 +101,14 @@ const SideGenerator = () => {
             {...register('Y0')}
           />
         )}
+        <Button
+          size="small"
+          variant="outlined"
+          onClick={handleSubmit(handleSubmitClick)}
+          fullWidth
+        >
+          Valider
+        </Button>
       </Stack>
     </>
   );

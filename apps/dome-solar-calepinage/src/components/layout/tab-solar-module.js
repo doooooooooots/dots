@@ -4,15 +4,15 @@ import PopperSelectFromDb from '../popper-select-from-db';
 import SolarPowerOutlined from '@mui/icons-material/SolarPowerOutlined';
 import { useStore } from '../context/useStore';
 import { isEmpty } from 'lodash';
-import { Box, Button, Divider, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { PAGE_SOLAR_MODULE } from '../../constants';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
-import CompareArrowsOutlinedIcon from '@mui/icons-material/CompareArrowsOutlined';
 import FielGroup from '../field-group';
+import TabPopperChangeButton from './tab-popper-change-button';
 
 const GET_SOLAR_MODULES = gql`
   query GetSolarModules($search: String, $take: Int) {
-    solarModules(
+    rows: solarModules(
       take: $take
       where: { name: { contains: $search, mode: insensitive } }
     ) {
@@ -27,9 +27,8 @@ const GET_SOLAR_MODULES = gql`
 `;
 
 const TabSolarModule = (props) => {
-  const { onClose } = props;
-  const { getRelatedData, setRelatedData, setUserData, renderView } =
-    useStore();
+  const { onChange } = props;
+  const { getRelatedData, setUserData } = useStore();
 
   const handleChoiceClick = useCallback(
     (element) => () => {
@@ -37,15 +36,10 @@ const TabSolarModule = (props) => {
       setUserData('My', element.lengthY);
       setUserData('Mz', element.lengthZ);
       setUserData('MPw', element.electricalPower);
-      setRelatedData('solarModule', element);
-      renderView();
+      onChange(element);
     },
-    [renderView, setRelatedData, setUserData]
+    [onChange, setUserData]
   );
-
-  const handleRemoveClick = useCallback(() => {
-    setRelatedData('solarModule', {});
-  }, [setRelatedData]);
 
   const solarModule = getRelatedData('solarModule');
 
@@ -57,7 +51,6 @@ const TabSolarModule = (props) => {
           query={GET_SOLAR_MODULES}
           icon={<SolarPowerOutlined />}
           onClick={handleChoiceClick}
-          getDatas={(data) => data?.solarModules}
           getRowDatas={(row) => ({
             id: row.id,
             name: row.name,
@@ -65,8 +58,8 @@ const TabSolarModule = (props) => {
           canAdd
         />
       ) : (
-        <Stack p={2} sx={{ minWidth: 385 }} spacing={1}>
-          <Stack direction="column">
+        <>
+          <Stack p={2} sx={{ minWidth: 385 }} spacing={1}>
             <FielGroup
               icon={<EventNoteOutlinedIcon />}
               label={'Largeur (⟷)'}
@@ -88,22 +81,8 @@ const TabSolarModule = (props) => {
               value={solarModule.electricalPower}
             />
           </Stack>
-          <Divider />
-          <Box>
-            <Button
-              onClick={handleRemoveClick}
-              startIcon={<CompareArrowsOutlinedIcon fontSize="small" />}
-              sx={{
-                color: 'grey.500',
-                borderColor: 'grey.500',
-                p: 0,
-                px: 1,
-              }}
-            >
-              Changer de panneau solaire
-            </Button>
-          </Box>
-        </Stack>
+          <TabPopperChangeButton name="solarModule" />
+        </>
       )}
     </>
   );

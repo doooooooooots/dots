@@ -5,14 +5,14 @@ import CalendarViewWeekOutlined from '@mui/icons-material/CalendarViewWeekOutlin
 import { PAGE_CLADDING } from '../../constants';
 import { useStore } from '../context/useStore';
 import { isEmpty } from 'lodash';
-import { Box, Button, Divider, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import FielGroup from '../field-group';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
-import CompareArrowsOutlinedIcon from '@mui/icons-material/CompareArrowsOutlined';
+import TabPopperChangeButton from './tab-popper-change-button';
 
 const GET_CLADDINGS = gql`
   query GetCladdings {
-    claddings {
+    rows: claddings {
       id
       name
       color
@@ -29,8 +29,8 @@ const GET_CLADDINGS = gql`
 `;
 
 const TabCladding = (props) => {
-  const { onClose } = props;
-  const { getRelatedData, setRelatedData, setUserData } = useStore();
+  const { onChange } = props;
+  const { getRelatedData, setUserData } = useStore();
 
   const handleChoiceClick = useCallback(
     (element) => () => {
@@ -38,14 +38,10 @@ const TabCladding = (props) => {
       setUserData('Cy', element.lengthY);
       setUserData('Cz', element.lengthZ);
       setUserData('CnbOfWaves', element.numberOfWaves);
-      setRelatedData('cladding', element);
+      onChange(element);
     },
-    [setRelatedData, setUserData]
+    [onChange, setUserData]
   );
-
-  const handleRemoveClick = useCallback(() => {
-    setRelatedData('cladding', {});
-  }, [setRelatedData]);
 
   const cladding = getRelatedData('cladding');
 
@@ -65,8 +61,8 @@ const TabCladding = (props) => {
           canAdd
         />
       ) : (
-        <Stack p={2} sx={{ minWidth: 385 }} spacing={1}>
-          <Stack>
+        <>
+          <Stack p={2} sx={{ minWidth: 385 }} spacing={1}>
             <FielGroup
               icon={<EventNoteOutlinedIcon />}
               label={'Color'}
@@ -113,22 +109,8 @@ const TabCladding = (props) => {
               value={cladding.material}
             />
           </Stack>
-          <Divider />
-          <Box>
-            <Button
-              onClick={handleRemoveClick}
-              startIcon={<CompareArrowsOutlinedIcon fontSize="small" />}
-              sx={{
-                color: 'grey.500',
-                borderColor: 'grey.500',
-                p: 0,
-                px: 1,
-              }}
-            >
-              Changer de bac acier
-            </Button>
-          </Box>
-        </Stack>
+          <TabPopperChangeButton name="cladding" />
+        </>
       )}
     </>
   );

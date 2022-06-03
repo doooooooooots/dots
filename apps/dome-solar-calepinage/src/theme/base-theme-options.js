@@ -1,3 +1,10 @@
+const zIndex = {
+  popper: 1300,
+  tooltip: 1299,
+  appBar: 1200,
+  drawer: 1100,
+};
+
 export const baseThemeOptions = {
   breakpoints: {
     values: {
@@ -24,25 +31,25 @@ export const baseThemeOptions = {
       },
       styleOverrides: {
         root: {
-          textTransform: "none",
+          textTransform: 'none',
         },
         sizeSmall: {
-          padding: "6px 16px",
+          padding: '6px 16px',
         },
         sizeMedium: {
-          padding: "8px 20px",
+          padding: '8px 20px',
         },
         sizeLarge: {
-          padding: "11px 24px",
+          padding: '11px 24px',
         },
         textSizeSmall: {
-          padding: "7px 12px",
+          padding: '7px 12px',
         },
         textSizeMedium: {
-          padding: "9px 16px",
+          padding: '9px 16px',
         },
         textSizeLarge: {
-          padding: "12px 16px",
+          padding: '12px 16px',
         },
       },
     },
@@ -52,8 +59,9 @@ export const baseThemeOptions = {
       },
       styleOverrides: {
         root: {
-          "& .MuiListItemIcon-root": {
-            minWidth: "unset!important",
+          minWidth: '30px',
+          '& .MuiListItemIcon-root': {
+            minWidth: 'unset!important',
           },
         },
       },
@@ -61,16 +69,16 @@ export const baseThemeOptions = {
     MuiCardActions: {
       styleOverrides: {
         root: {
-          padding: "16px 24px",
+          padding: '16px 24px',
         },
       },
     },
     MuiCardContent: {
       styleOverrides: {
         root: {
-          padding: "32px 24px",
-          "&:last-child": {
-            paddingBottom: "32px",
+          padding: '32px 24px',
+          '&:last-child': {
+            paddingBottom: '32px',
           },
         },
       },
@@ -78,28 +86,28 @@ export const baseThemeOptions = {
     MuiCardHeader: {
       defaultProps: {
         titleTypographyProps: {
-          variant: "h6",
+          variant: 'h6',
         },
         subheaderTypographyProps: {
-          variant: "body2",
+          variant: 'body2',
         },
       },
       styleOverrides: {
         root: {
-          padding: "32px 24px",
+          padding: '32px 24px',
         },
       },
     },
     MuiCheckbox: {
       defaultProps: {
-        color: "primary",
+        color: 'primary',
       },
     },
     MuiChip: {
       styleOverrides: {
         root: {
           fontWeight: 500,
-          "& .MuiSvgIcon-fontSizeSmall": {
+          '& .MuiSvgIcon-fontSizeSmall': {
             fontSize: 14,
           },
         },
@@ -107,42 +115,54 @@ export const baseThemeOptions = {
     },
     MuiCssBaseline: {
       styleOverrides: {
-        "*": {
-          boxSizing: "border-box",
+        '*': {
+          boxSizing: 'border-box',
         },
         html: {
-          MozOsxFontSmoothing: "grayscale",
-          WebkitFontSmoothing: "antialiased",
-          display: "flex",
-          flexDirection: "column",
-          minHeight: "100%",
-          width: "100%",
+          MozOsxFontSmoothing: 'grayscale',
+          WebkitFontSmoothing: 'antialiased',
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100%',
+          width: '100%',
+          scrollBehavior: 'smooth',
         },
         body: {
-          display: "flex",
-          flex: "1 1 auto",
-          flexDirection: "column",
-          minHeight: "100%",
-          width: "100%",
+          display: 'flex',
+          flex: '1 1 auto',
+          flexDirection: 'column',
+          minHeight: '100%',
+          width: '100%',
         },
-        "#__next": {
-          display: "flex",
-          flex: "1 1 auto",
-          flexDirection: "column",
-          height: "100%",
-          width: "100%",
+        '#__next': {
+          display: 'flex',
+          flex: '1 1 auto',
+          flexDirection: 'column',
+          height: '100%',
+          width: '100%',
         },
-        "#nprogress": {
-          pointerEvents: "none",
+        '#nprogress': {
+          pointerEvents: 'none',
         },
-        "#nprogress .bar": {
-          backgroundColor: "#5048E5",
+        '#nprogress .bar': {
+          backgroundColor: '#5048E5',
           height: 3,
           left: 0,
-          position: "fixed",
+          position: 'fixed',
           top: 0,
-          width: "100%",
+          width: '100%',
           zIndex: 2000,
+        },
+      },
+    },
+    MuiDataGrid: {
+      styleOverrides: {
+        root: {
+          borderRadius: 10,
+          border: 0,
+          '& div[style*=z-index]': {
+            display: 'none',
+          },
         },
       },
     },
@@ -161,21 +181,21 @@ export const baseThemeOptions = {
       styleOverrides: {
         root: {
           borderRadius: 3,
-          overflow: "hidden",
+          overflow: 'hidden',
         },
       },
     },
     MuiLink: {
       defaultProps: {
-        underline: "hover",
+        underline: 'hover',
       },
     },
     MuiListItemIcon: {
       styleOverrides: {
         root: {
-          marginRight: "8px",
-          "&.MuiListItemIcon-root": {
-            minWidth: "unset",
+          marginRight: '8px',
+          '&.MuiListItemIcon-root': {
+            minWidth: 'unset',
           },
         },
       },
@@ -190,7 +210,7 @@ export const baseThemeOptions = {
     MuiPaper: {
       styleOverrides: {
         root: {
-          backgroundImage: "none",
+          backgroundImage: 'none',
         },
       },
     },
@@ -198,15 +218,41 @@ export const baseThemeOptions = {
       defaultProps: {
         elevation: 16,
       },
+      styleOverrides: {
+        paper: {
+          padding: 8,
+          marginTop: 4,
+          '& .MuiList-root': {
+            padding: 0,
+          },
+          '& .MuiMenuItem-root': {
+            borderRadius: 4,
+          },
+        },
+      },
+    },
+    MuiPopper: {
+      styleOverrides: {
+        root: {
+          zIndex: zIndex.popper,
+        },
+      },
     },
     MuiRadio: {
       defaultProps: {
-        color: "primary",
+        color: 'primary',
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        outlined: {
+          padding: 8,
+        },
       },
     },
     MuiSwitch: {
       defaultProps: {
-        color: "primary",
+        color: 'primary',
       },
     },
     MuiTab: {
@@ -215,31 +261,31 @@ export const baseThemeOptions = {
           fontSize: 14,
           fontWeight: 500,
           lineHeight: 1,
-          minWidth: "auto",
-          textTransform: "none",
+          minWidth: 'auto',
+          textTransform: 'none',
         },
       },
     },
     MuiTableCell: {
       styleOverrides: {
         root: {
-          padding: "15px 16px",
+          padding: '15px 16px',
         },
       },
     },
     MuiTableHead: {
       styleOverrides: {
         root: {
-          borderBottom: "none",
-          "& .MuiTableCell-root": {
-            borderBottom: "none",
-            fontSize: "12px",
+          borderBottom: 'none',
+          '& .MuiTableCell-root': {
+            borderBottom: 'none',
+            fontSize: '12px',
             fontWeight: 600,
             lineHeight: 1,
             letterSpacing: 0.5,
-            textTransform: "uppercase",
+            textTransform: 'uppercase',
           },
-          "& .MuiTableCell-paddingCheckbox": {
+          '& .MuiTableCell-paddingCheckbox': {
             paddingTop: 4,
             paddingBottom: 4,
           },
@@ -247,7 +293,7 @@ export const baseThemeOptions = {
       },
     },
   },
-  direction: "ltr",
+  direction: 'ltr',
   shape: {
     borderRadius: 8,
   },
@@ -258,70 +304,67 @@ export const baseThemeOptions = {
     fontFamily:
       '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
     body1: {
-      fontSize: "1rem",
+      fontSize: '1rem',
       fontWeight: 400,
       lineHeight: 1.5,
     },
     body2: {
-      fontSize: "0.875rem",
+      fontSize: '0.875rem',
       fontWeight: 400,
       lineHeight: 1.57,
     },
     subtitle1: {
-      fontSize: "1rem",
+      fontSize: '1rem',
       fontWeight: 500,
       lineHeight: 1.75,
     },
     subtitle2: {
-      fontSize: "0.875rem",
+      fontSize: '0.875rem',
       fontWeight: 500,
       lineHeight: 1.57,
     },
     overline: {
-      fontSize: "0.75rem",
+      fontSize: '0.75rem',
       fontWeight: 600,
-      letterSpacing: "0.5px",
+      letterSpacing: '0.5px',
       lineHeight: 2.5,
-      textTransform: "uppercase",
+      textTransform: 'uppercase',
     },
     caption: {
-      fontSize: "0.75rem",
+      fontSize: '0.75rem',
       fontWeight: 400,
       lineHeight: 1.66,
     },
     h1: {
       fontWeight: 700,
-      fontSize: "3.5rem",
+      fontSize: '3.5rem',
       lineHeight: 1.375,
     },
     h2: {
       fontWeight: 700,
-      fontSize: "3rem",
+      fontSize: '3rem',
       lineHeight: 1.375,
     },
     h3: {
       fontWeight: 700,
-      fontSize: "2.25rem",
+      fontSize: '2.25rem',
       lineHeight: 1.375,
     },
     h4: {
       fontWeight: 700,
-      fontSize: "2rem",
+      fontSize: '2rem',
       lineHeight: 1.375,
     },
     h5: {
       fontWeight: 600,
-      fontSize: "1.5rem",
+      fontSize: '1.5rem',
       lineHeight: 1.375,
     },
     h6: {
       fontWeight: 600,
-      fontSize: "1.125rem",
+      fontSize: '1.125rem',
       lineHeight: 1.375,
     },
   },
-  zIndex: {
-    appBar: 1200,
-    drawer: 1300,
-  },
+  zIndex,
 };

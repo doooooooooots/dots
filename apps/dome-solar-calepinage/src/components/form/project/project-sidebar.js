@@ -7,12 +7,25 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 
 export default function BasicTimeline() {
+  const handleClickSection = React.useCallback(
+    (sectionName) => () => {
+      document
+        .getElementById(`section-${sectionName}`)
+        .scrollIntoView({ behavior: 'smooth' });
+    },
+    []
+  );
+
   return (
     <Timeline
       sx={{
         mt: 0,
+        minWidth: 250,
         '& .MuiTimelineItem-root:before': {
           display: 'none',
+        },
+        '& .MuiTimelineContent-root': {
+          cursor: 'pointer',
         },
       }}
     >
@@ -21,7 +34,7 @@ export default function BasicTimeline() {
           <TimelineDot color="primary" />
           <TimelineConnector />
         </TimelineSeparator>
-        <TimelineContent>
+        <TimelineContent onClick={handleClickSection('main')}>
           Informations de
           <br /> base
         </TimelineContent>
@@ -32,7 +45,9 @@ export default function BasicTimeline() {
           <TimelineDot />
           <TimelineConnector />
         </TimelineSeparator>
-        <TimelineContent>Gestion</TimelineContent>
+        <TimelineContent onClick={handleClickSection('steps')}>
+          Etape
+        </TimelineContent>
       </TimelineItem>
 
       <TimelineItem>
@@ -40,7 +55,9 @@ export default function BasicTimeline() {
           <TimelineDot />
           <TimelineConnector />
         </TimelineSeparator>
-        <TimelineContent>Localité</TimelineContent>
+        <TimelineContent onClick={handleClickSection('dates')}>
+          Dates
+        </TimelineContent>
       </TimelineItem>
 
       <TimelineItem>
@@ -48,7 +65,9 @@ export default function BasicTimeline() {
           <TimelineDot />
           <TimelineConnector />
         </TimelineSeparator>
-        <TimelineContent>Typologie de terrain</TimelineContent>
+        <TimelineContent onClick={handleClickSection('address')}>
+          Adresse
+        </TimelineContent>
       </TimelineItem>
 
       <TimelineItem>
@@ -56,14 +75,18 @@ export default function BasicTimeline() {
           <TimelineDot />
           <TimelineConnector />
         </TimelineSeparator>
-        <TimelineContent>Infos toiture</TimelineContent>
+        <TimelineContent onClick={handleClickSection('field')}>
+          Typologie de terrain
+        </TimelineContent>
       </TimelineItem>
 
       <TimelineItem>
         <TimelineSeparator>
           <TimelineDot />
         </TimelineSeparator>
-        <TimelineContent>Sleep</TimelineContent>
+        <TimelineContent onClick={handleClickSection('hr')}>
+          Gestion
+        </TimelineContent>
       </TimelineItem>
     </Timeline>
   );

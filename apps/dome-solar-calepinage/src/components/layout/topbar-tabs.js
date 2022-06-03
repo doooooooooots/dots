@@ -10,24 +10,40 @@ import {
   Chip,
 } from '@mui/material';
 import { styled } from '@mui/system';
-import TabProject from './tab-project';
-import TabSolarPanel from './tab-solar-module';
-import TabProduct from './tab-product';
-import TabCladding from './tab-cladding';
-import { Add, Close } from '@mui/icons-material';
+
+// Icons
+import AddIcon from '@mui/icons-material/Add';
 import CalendarViewWeekOutlinedIcon from '@mui/icons-material/CalendarViewWeekOutlined';
+import CloseIcon from '@mui/icons-material/Close';
+import InfoIcon from '@mui/icons-material/InfoOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SolarPowerIcon from '@mui/icons-material/SolarPowerOutlined';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-import InfoIcon from '@mui/icons-material/InfoOutlined';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import LogoutIcon from '@mui/icons-material/Logout';
+
+// Constants
+import { TOPBAR_SIZE } from '../../constants';
+
+// Tabs
+import TabSolarPanel from './tab-solar-module';
+import TabCladding from './tab-cladding';
+import TabProject from './tab-project';
+import TabProduct from './tab-product';
+import TabRoof from './tab-roof';
+
+// Components
+import PopperGrow from '../../../design-system/popper-grow';
+
+// Hooks
+import { useAuth } from '../../hooks/use-auth';
+import { useStore } from '../context/useStore';
+import { useRouter } from 'next/router';
+
+//Utils
 import { isEmpty } from 'lodash';
 import { observer } from 'mobx-react-lite';
-import PopperGrow from '../../../design-system/popper-grow';
-import { useStore } from '../context/useStore';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import { useRouter } from 'next/router';
-import { TOPBAR_SIZE } from '../../constants';
-import TabRoof from './tab-roof';
+import { toast } from 'react-hot-toast';
 
 const id = 'transition-popper';
 
@@ -49,19 +65,30 @@ function TopBar() {
   const [value, setValue] = React.useState('project');
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+
+  const { logout } = useAuth();
   const store = useStore();
   const router = useRouter();
 
-  const handleClick = (newValue) => (event) => {
+  const handleTabClick = (newValue) => (event) => {
     event.stopPropagation();
     setValue(newValue);
     setAnchorEl(event.currentTarget);
     setOpen(true);
   };
 
+  const handleSelectElement = useCallback(
+    (pageName) => (element) => {
+      store.setRelatedData(pageName, element);
+      store.renderView();
+    },
+    [store]
+  );
+
   const handleDeleteButtonClick = useCallback(
     (pageName) => () => {
       store.setRelatedData(pageName, {});
+      if (pageName === 'project') store.setRelatedData('roof', {});
       store.setIsPassingTests(false);
     },
     [store]
@@ -71,6 +98,16 @@ function TopBar() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push('/authentication/login').catch(console.error);
+    } catch (err) {
+      console.error(err);
+      toast.error('Unable to logout.');
+    }
   };
 
   return (
@@ -98,20 +135,25 @@ function TopBar() {
           {panels.map((item) => {
             const isActive = open && item.name === value;
             const _isEmpty = isEmpty(store.getRelatedData(item.name));
+            const related = store.getRelatedData(item.name);
 
             return (
               <Chip
                 key={`button-${item.name}`}
-                icon={isActive || !_isEmpty ? item.Icon : <Add />}
-                label={_isEmpty ? `Ajouter un ${item.name}` : item.name}
+                icon={isActive || !_isEmpty ? item.Icon : <AddIcon />}
+                label={
+                  _isEmpty
+                    ? `Ajouter un ${item.name}`
+                    : (related && related.name) || item.name
+                }
                 color={isActive || !_isEmpty ? 'primary' : 'neutral'}
                 variant={isActive ? 'contained' : 'outlined'}
-                onClick={handleClick(item.name)}
+                onClick={handleTabClick(item.name)}
                 deleteIcon={isActive ? <KeyboardArrowDownIcon /> : undefined}
                 onDelete={
                   _isEmpty
                     ? isActive
-                      ? handleClick(item.name)
+                      ? handleTabClick(item.name)
                       : undefined
                     : handleDeleteButtonClick(item.name)
                 }
@@ -125,6 +167,9 @@ function TopBar() {
               />
             );
           })}
+          {/* <IconButton size="small" onClick={handleLogout}>
+            <LogoutIcon fontSize="small" />
+          </IconButton> */}
         </Stack>
 
         {/*//* Poppers */}
@@ -147,28 +192,43 @@ function TopBar() {
               aria-label="delete"
               size="small"
               onClick={handleClose}
-              endIcon={<Close fontSize="inherit" />}
+              endIcon={<CloseIcon fontSize="inherit" />}
               sx={{ py: 0.25, px: 2 }}
             >
               Fermer
             </Button>
           </Stack>
 
-          {/*//? Content */}
+          {/*//* Content */}
           <StyledTabPanel value="project">
-            <TabProject onClose={handleClose} />
+            <TabProject
+              onChange={handleSelectElement('project')}
+              onClose={handleClose}
+            />
           </StyledTabPanel>
           <StyledTabPanel value="roof">
-            <TabRoof onClose={handleClose} />
+            <TabRoof
+              onChange={handleSelectElement('roof')}
+              onClose={handleClose}
+            />
           </StyledTabPanel>
           <StyledTabPanel value="solarModule">
-            <TabSolarPanel onClose={handleClose} />
+            <TabSolarPanel
+              onChange={handleSelectElement('solarModule')}
+              onClose={handleClose}
+            />
           </StyledTabPanel>
           <StyledTabPanel value="product">
-            <TabProduct onClose={handleClose} />
+            <TabProduct
+              onChange={handleSelectElement('product')}
+              onClose={handleClose}
+            />
           </StyledTabPanel>
           <StyledTabPanel value="cladding">
-            <TabCladding onClose={handleClose} />
+            <TabCladding
+              onChange={handleSelectElement('cladding')}
+              onClose={handleClose}
+            />
           </StyledTabPanel>
         </PopperGrow>
       </Stack>

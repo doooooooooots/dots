@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Group, Arrow } from 'react-konva';
 import { observer } from 'mobx-react';
-import Module from '../Module';
-import Contour from './Contour';
-import Obsctacle from '../Obsctacle';
+import Module from '../module';
+import Contour from './contour';
+import Obsctacle from '../obsctacle';
 
 const Roof = (props) => {
   const { store } = props;
@@ -40,11 +40,8 @@ const Roof = (props) => {
         }
       </Group>
 
-      <Group
-        // Modules
-        x={offsetX}
-        y={offsetY}
-      >
+      {/* //* Modules */}
+      <Group x={offsetX} y={offsetY}>
         {store.allModules() &&
           store.allModules().map((element) => {
             const { index, isIntercepted } = element;

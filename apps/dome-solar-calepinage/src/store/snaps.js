@@ -1,7 +1,7 @@
 export const withSnaps = (app) => ({
   ...app,
   snaps: {
-    currentRows: []
+    currentRows: [],
   },
   snapshots: {},
 
@@ -21,13 +21,15 @@ export const withSnaps = (app) => ({
   },
 
   snapshot({ id = null, name = '', comment = '' }) {
+    if (!this.getCurrentStage()) return;
+
     const snap = this.getCurrentStage().toDataURL({ pixelRatio: 3 });
 
     this.snapshots[id] = {
       aspectRatio: this.getAspectRatio(),
       snap,
       name,
-      comment
+      comment,
     };
   },
 
@@ -48,7 +50,7 @@ export const withSnaps = (app) => ({
         this.snapshot({
           id,
           name,
-          comment
+          comment,
         });
         resolve();
       }, timer);
@@ -68,7 +70,7 @@ export const withSnaps = (app) => ({
       setTimeout(() => {
         this.snapshot({
           id: 'generator',
-          name: 'Générateur'
+          name: 'Générateur',
         });
       }, timer);
 
@@ -85,7 +87,7 @@ export const withSnaps = (app) => ({
           } else if (currentCol.length) {
             cols[col] = cols[col] ?? {
               allIndexes: [],
-              startRows: []
+              startRows: [],
             };
             cols[col].allIndexes = [...cols[col].allIndexes, ...currentCol];
             cols[col].startRows.push(startRow);
@@ -97,7 +99,7 @@ export const withSnaps = (app) => ({
         if (currentCol.length) {
           cols[col] = cols[col] ?? {
             allIndexes: [],
-            startRows: []
+            startRows: [],
           };
           cols[col].allIndexes = [...cols[col].allIndexes, ...currentCol];
           cols[col].startRows.push(startRow);
@@ -106,7 +108,10 @@ export const withSnaps = (app) => ({
       }
 
       cols = Object.entries(cols).reduce((acc, [col, item]) => {
-        acc[item.startRows.join('-')] = acc[item.startRows.join('-')] ?? { allIndexes: [], cols: [] };
+        acc[item.startRows.join('-')] = acc[item.startRows.join('-')] ?? {
+          allIndexes: [],
+          cols: [],
+        };
         acc[item.startRows.join('-')].allIndexes.push(...item.allIndexes);
         acc[item.startRows.join('-')].cols.push(parseInt(col, 10) + 1);
         return acc;
@@ -121,7 +126,8 @@ export const withSnaps = (app) => ({
             this.setFocused(value.allIndexes);
             this.setCurrentLastCol(this.getCol(value.allIndexes[0]));
             const id = `000${index}`.slice(-3);
-            const name = value.cols.length > 1 ? 'Détails colonnes' : 'Détails colonne';
+            const name =
+              value.cols.length > 1 ? 'Détails colonnes' : 'Détails colonne';
             const comment =
               value.cols.length > 1
                 ? `Détails des colonnes ${value.cols.join(', ')}`
@@ -129,7 +135,7 @@ export const withSnaps = (app) => ({
             this.snapshot({
               id,
               name,
-              comment
+              comment,
             });
           }, timer);
           timer += baseTimer;
@@ -144,5 +150,5 @@ export const withSnaps = (app) => ({
         resolve();
       }, timer);
     });
-  }
+  },
 });

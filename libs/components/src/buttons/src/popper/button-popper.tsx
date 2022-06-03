@@ -20,12 +20,15 @@ export default function ButtonPopper(props) {
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const id = `transition-popper`;
+  const id = open ? 'transition-popper' : undefined;
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-    setOpen((previousOpen) => !previousOpen);
-  };
+  const handleClick = React.useCallback(
+    (event) => {
+      setAnchorEl(anchorEl ? null : event.currentTarget);
+      setOpen((previousOpen) => !previousOpen);
+    },
+    [anchorEl]
+  );
 
   const handleClose = () => {
     setOpen(false);

@@ -1,4 +1,4 @@
-import CardModule from '../CardModule';
+import CardModule from '../card-module';
 import { useStore } from '../context/useStore';
 import { PowerSettingsNewOutlined } from '@mui/icons-material';
 import { Button, IconButton, Stack, Typography } from '@mui/material';

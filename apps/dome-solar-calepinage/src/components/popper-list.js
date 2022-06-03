@@ -1,11 +1,12 @@
 import React from 'react';
 import { styled } from '@mui/system';
 import { List } from '@mui/material';
+import { POPPER_SEARCH_PADDING } from '../constants';
 
 const PopperList = styled(List)(({ theme }) => ({
   '& .MuiListItemButton-root': {
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
+    paddingLeft: theme.spacing(POPPER_SEARCH_PADDING),
+    paddingRight: theme.spacing(POPPER_SEARCH_PADDING),
   },
   '& .MuiListItemIcon-root': {
     minWidth: 0,

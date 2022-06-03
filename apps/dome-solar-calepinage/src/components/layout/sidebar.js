@@ -11,8 +11,8 @@ const LayoutSidebar = () => {
   if (!store.hasRequiredInfos()) return null;
   if (store.getCurrentPage() === 'preview') return <SidePreview />;
   if (store.getCurrentPage() === 'pdf') return <SidebarPdf />;
-  if (store.allSelected().length === 0) return <SideBarLayout />;
-  return <SideBarSelect />;
+  if (store.allSelected().length !== 0) return <SideBarSelect />;
+  return <SideBarLayout />;
 };
 
 export default observer(LayoutSidebar);

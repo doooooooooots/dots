@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import { Button, TextField, Grid, Typography, Stack } from '@mui/material';
-import { useFormContext } from 'react-hook-form';
+import { Button, TextField, Grid, Typography } from '@mui/material';
+import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { createOneBuilder } from '@dots.cool/schemas';
 import { useStore } from '../context/useStore';
@@ -9,14 +9,30 @@ const CREATE_CLADDING = createOneBuilder('cladding')('id');
 
 const CladdingCreate = () => {
   const { renderView, closeDialog, setRelatedData } = useStore();
-  const { register, handleSubmit } = useFormContext();
+
+  const { handleSubmit, register } = useForm({
+    defaultValues: {
+      name: 'Bac acier',
+      status: 'status_available',
+      lengthX: 1000,
+      lengthY: 1000,
+      thickness: 5,
+      lengthZ: 45,
+      numberOfWaves: 4,
+      waveBaseWidth: 30,
+      waveTopWidth: 50,
+      material: 1,
+      color: 'black',
+    },
+  });
 
   const [createCladding] = useMutation(CREATE_CLADDING);
 
   const onSubmit = useCallback(
     async (data) => {
-      await createCladding({ variables: { data: data.solarModule } });
-      setRelatedData('cladding', data.solarModule);
+      await createCladding({ variables: { data: data } });
+      console.log(data);
+      setRelatedData('cladding', data);
       renderView();
       closeDialog();
     },
@@ -29,19 +45,14 @@ const CladdingCreate = () => {
         <Typography variant="h6">Informations de base</Typography>
       </Grid>
       <Grid item xs={8}>
-        <TextField
-          label="Nom"
-          size="small"
-          fullWidth
-          {...register('cladding.name')}
-        />
+        <TextField label="Nom" size="small" fullWidth {...register('name')} />
       </Grid>
       <Grid item xs={4}>
         <TextField
           label="Status"
           size="small"
           fullWidth
-          {...register('cladding.status')}
+          {...register('status')}
         />
       </Grid>
       <Grid item xs={12}>
@@ -53,7 +64,7 @@ const CladdingCreate = () => {
           size="small"
           type="number"
           fullWidth
-          {...register('solarModule.lengthX', {
+          {...register('lengthX', {
             valueAsNumber: true,
           })}
         />
@@ -64,7 +75,7 @@ const CladdingCreate = () => {
           size="small"
           type="number"
           fullWidth
-          {...register('solarModule.lengthY', {
+          {...register('lengthY', {
             valueAsNumber: true,
           })}
         />
@@ -73,8 +84,11 @@ const CladdingCreate = () => {
         <TextField
           label="Epaisseur (↖︎)"
           size="small"
+          type="number"
           fullWidth
-          {...register('cladding.thickness')}
+          {...register('thickness', {
+            valueAsNumber: true,
+          })}
         />
       </Grid>
       <Grid item xs={12}>
@@ -86,7 +100,7 @@ const CladdingCreate = () => {
           size="small"
           type="number"
           fullWidth
-          {...register('solarModule.lengthZ', {
+          {...register('lengthZ', {
             valueAsNumber: true,
           })}
         />
@@ -95,24 +109,33 @@ const CladdingCreate = () => {
         <TextField
           label="Nombre d'ondes"
           size="small"
+          type="number"
           fullWidth
-          {...register('cladding.numberOfWaves')}
+          {...register('numberOfWaves', {
+            valueAsNumber: true,
+          })}
         />
       </Grid>
       <Grid item xs={6}>
         <TextField
           label="Largeur base d'onde"
           size="small"
+          type="number"
           fullWidth
-          {...register('cladding.waveBaseWidth')}
+          {...register('waveBaseWidth', {
+            valueAsNumber: true,
+          })}
         />
       </Grid>
       <Grid item xs={6}>
         <TextField
           label="Largeur hauteur d'onde"
           size="small"
+          type="number"
           fullWidth
-          {...register('cladding.waveTopWidth')}
+          {...register('waveTopWidth', {
+            valueAsNumber: true,
+          })}
         />
       </Grid>
       <Grid item xs={12}>
@@ -122,8 +145,11 @@ const CladdingCreate = () => {
         <TextField
           label="Matériel"
           size="small"
+          type="number"
           fullWidth
-          {...register('cladding.material')}
+          {...register('material', {
+            valueAsNumber: true,
+          })}
         />
       </Grid>
       <Grid item xs={6}>
@@ -131,7 +157,7 @@ const CladdingCreate = () => {
           label="Couleur"
           size="small"
           fullWidth
-          {...register('cladding.color')}
+          {...register('color')}
         />
       </Grid>
       <Grid item xs={12}>

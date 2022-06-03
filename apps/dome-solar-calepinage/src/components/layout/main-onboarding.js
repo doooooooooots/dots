@@ -24,7 +24,7 @@ function MainOnboarding() {
       <Box
         sx={{
           bgcolor: 'background.default',
-          p: 3,
+          p: 4,
           borderRadius: 2,
         }}
       >

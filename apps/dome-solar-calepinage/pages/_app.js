@@ -5,11 +5,17 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider } from '@emotion/react';
 import { createTheme } from '../src/theme';
-import createEmotionCache from '../src/lib/createEmotionCache';
+import createEmotionCache from '../src/lib/create-emotion-cache';
 import { StoreProvider } from '../src/components/context/useStore';
+import frLocale from 'date-fns/locale/fr';
+
 // Apollo
 import { ApolloProvider } from '@apollo/client';
-import { useApollo } from '../src/lib/apolloClient';
+import { useApollo } from '../src/lib/apollo-client';
+import { AuthConsumer, AuthProvider } from '../src/contexts/keystone-context';
+import { SplashScreen } from '../src/components/splash-screen';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -22,27 +28,42 @@ export default function MyApp(props) {
 
   return (
     <CacheProvider value={emotionCache}>
-      <ApolloProvider client={apolloClient}>
-        <StoreProvider>
-          <Head>
-            <meta
-              name="viewport"
-              content="initial-scale=1, width=device-width"
-            />
-          </Head>
-          <ThemeProvider
-            theme={createTheme({
-              direction: 'ltr',
-              responsiveFontSizes: true,
-              mode: 'light',
-            })}
-          >
-            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            <CssBaseline />
-            {getLayout(<Component {...pageProps} />)}
-          </ThemeProvider>
-        </StoreProvider>
-      </ApolloProvider>
+      <LocalizationProvider
+        dateAdapter={AdapterDateFns}
+        adapterLocale={frLocale}
+      >
+        <ApolloProvider client={apolloClient}>
+          <AuthProvider>
+            <StoreProvider>
+              <Head>
+                <meta
+                  name="viewport"
+                  content="initial-scale=1, width=device-width"
+                />
+              </Head>
+              <ThemeProvider
+                theme={createTheme({
+                  direction: 'ltr',
+                  responsiveFontSizes: true,
+                  mode: 'light',
+                })}
+              >
+                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                <CssBaseline />
+                <AuthConsumer>
+                  {(auth) =>
+                    !auth.isInitialized ? (
+                      <SplashScreen />
+                    ) : (
+                      getLayout(<Component {...pageProps} />)
+                    )
+                  }
+                </AuthConsumer>
+              </ThemeProvider>
+            </StoreProvider>
+          </AuthProvider>
+        </ApolloProvider>
+      </LocalizationProvider>
     </CacheProvider>
   );
 }

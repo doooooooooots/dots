@@ -1,4 +1,4 @@
-import {  isEmpty, uniqueId } from 'lodash';
+import { isEmpty, uniqueId } from 'lodash';
 
 let indexObs = 1;
 
@@ -24,6 +24,10 @@ export const withObstacles = (app) => ({
    */
   allObstacles() {
     return this.obstacles;
+  },
+
+  setObstacles(data) {
+    this.obstacles = data;
   },
 
   getObstacleById(id) {
@@ -59,8 +63,16 @@ export const withObstacles = (app) => ({
     if (!indexes) return;
 
     const { fromCol, fromRow, toCol, toRow } = indexes;
-    for (let col = fromCol; col <= toCol && col < this.getCurrentMaxCol(); col++) {
-      for (let row = fromRow; row <= toRow && row < this.getCurrentMaxRow(); row++) {
+    for (
+      let col = fromCol;
+      col <= toCol && col < this.getCurrentMaxCol();
+      col++
+    ) {
+      for (
+        let row = fromRow;
+        row <= toRow && row < this.getCurrentMaxRow();
+        row++
+      ) {
         const index = this.getIndex(col, row);
         if (!this.isModuleInterceptedByObstacle(index, obstacle.id)) {
           this.setActive(index, false);
@@ -72,7 +84,8 @@ export const withObstacles = (app) => ({
   },
 
   removeObstacleFromModuleIsIntercepted(index, obstacleId) {
-    const indexObstacle = this.getModule(index).isIntercepted.indexOf(obstacleId);
+    const indexObstacle =
+      this.getModule(index).isIntercepted.indexOf(obstacleId);
     this.getModule(index).isIntercepted.splice(indexObstacle, 1);
   },
 
@@ -87,7 +100,10 @@ export const withObstacles = (app) => ({
         const index = this.getIndex(col, row);
         if (index < indexMax) {
           this.removeObstacleFromModuleIsIntercepted(index, obstacle.id);
-          if (!this.isActive(index) && this.getModule(index).isIntercepted.length === 0) {
+          if (
+            !this.isActive(index) &&
+            this.getModule(index).isIntercepted.length === 0
+          ) {
             this.setActive(index, true);
           }
         }
@@ -96,12 +112,11 @@ export const withObstacles = (app) => ({
   },
 
   resetModuleInterceptions() {
-    const that = this;
     this.obstacles.forEach((id) => {
-      if (that.getModule(id)) {
-        that.getModule(id).isIntercepted = [];
+      if (this.getModule(id)) {
+        this.getModule(id).isIntercepted = [];
       }
     });
     this.modules.desactived = [];
-  }
+  },
 });

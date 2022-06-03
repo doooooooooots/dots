@@ -56,6 +56,7 @@ function PopperGrow(props) {
                 sx={{
                   backgroundColor: 'background.default',
                   boxShadow: (theme) => theme.shadows[18],
+                  overflow: 'hidden',
                   borderRadius: 2,
                   pt: 2,
                 }}

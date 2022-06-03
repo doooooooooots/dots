@@ -1,9 +1,9 @@
 import React from 'react';
 import { Stack, TextField } from '@mui/material';
-import { useFormContext } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 const SideRoof = () => {
-  const { register } = useFormContext();
+  const { register } = useForm();
   return (
     <Stack spacing={1}>
       <TextField

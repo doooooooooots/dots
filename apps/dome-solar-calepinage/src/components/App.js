@@ -22,20 +22,20 @@ import {
 import { useStore } from './context/useStore';
 import * as actionsBdd from '../../libraries/actions';
 import BtnBack from '../../components/atoms/buttons/ButtonBack';
-import StepPreview from './steps/StepShowPdf';
+import StepPreview from './steps/show-pdf';
 import SmallChip from '../../components/atoms/chips/SmallChip';
 import useDrawer from '../../hooks/useDrawer';
-import StepIsLayoutOf from './steps/StepIsLayoutOf';
-import StepUseSolarPanel from './steps/StepUseSolarPanel';
-import StepHasProduct from './steps/StepHasProduct';
-import StepUseCladding from './steps/StepUseCladding';
-import StepTemplate from './steps/StepTemplate';
-import StepLayout from './steps/StepLayout';
-import StepHasTechnician from './steps/StepHasTechnician';
-import StepRails from './steps/StepRails';
-import StepMarkup from './steps/StepMarkup';
-import ModeToggle from './ModeToggle';
-import { QontoConnector, QontoStepIcon } from './Stepper';
+import StepIsLayoutOf from './steps/_trash/StepIsLayoutOf';
+import StepUseSolarPanel from './steps/show-solar-panel';
+import StepHasProduct from './steps/show-product';
+import StepUseCladding from './steps/show-cladding';
+import StepTemplate from './steps/show-template';
+import StepLayout from './steps/step-layout';
+import StepHasTechnician from './steps/_trash/StepHasTechnician';
+import StepRails from './steps/snap-all-column-details';
+import StepMarkup from './steps/snap-type-column';
+import ModeToggle from './mode-toggle';
+import { QontoConnector, QontoStepIcon } from './stepper';
 import StepSummary from './StepSummary';
 
 const correspondanceTable = {

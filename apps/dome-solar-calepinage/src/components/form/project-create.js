@@ -1,14 +1,13 @@
 import * as React from 'react';
 import ProjectStep1 from './project/project-1-basic-infos';
 import ProjectStep2 from './project/project-2-timing';
-import ProjectStep3 from './project/project-3-field';
-import { Button, Container, Divider, Grid, Stack } from '@mui/material';
+import { Button, Grid, Stack, Container } from '@mui/material';
 import BasicTimeline from './project/project-sidebar';
 import { Box } from '@mui/system';
 import Sticky from 'react-stickynode';
 
 export default function ProjectFormCreate() {
-  const [store, setStore] = React.useState({ test1: '', test2: '', test3: '' });
+  const [store, setStore] = React.useState({});
 
   const onSubmit = (data) => {
     setStore({
@@ -18,25 +17,24 @@ export default function ProjectFormCreate() {
   };
 
   return (
-    <Container sx={{ bgcolor: 'background.default' }}>
-      <Grid container>
-        <Grid item sx={{ width: 290 }}>
-          <Sticky enabled={true} top={50} bottomBoundary={1200}>
+    <Container maxWidth="lg">
+      <Grid container spacing={2} flexWrap="nowrap">
+        <Grid item sx={{ width: 250 }}>
+          <Sticky enabled={true} top={140}>
             <BasicTimeline />
           </Sticky>
         </Grid>
         <Grid item xs>
-          <ProjectStep1 onSubmit={onSubmit} store={store} />
-          <Divider sx={{ my: 4 }} />
-          <ProjectStep2 onSubmit={onSubmit} store={store} />
-          <Divider sx={{ my: 4 }} />
-          <ProjectStep3 onSubmit={onSubmit} store={store} />
-          <Box mt={4}>
-            <Stack direction="row" justifyContent="flex-end">
-              <Button variant="contained" fullWidth>
-                Enregistrer
-              </Button>
-            </Stack>
+          <Box sx={{ bgcolor: 'background.default', p: 5, borderRadius: 2 }}>
+            <ProjectStep1 onSubmit={onSubmit} />
+            <ProjectStep2 onSubmit={onSubmit} />
+            <Box mt={4}>
+              <Stack direction="row" justifyContent="flex-end">
+                <Button variant="contained" fullWidth>
+                  Enregistrer
+                </Button>
+              </Stack>
+            </Box>
           </Box>
         </Grid>
       </Grid>

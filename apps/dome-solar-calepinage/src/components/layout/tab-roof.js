@@ -8,19 +8,17 @@ import {
   ListItemIcon,
   ListItemText,
   Stack,
-  Divider,
-  Button,
 } from '@mui/material';
 import { observer } from 'mobx-react';
 import PopperList from '../popper-list';
 import RoofingIcon from '@mui/icons-material/Roofing';
-import { useCallback } from 'react';
 import FielGroup from '../field-group';
-import CompareArrowsOutlinedIcon from '@mui/icons-material/CompareArrowsOutlined';
+import { useCallback } from 'react';
+import TabPopperChangeButton from './tab-popper-change-button';
 
 const GET_ROOF = gql`
   query GetRoofs($id: ID!) {
-    roofs(where: { project: { id: { equals: $id } } }) {
+    rows: roofs(where: { project: { id: { equals: $id } } }) {
       id
       name
       roofTypology
@@ -36,38 +34,46 @@ const GET_ROOF = gql`
 `;
 
 const TabRoof = (props) => {
-  const { onClose } = props;
-  const { getRelatedData, setRelatedData } = useStore();
-  const project = getRelatedData('project');
+  const { onChange } = props;
+  const { getRelatedData, setUserData, setObstacles } = useStore();
 
+  const handleChoiceClick = useCallback(
+    (element) => () => {
+      setUserData('Tx', element.lengthX);
+      setUserData('Ty', element.lengthY);
+      try {
+        setObstacles(JSON.parse(element.obstacles || '[]'));
+      } catch (err) {
+        console.log('JSON error');
+      }
+      onChange(element);
+    },
+    [onChange, setObstacles, setUserData]
+  );
+
+  const project = getRelatedData('project');
   const roof = getRelatedData('roof');
 
+  //* REQUEST - Get projet related roofs
   const { data, loading, error } = useQuery(GET_ROOF, {
     variables: { id: project?.id },
     skip: !project?.id,
   });
 
-  const handleRemoveClick = useCallback(() => {
-    setRelatedData('roof', {});
-  }, [setRelatedData]);
-
-  const handleChoiceClick = useCallback(
-    (element) => () => {
-      setRelatedData('roof', element);
-    },
-    [setRelatedData]
-  );
+  if (loading) return 'loading';
 
   return (
-    <Stack spacing={1} sx={{ p: 2, minWidth: 385 }}>
+    <>
+      {/* WARNING */}
       {isEmpty(project) && (
-        <Box py={3}>
+        <Box py={4}>
           <Alert severity="error">
             Vous devez d&apos;abord choisir un projet avant de pouvoir
             séléctionner ou créer une toiture
           </Alert>
         </Box>
       )}
+
       {!isEmpty(project) && isEmpty(roof) && (
         <PopperList>
           {data &&
@@ -91,71 +97,61 @@ const TabRoof = (props) => {
             ))}
         </PopperList>
       )}
+
+      {/* Choice details */}
       {!isEmpty(project) && !isEmpty(roof) && (
-        <Stack direction="column" mt={2}>
-          <FielGroup icon={<RoofingIcon />} label={'name'} value={roof.name} />
-          <FielGroup
-            icon={<RoofingIcon />}
-            label={'roofTypology'}
-            value={roof.roofTypology}
-          />
-          <FielGroup
-            icon={<RoofingIcon />}
-            label={'lengthX'}
-            value={roof.lengthX}
-          />
-          <FielGroup
-            icon={<RoofingIcon />}
-            label={'lengthY'}
-            value={roof.lengthY}
-          />
-          <FielGroup
-            icon={<RoofingIcon />}
-            label={'purlinType'}
-            value={roof.purlinType}
-          />
-          <FielGroup
-            icon={<RoofingIcon />}
-            label={'purlinBetweenAxis'}
-            value={roof.purlinBetweenAxis}
-          />
-          <FielGroup
-            icon={<RoofingIcon />}
-            label={'purlinThickness'}
-            value={roof.purlinThickness}
-          />
-          <FielGroup
-            icon={<RoofingIcon />}
-            label={'incline'}
-            value={roof.incline}
-          />
-          <FielGroup
-            icon={<RoofingIcon />}
-            label={'ridgeHeight'}
-            value={roof.ridgeHeight}
-          />
-        </Stack>
-      )}
-      {!isEmpty(roof) && (
         <>
-          <Divider />
-          <Box>
-            <Button
-              onClick={handleRemoveClick}
-              startIcon={<CompareArrowsOutlinedIcon fontSize="small" />}
-              sx={{
-                color: 'grey.500',
-                borderColor: 'grey.500',
-                p: 0,
-                px: 1,
-              }}
-            >
-              Changer de projet
-            </Button>
-          </Box>
+          <Stack sx={{ p: 2, minWidth: 385 }}>
+            <FielGroup
+              icon={<RoofingIcon />}
+              label={'name'}
+              value={roof.name}
+            />
+            <FielGroup
+              icon={<RoofingIcon />}
+              label={'roofTypology'}
+              value={roof.roofTypology}
+            />
+            <FielGroup
+              icon={<RoofingIcon />}
+              label={'lengthX'}
+              value={roof.lengthX}
+            />
+            <FielGroup
+              icon={<RoofingIcon />}
+              label={'lengthY'}
+              value={roof.lengthY}
+            />
+            <FielGroup
+              icon={<RoofingIcon />}
+              label={'purlinType'}
+              value={roof.purlinType}
+            />
+            <FielGroup
+              icon={<RoofingIcon />}
+              label={'purlinBetweenAxis'}
+              value={roof.purlinBetweenAxis}
+            />
+            <FielGroup
+              icon={<RoofingIcon />}
+              label={'purlinThickness'}
+              value={roof.purlinThickness}
+            />
+            <FielGroup
+              icon={<RoofingIcon />}
+              label={'incline'}
+              value={roof.incline}
+            />
+            <FielGroup
+              icon={<RoofingIcon />}
+              label={'ridgeHeight'}
+              value={roof.ridgeHeight}
+            />
+          </Stack>
+          <TabPopperChangeButton name="roof" />
         </>
       )}
-    </Stack>
+    </>
   );
 };
 

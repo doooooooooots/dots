@@ -1,103 +1,254 @@
+import * as React from 'react';
 import {
   Alert,
   Box,
   Button,
   Container,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   Stack,
   Typography,
 } from '@mui/material';
 import { gql, useQuery } from '@apollo/client';
-import Link from '../src/components/Link';
-import { styled } from '@mui/system';
-import { useRouter } from 'next/router';
+import { isEmpty } from 'lodash';
+import { AuthGuard } from '../src/components/authentication/auth-guard';
+import ProjectFormCreate from '../src/components/form/project-create';
+import ProjectDetails from '../src/components/project/project-details';
+import NoProject from './project/no-project';
+import AutocompletePeople from '../src/components/form/atoms/autocomplete-people';
+import { STATUS_OPTIONS } from '../src/constants';
+
+import SelectPerson from '../src/components/form/atoms/select-person';
+import SelectStep from '../src/components/form/atoms/select-step';
+import SelectEmergency from '../src/components/form/atoms/select-emergency';
+import SelectReaction from '../src/components/form/atoms/select-reaction';
+import SelectStatus from '../src/components/form/atoms/select-status';
+import SelectCalendar from '../src/components/form/atoms/select-calendar';
+import SelectProgress from '../src/components/form/atoms/select-progress';
+import SelectNumber from '../src/components/form/atoms/select-number';
+import SelectTag from '../src/components/form/atoms/select-tag';
+import ButtonFavorite from '../src/components/form/atoms/button-favorite';
+import ButtonComment from '../src/components/form/atoms/button-comment';
+import ButtonStar from '../src/components/form/atoms/button-star';
+import ButtonTask from '../src/components/form/atoms/button-task';
+import ButtonError from '../src/components/form/atoms/button-error';
+import ButtonAction from '../src/components/form/atoms/button-action';
+import ButtonFile from '../src/components/form/atoms/button-file';
+import ButtonExpense from '../src/components/form/atoms/button-expense';
+import ButtonBug from '../src/components/form/atoms/button-bug';
+import ButtonAnalytic from '../src/components/form/atoms/button-analytic';
+import ButtonIdea from '../src/components/form/atoms/button-idea';
+import ButtonNotification from '../src/components/form/atoms/button-notification';
+import ButtonPin from '../src/components/form/atoms/button-pin';
+import ButtonHistory from '../src/components/form/atoms/button-history';
 
 const GET_LAST_PROJECTS = gql`
-  query GetLastProjects($take: Int) {
-    projects(take: $take) {
+  query GetLastProjects(
+    $where: ProjectWhereInput!
+    $orderBy: [ProjectOrderByInput!]!
+    $skip: Int! = 0
+    $take: Int
+  ) {
+    projects(where: $where, orderBy: $orderBy, skip: $skip, take: $take) {
       id
       name
+      identifier
+      step
+      typeEmergency
+      roofs {
+        id
+        name
+        layouts {
+          id
+          name
+        }
+      }
     }
   }
 `;
 
-const StyledLink = styled(Link)(
-  ({ theme }) => `
-  background-color:${theme.palette.primary.main};
-  padding: 10px 15px;
-  border-radius:10px;
-  color:${theme.palette.primary.contrastText};
-  text-decoration: none;
-  &:hover {
-    text-decoration: none;
-    background-color:${theme.palette.primary.dark};
-  }
-`
-);
-
 export default function Home() {
+  const [open, setOpen] = React.useState(false);
+
+  const [params, setParams] = React.useState({
+    where: {},
+    orderBy: [],
+    take: 15,
+    skip: 0,
+  });
+
   const {
     data = {},
     loading,
     error,
-  } = useQuery(GET_LAST_PROJECTS, { variables: { take: 20 } });
+    refetch,
+  } = useQuery(GET_LAST_PROJECTS, {
+    variables: {
+      where: params.where,
+      orderBy: params.orderBy,
+      take: params.take,
+      skip: params.skip,
+    },
+  });
 
-  const router = useRouter();
+  const handleChange = React.useCallback(
+    (param) => (event) => {
+      setParams((current) => ({
+        ...current,
+        where: { ...current.where, [param]: { in: [`${event.target.value}`] } },
+      }));
+    },
+    []
+  );
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  if (error) {
-    return <Alert severity="error">Erreur pendant le chargement</Alert>;
-  }
+  const handleOpen = React.useCallback(() => {
+    setOpen(true);
+  }, []);
+  const handleClose = React.useCallback(() => {
+    setOpen(false);
+  }, []);
+
+  React.useEffect(() => {
+    refetch({
+      where: params.where,
+      orderBy: params.orderBy,
+      take: params.take,
+      skip: params.skip,
+    });
+  }, [params, refetch]);
 
   return (
-    <Container>
-      <Stack
-        my={2}
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Typography variant="h1">Hello</Typography>
-        <Stack direction="row" spacing={2}>
-          <Button
-            onClick={() => router.push('/project/create')}
-            variant="outlined"
-            size="small"
-          >
-            Creér un projet
-          </Button>
-          <Button
-            onClick={() => router.push('/layout/create')}
-            variant="contained"
-            size="small"
-          >
-            Creér un calepinage
-          </Button>
+    <>
+      <Stack as={Container} spacing={1}>
+        {/*//* TopBar */}
+        <Stack
+          direction="row"
+          spacing={2}
+          py={2}
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Typography variant="h4" sx={{ minWidth: 200 }}>
+            Dome solar
+          </Typography>
+          <Box>
+            <Button onClick={handleOpen} variant="contained" size="small">
+              Creér un projet
+            </Button>
+          </Box>
+        </Stack>
+        <Divider />
+        {/*//* Filters */}
+        <Stack direction="row" alignItems="center" spacing={1} sx={{ flex: 1 }}>
+          <FormControl size="small" sx={{ minWidth: 150 }}>
+            <InputLabel id="demo-simple-select-label">Status</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              label="Status"
+              onChange={handleChange('status')}
+            >
+              <MenuItem value={'status_draft'}>Draft</MenuItem>
+              <MenuItem value={'status_available'}>Available</MenuItem>
+              <MenuItem value={'status_archived'}>Archived</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl size="small" sx={{ minWidth: 150 }}>
+            <InputLabel id="demo-simple-select-label">Attribué à</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              label="Attribué à"
+              onChange={handleChange('hasTechnician')}
+            >
+              <MenuItem value={10}>Malo</MenuItem>
+              <MenuItem value={20}>Yannis</MenuItem>
+              <MenuItem value={30}>Paul</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl size="small" sx={{ minWidth: 150 }}>
+            <InputLabel id="demo-simple-select-label">Etape</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              label="Etape"
+              onChange={handleChange('step')}
+            >
+              <MenuItem value={10}>Pre-étude à faire</MenuItem>
+              <MenuItem value={20}>Pré-étude envoyée</MenuItem>
+              <MenuItem value={20}>Pré-étude valiée</MenuItem>
+              <MenuItem value={30}>CF à faire</MenuItem>
+              <MenuItem value={30}>CF envoyé</MenuItem>
+              <MenuItem value={30}>CF validé</MenuItem>
+            </Select>
+          </FormControl>
+        </Stack>
+        <Divider />
+        {/*//* Résults */}
+        <AutocompletePeople label="People" multiple />
+        <Stack direction="row" spacing={1}>
+          <SelectProgress />
+          <SelectEmergency severity={3} />
+          <SelectPerson label="People" multiple />
+          <SelectTag />
+
+          <SelectStep />
+          <SelectReaction variant="+1" />
+          <SelectStatus />
+          <SelectCalendar dateAsDistance />
+          <SelectNumber />
+
+          <ButtonStar isActive />
+          <ButtonFavorite isActive />
+          <ButtonTask />
+          <ButtonError />
+          <ButtonComment />
+          <ButtonAction />
+          <ButtonAnalytic />
+          <ButtonIdea />
+          <ButtonNotification />
+          <ButtonFile />
+          <ButtonPin />
+          <ButtonHistory />
+          <ButtonExpense />
+          <ButtonBug />
+
+          <Button variant="outlined">Hello</Button>
+          <Button variant="contained">Hello</Button>
+        </Stack>
+        <Stack my={2}>
+          {error && (
+            <Alert severity="error">Erreur pendant le chargement</Alert>
+          )}
+          {loading && <div>Loading...</div>}
+          {!error && !loading && !isEmpty(data.projects) && (
+            <>
+              {data.projects.map((project) => (
+                <ProjectDetails key={project.id} project={project} />
+              ))}
+            </>
+          )}
+          {!error && !loading && isEmpty(data.projects) && <NoProject />}
         </Stack>
       </Stack>
-      <Divider variant="middle" />
-      <Box my={2}>
-        {data.projects.map((item) => (
-          <Stack
-            direction="row"
-            key={item.id}
-            alignItems="center"
-            justifyContent="space-between"
-            p={1}
-          >
-            <Typography>{item.name}</Typography>
-            <StyledLink href={`/layout/${item.id}`} variant="contained">
-              Creér un calepinage
-            </StyledLink>
-          </Stack>
-        ))}
-      </Box>
-    </Container>
+
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xl">
+        <DialogTitle>Créer un projet</DialogTitle>
+        <Divider />
+        <DialogContent sx={{ bgcolor: 'grey.100' }}>
+          <ProjectFormCreate />
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 
 Home.getLayout = function getLayout(page) {
-  return <>{page}</>;
+  return <AuthGuard>{page}</AuthGuard>;
 };

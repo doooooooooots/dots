@@ -4,7 +4,8 @@ import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { Stage, Layer, Group, Rect } from 'react-konva';
 import { useStore } from '../context/useStore';
-import Markup from '../Markup';
+import Markup from '../markup';
+import { Box } from '@mui/material';
 
 const Canvas = (props) => {
   const { markups = [], isCentred, children } = props;
@@ -53,94 +54,108 @@ const Canvas = (props) => {
    * *Events -- Mouse
    * -------
    */
-  const handleMouseDown = (e) => {
-    if (
-      store.getViewMode() !== 'select' ||
-      store.getKeyboardState('isSpaceDown')
-    ) {
-      return;
-    }
-    e.evt.preventDefault();
-    const pointer = getPointer();
-    store.updateSelectionState({
-      x0: pointer.x,
-      y0: pointer.y,
-      x1: pointer.x,
-      y1: pointer.y,
-      visible: true,
-    });
-  };
-
-  const handleMouseMove = (e) => {
-    // do nothing if we didn't start selection
-    const pointer = getPointer();
-    if (!store.getSelectionState().visible) {
-      return;
-    }
-    e.evt.preventDefault();
-    store.updateSelectionState({
-      x1: (pointer.x - store.getCanvasState().x) / store.getCanvasState().scale,
-      y1: (pointer.y - store.getCanvasState().y) / store.getCanvasState().scale,
-    });
-  };
-
-  const handleMouseUp = (e) => {
-    const clickedIndex = e.target.attrs.index;
-
-    switch (store.getViewMode()) {
-      case 'select':
-        store.getSelected(selectionRef.current.attrs);
-        break;
-
-      case 'default':
-        if (clickedIndex === undefined) return;
-
-        if (
-          store.getKeyboardState('isShiftDown') &&
-          !store.getKeyboardState('isSpaceDown')
-        ) {
-          store.toggleAllRange(clickedIndex, true);
-        } else {
-          store.toggleModule(clickedIndex);
-        }
-        break;
-
-      case 'pan':
-      default:
+  const handleMouseDown = useCallback(
+    (e) => {
+      if (
+        store.getViewMode() !== 'select' ||
+        store.getKeyboardState('isSpaceDown')
+      ) {
         return;
-    }
+      }
+      e.evt.preventDefault();
+      const pointer = getPointer();
+      store.updateSelectionState({
+        x0: pointer.x,
+        y0: pointer.y,
+        x1: pointer.x,
+        y1: pointer.y,
+        visible: true,
+      });
+    },
+    [getPointer, store]
+  );
 
-    store.updateSelectionState({
-      visible: false,
-    });
-    store.updateLastSelectedIndex(clickedIndex);
-  };
+  const handleMouseMove = useCallback(
+    (e) => {
+      // do nothing if we didn't start selection
+      const pointer = getPointer();
+      if (!store.getSelectionState().visible) {
+        return;
+      }
+      e.evt.preventDefault();
+      store.updateSelectionState({
+        x1:
+          (pointer.x - store.getCanvasState().x) / store.getCanvasState().scale,
+        y1:
+          (pointer.y - store.getCanvasState().y) / store.getCanvasState().scale,
+      });
+    },
+    [getPointer, store]
+  );
 
-  const handleOnWheel = (e) => {
-    e.evt.preventDefault();
+  const handleMouseUp = useCallback(
+    (e) => {
+      const clickedIndex = e.target.attrs.index;
 
-    const oldScale = canvasRef.current.scaleX();
-    const pointer = getPointer();
+      switch (store.getViewMode()) {
+        case 'select':
+          store.getSelected(selectionRef.current.attrs);
+          break;
 
-    const mousePointTo = {
-      x: (pointer.x - canvasRef.current.x()) / oldScale,
-      y: (pointer.y - canvasRef.current.y()) / oldScale,
-    };
+        case 'default':
+          if (clickedIndex === undefined) return;
 
-    const newScale = e.evt.deltaY > 0 ? oldScale / 1.04 : oldScale * 1.04;
+          if (
+            store.getKeyboardState('isShiftDown') &&
+            !store.getKeyboardState('isSpaceDown')
+          ) {
+            store.toggleAllRange(clickedIndex, true);
+          } else {
+            store.toggleModule(clickedIndex);
+          }
+          break;
 
-    store.updateCanvasState({
-      x: pointer.x - mousePointTo.x * newScale,
-      y: pointer.y - mousePointTo.y * newScale,
-      scale: newScale,
-    });
-  };
+        case 'pan':
+        default:
+          return;
+      }
+
+      store.updateSelectionState({
+        visible: false,
+      });
+      store.updateLastSelectedIndex(clickedIndex);
+    },
+    [store]
+  );
+
+  const handleOnWheel = useCallback(
+    (e) => {
+      e.evt.preventDefault();
+
+      const oldScale = canvasRef.current.scaleX();
+      const pointer = getPointer();
+
+      const mousePointTo = {
+        x: (pointer.x - canvasRef.current.x()) / oldScale,
+        y: (pointer.y - canvasRef.current.y()) / oldScale,
+      };
+
+      const newScale = e.evt.deltaY > 0 ? oldScale / 1.04 : oldScale * 1.04;
+
+      store.updateCanvasState({
+        x: pointer.x - mousePointTo.x * newScale,
+        y: pointer.y - mousePointTo.y * newScale,
+        scale: newScale,
+      });
+    },
+    [getPointer, store]
+  );
 
   /**
-   * *Draw
+   ** Draw
    * -----
-   * ?Calculate position and ratio in order to display canvas centered and fit view size
-   * ? To re-render the scene, call store.draw() in order to make a new cacheId
+   *? Calculate position and ratio in order to display canvas centered and fit view size
+   *? To re-render the scene, call store.draw() in order to make a new cacheId
    */
   useEffect(() => {
     if (buffer.current) {
@@ -258,7 +273,7 @@ const Canvas = (props) => {
   }
 
   return (
-    <>
+    <Box visibility={store.isRendered() ? 'visible' : 'hidden'}>
       {/* Container */}
       <Stage
         id="container"
@@ -393,7 +408,7 @@ const Canvas = (props) => {
           </Group>
         </Layer>
       </Stage>
-    </>
+    </Box>
   );
 };
 

@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from '@mui/material';
 import { observer } from 'mobx-react';
-import InputNumber from '../InputNumber';
-import InputSelect from '../InputSelect';
-import InputCheckbox from '../InputCheckbox';
-import InputString from '../InputString';
+import InputNumber from '../input-number';
+import InputSelect from '../input-select';
+import InputCheckbox from '../input-checkbox';
+import InputString from '../input-string';
 import * as Rows from '../../../components/layouts/form/rows';
 import { useStore } from '../context/useStore';
 
@@ -54,12 +54,19 @@ const Form = (props) => {
   return (
     <Box sx={{ overflowX: 'hidden' }}>
       {fields.map((element) => {
-        if (element.id === 'X0' && store.getAnchorPoint().includes('center')) return null;
+        if (element.id === 'X0' && store.getAnchorPoint().includes('center'))
+          return null;
 
-        if (element.id === 'Y0' && store.getAnchorPoint().includes('middle')) return null;
+        if (element.id === 'Y0' && store.getAnchorPoint().includes('middle'))
+          return null;
 
         return (
-          <Container key={element.id} variant={variant} label={element.label} description={element.description}>
+          <Container
+            key={element.id}
+            variant={variant}
+            label={element.label}
+            description={element.description}
+          >
             <Row element={element} />
           </Container>
         );
@@ -69,12 +76,12 @@ const Form = (props) => {
 };
 
 Row.propTypes = {
-  element: PropTypes.any
+  element: PropTypes.any,
 };
 
 Form.propTypes = {
   fields: PropTypes.any,
-  variant: PropTypes.any
+  variant: PropTypes.any,
 };
 
 export default observer(Form);

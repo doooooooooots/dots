@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { Stack, Button } from '@mui/material';
 import SaveIcon from '@mui/icons-material/SaveOutlined';
 import { useStore } from '../context/useStore';
+import ArrowBackIcon from '@mui/icons-material/ArrowBackOutlined';
 
 function SidePreview() {
   const { setCurrentPage } = useStore();
@@ -17,7 +18,7 @@ function SidePreview() {
   return (
     <Stack p={2} spacing={2}>
       <Button
-        startIcon={<SaveIcon />}
+        startIcon={<ArrowBackIcon />}
         onClick={handleGoBack}
         variant="outlined"
         size="small"

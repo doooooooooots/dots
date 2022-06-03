@@ -181,6 +181,7 @@
     "lcdb-back": "apps/lcdb-back",
     "lcdb-front": "apps/lcdb-front",
     "schemas": "libs/schemas",
+    "theme": "libs/theme",
     "tokens": {
       "root": "libs/tokens",
       "sourceRoot": "libs/tokens/src",

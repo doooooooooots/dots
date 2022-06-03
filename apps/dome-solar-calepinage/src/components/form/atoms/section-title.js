@@ -1,11 +1,19 @@
 import React from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, Divider } from '@mui/material';
 
 function SectionTitle(props) {
-  const { primary } = props;
+  const { id, primary, noGutterTop } = props;
   return (
-    <Grid item xs={12}>
-      <Typography variant="h6">{primary}</Typography>
+    <Grid
+      id={id}
+      item
+      xs={12}
+      sx={{ py: 2, mt: noGutterTop ? 0 : 2, borderRadius: 2 }}
+    >
+      <Typography variant="h6" gutterBottom>
+        {primary}
+      </Typography>
+      <Divider />
     </Grid>
   );
 }
