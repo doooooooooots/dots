@@ -3,10 +3,14 @@ import ScheduleOutlinedIcon from '@mui/icons-material/ScheduleOutlined';
 import ButtonBase from './button-base';
 
 function ButtonHistory(props) {
-  const { tooltip = 'history', count = 0 } = props;
+  const { tooltip = 'history', count = 0, variant = 'outlined' } = props;
 
   return (
-    <ButtonBase tooltip={tooltip} icon={<ScheduleOutlinedIcon />}>
+    <ButtonBase
+      tooltip={tooltip}
+      startIcon={<ScheduleOutlinedIcon />}
+      variant={variant}
+    >
       {count}
     </ButtonBase>
   );

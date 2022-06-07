@@ -22,13 +22,16 @@ function PopperGrowWithClickaway(props) {
               sx={{
                 backgroundColor: 'background.default',
                 minWidth: 190,
+                minheight: 120,
                 borderRadius: 1,
                 mt: 1,
+                border: 1,
+                borderColor: 'divider',
                 boxShadow: (theme) => theme.shadows[8],
                 ...sx,
               }}
             >
-              {children}
+              {open && children}
             </Box>
           </Grow>
         </ClickAwayListener>

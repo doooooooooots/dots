@@ -1,5 +1,8 @@
-import React, { useCallback, useState } from 'react';
-import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
+import React from 'react';
+import SelectFromList from './select-with-autocomplete/components/popper-from-list';
+import { isEmpty } from 'lodash';
+import ButtonBase from './button-base';
+
 import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import ScheduleOutlinedIcon from '@mui/icons-material/ScheduleOutlined';
@@ -15,18 +18,83 @@ import FlagCircleOutlinedIcon from '@mui/icons-material/FlagCircleOutlined';
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
 import BuildCircleOutlinedIcon from '@mui/icons-material/BuildCircleOutlined';
 import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
+import NotStartedOutlinedIcon from '@mui/icons-material/NotStartedOutlined';
+import SelectItemOption from './select-with-autocomplete/components/item-option';
 
-import usePopper from '../../../hooks/use-popper';
-import ButtonBase from './button-base';
-import PopperGrowWithClickaway from '../../popper-grow-with-clickaway';
-import PopperList from '../../popper-list';
-import SelectOptionItem from './select-option-item';
+const labels = [
+  {
+    title: 'Non traitée',
+    icon: 'inbox',
+    color: 'neutral',
+    description: 'La tâche est encore en inbox',
+  },
+  {
+    title: 'Non commencée',
+    icon: 'notStarted',
+    color: 'neutral',
+    description: "La tâche n'a pas encore été commencée",
+  },
+  {
+    title: 'Assignée',
+    icon: 'assigned',
+    color: 'neutral',
+    description: 'La tâche a été assignée',
+  },
+  {
+    title: 'Programmée',
+    icon: 'scheduled',
+    color: 'neutral',
+    description: 'La tâche a été assignée et mise au planning',
+  },
+  {
+    title: 'En cours',
+    icon: 'inProgress',
+    color: 'info',
+    description: '',
+  },
+  {
+    title: 'En cours1',
+    icon: 'inProgress',
+    color: 'info',
+    description: '',
+  },
+  {
+    title: 'En cours2',
+    icon: 'inProgress',
+    color: 'info',
+    description: '',
+  },
+  {
+    title: 'En cours3',
+    icon: 'inProgress',
+    color: 'info',
+    description: '',
+  },
+  {
+    title: 'En cours4',
+    icon: 'inProgress',
+    color: 'info',
+    description: '',
+  },
+  {
+    title: 'En cours5',
+    icon: 'inProgress',
+    color: 'info',
+    description: '',
+  },
+  {
+    title: 'En cours6',
+    icon: 'inProgress',
+    color: 'info',
+    description: '',
+  },
+];
 
 const PROGRESS_VALUES = [
-  'notStarted',
   'inbox',
-  'assigned',
+  'notStarted',
   'scheduled',
+  'assigned',
   'inProgress',
   'sent',
   'reviewed',
@@ -40,7 +108,6 @@ const PROGRESS_VALUES = [
   'canceled',
   'closed',
 ];
-
 const PROGRESS_COLORS = {
   notStarted: 'neutral',
   inbox: 'neutral',
@@ -60,12 +127,30 @@ const PROGRESS_COLORS = {
   closed: 'neutral',
 };
 
-const ProgressIcon = ({ variant }) => {
+const title = 'Appliquer un progress à ce projet';
+const placeholder = 'Chercher un progress';
+const options = labels;
+const noOptionsText = 'Pas de progress correspondant';
+const defaultButtonText = 'Progress';
+const defaultTooltip = 'Add a progress';
+const getOptionLabel = (option) => option.title;
+const renderButtonText = (value) => (isEmpty(value) ? defaultButtonText : null);
+const renderOption = (props, option, { selected }) => (
+  <SelectItemOption
+    {...props}
+    title={option.title}
+    icon={<ProgressIcon variant={option?.icon} size="small" />}
+    selected={selected}
+    tooltip={option.description}
+  />
+);
+
+const ProgressIcon = ({ variant, size }) => {
   const color = `${PROGRESS_COLORS[variant]}.main`;
   let Icon = null;
   switch (variant) {
     case 'notStarted':
-      Icon = RadioButtonUncheckedOutlinedIcon;
+      Icon = NotStartedOutlinedIcon;
       break;
     case 'inbox':
       Icon = MoveToInboxIcon;
@@ -116,53 +201,34 @@ const ProgressIcon = ({ variant }) => {
       return null;
   }
 
-  return <Icon sx={{ color }} />;
+  return <Icon sx={{ color }} fontSize={size} />;
 };
 
 function SelectProgress(props) {
-  const { tooltip = 'number', defaultValue = 'notStarted' } = props;
-  const { open, anchorEl, onOpen, onClose } = usePopper(false);
-
-  const [value, setValue] = useState(defaultValue);
-
-  //* FUNC -- When select a user
-  const handleElementClick = useCallback(
-    (_value) => () => {
-      setValue(_value);
-      onClose();
-    },
-    [onClose]
-  );
+  const { tooltip = defaultTooltip } = props;
 
   return (
-    <>
-      {/*//* BUTTON */}
-      <ButtonBase
-        tooltip={value ? value : tooltip}
-        icon={<ProgressIcon variant={value} />}
-        className={open ? 'is--focused' : ''}
-        onClick={onOpen}
-      />
-
-      {/*//* RESULT */}
-      <PopperGrowWithClickaway
-        label="Choisir une personne"
-        open={open}
-        anchorEl={anchorEl}
-        onClose={onClose}
-      >
-        <PopperList>
-          {PROGRESS_VALUES.map((_progress) => (
-            <SelectOptionItem
-              key={_progress}
-              icon={<ProgressIcon variant={_progress} />}
-              onClick={handleElementClick(_progress)}
-              primary={_progress}
-            />
-          ))}
-        </PopperList>
-      </PopperGrowWithClickaway>
-    </>
+    <SelectFromList
+      title={title}
+      options={options}
+      noOptionsText={noOptionsText}
+      getOptionLabel={getOptionLabel}
+      renderOption={renderOption}
+      inputProps={{ placeholder }}
+    >
+      {({ value, onClick, open }) => (
+        <ButtonBase
+          tooltip={isEmpty(value) ? tooltip : value.name}
+          startIcon={<ProgressIcon variant={value?.icon} />}
+          endIcon={!!value}
+          onClick={onClick}
+          isActive={open}
+          withAddIcon={!value}
+        >
+          {renderButtonText(value)}
+        </ButtonBase>
+      )}
+    </SelectFromList>
   );
 }
 

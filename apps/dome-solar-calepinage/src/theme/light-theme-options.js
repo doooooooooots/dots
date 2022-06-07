@@ -111,7 +111,6 @@ const tags = [
   '#F8D3D3',
   '#F8D3E2',
 ];
-
 const common = {
   black: '#000',
   white: '#fff',
@@ -123,8 +122,6 @@ const text = {
   secondary: grey[600],
   inverse: grey[200],
   disabled: grey[300],
-  light: grey[400],
-  dark: grey[900],
 };
 const background = {
   default: common.white,
@@ -148,12 +145,11 @@ const neutral = {
   light: grey[100],
   main: grey[300],
   dark: grey[500],
-  contrastText: text.dark,
+  contrastText: text.primary,
   background: grey[50],
   hover: grey[100],
   ...grey,
 };
-
 const primary = {
   main: blue[500],
   light: blue[300],
@@ -163,52 +159,47 @@ const primary = {
   hover: blue[100],
   ...blue,
 };
-
 const secondary = {
   main: yellow[500],
   light: yellow[300],
   dark: yellow[700],
-  contrastText: text.dark,
+  contrastText: text.primary,
   background: yellow[50],
   hover: yellow[100],
   ...yellow,
 };
-
 const success = {
   main: green[500],
   light: green[300],
   dark: green[700],
-  contrastText: text.dark,
+  contrastText: text.primary,
   background: green[50],
   hover: green[100],
   ...green,
 };
-
 const info = {
   main: blueAlt[500],
   light: blueAlt[300],
   dark: blueAlt[700],
-  contrastText: text.dark,
+  contrastText: text.primary,
   background: blueAlt[50],
   hover: blueAlt[100],
   ...blueAlt,
 };
-
 const warning = {
   main: orange[500],
   light: orange[300],
   dark: orange[700],
-  contrastText: text.dark,
+  contrastText: text.primary,
   background: orange[50],
   hover: orange[100],
   ...orange,
 };
-
 const error = {
   main: red[500],
   light: red[300],
   dark: red[700],
-  contrastText: text.dark,
+  contrastText: text.primary,
   background: red[50],
   hover: red[100],
   ...red,

@@ -9,16 +9,16 @@ import {
   Switch,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
-import SectionTitle from '../atoms/section-title';
-import AutocompletePeople from '../atoms/autocomplete-people';
-import StaticDatePickerLandscape from '../atoms/date-picker';
-import Status from '../fields/status';
-import TextfieldWithMask from '../fields/textfield-with-mask';
+import SectionTitle from '../../atoms/section-title';
+import AutocompletePeople from '../../atoms/autocomplete-people';
+import StaticDatePickerLandscape from '../../atoms/date-picker';
+import Status from '../../fields/status';
+import TextfieldWithMask from '../../fields/textfield-with-mask';
 import {
   PROJECT_STEP_LABELS,
   PROJECT_STEP_OPTIONS,
   STEP_PRE_STUDY_TODO,
-} from '../../../constants';
+} from '../../../../constants/constants';
 
 const ProjectStep1 = (props, ref) => {
   const { onSubmit } = props;

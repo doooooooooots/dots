@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select, MenuItem } from '@mui/material';
-import { PURLIN_TYPES_OPTIONS } from '../../../constants';
+import { PURLIN_TYPES_OPTIONS } from '../../../constants/constants';
 
 function PurlinTypes(props) {
   return (

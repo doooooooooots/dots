@@ -8,11 +8,11 @@ import {
   TextField,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
-import SectionTitle from '../atoms/section-title';
-import AreaField from '../fields/area-field';
-import GoogleMapInput from '../molecule/google-map/google-map-input';
-import AutocompletePeople from '../atoms/autocomplete-people';
-import CountrySelect from '../atoms/autocomplete-country';
+import SectionTitle from '../../atoms/section-title';
+import AreaField from '../../fields/area-field';
+import GoogleMapInput from '../../google-map/google-map-input';
+import AutocompletePeople from '../../atoms/autocomplete-people';
+import CountrySelect from '../../atoms/autocomplete-country';
 
 const ProjectStep2 = (props, ref) => {
   const { onSubmit } = props;

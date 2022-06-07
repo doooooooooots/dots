@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { gql } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { People } from '@mui/icons-material';
-import { PAGE_PROJECT } from '../../constants';
+import { PAGE_PROJECT } from '../../constants/constants';
 import { useStore } from '../context/useStore';
 import { isEmpty } from 'lodash';
 import { Stack } from '@mui/material';

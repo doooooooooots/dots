@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select, MenuItem } from '@mui/material';
-import { STATUS_OPTIONS } from '../../../constants';
+import { STATUS_OPTIONS } from '../../../constants/constants';
 
 function Status(props, ref) {
   return (

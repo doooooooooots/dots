@@ -3,10 +3,14 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 import ButtonBase from './button-base';
 
 function ButtonNotification(props) {
-  const { tooltip = 'notification', count = 0 } = props;
+  const { tooltip = 'notification', count = 0, variant = 'outlined' } = props;
 
   return (
-    <ButtonBase tooltip={tooltip} icon={<NotificationsNoneOutlinedIcon />}>
+    <ButtonBase
+      tooltip={tooltip}
+      startIcon={<NotificationsNoneOutlinedIcon />}
+      variant={variant}
+    >
       {count}
     </ButtonBase>
   );

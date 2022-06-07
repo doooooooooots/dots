@@ -1,18 +1,13 @@
-import React, { useCallback, useState } from 'react';
-import { Avatar, IconButton } from '@mui/material';
-import usePopper from '../../../hooks/use-popper';
-import ButtonBase from './button-base';
-import stringAvatar from '../../../utils/string-to-avatar';
-import useInput from '../../../hooks/use-input';
-import { gql, useLazyQuery } from '@apollo/client';
-import PopperSearch from '../../popper-search';
-import SelectOptionItem from './select-option-item';
-import PopperList from '../../popper-list';
+import React from 'react';
+import { Box, Stack } from '@mui/material';
 import { isEmpty } from 'lodash';
-import SelectNoResult from './select-no-result';
-import { useDebounce } from 'react-use';
-import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
+import ButtonBase from './button-base';
+import DiscountOutlinedIcon from '@mui/icons-material/DiscountOutlined';
+import ColorDot from '../../color-dot/color-dot';
+import ColorDotGroup from '../../color-dot/color-dot-group';
+import SelectItemOption from './select-with-autocomplete/components/item-option';
+import SelectFromQuery from './select-with-autocomplete/components/popper-from-query';
+import { gql } from '@apollo/client';
 
 const GET_PEOPLE = gql`
   query GetPeople($take: Int! = 4, $input: String! = "") {
@@ -31,131 +26,83 @@ const GET_PEOPLE = gql`
     }
   }
 `;
-
-const avatarProps = {
-  fontSize: 12,
-  width: 24,
-  height: 24,
-};
-
-function SelectPerson(props) {
-  const { tooltip = 'number' } = props;
-  const { open, anchorEl, onOpen, onClose } = usePopper(false);
-
-  const [person, setPerson] = useState(null);
-  const { input, onChange } = useInput('');
-  const [searchPeople, { data, loading }] = useLazyQuery(GET_PEOPLE);
-
-  //* FUNC -- When select a user
-  const handleClearClick = useCallback(() => {
-    setPerson(null);
-  }, []);
-
-  //* FUNC -- When select a user
-  const handlePersonClick = useCallback(
-    (_person) => () => {
-      setPerson(_person);
-      onClose();
-    },
-    [onClose]
+const title = 'Assigner des personnes';
+const placeholder = 'Chercher une personne';
+const defaultButtonText = 'Personnes';
+const defaultTooltip = 'Add a person';
+const renderOption = (props, option, { selected }) => (
+  <SelectItemOption
+    {...props}
+    title={option.name}
+    icon={<TagIcon color={option.color} />}
+    description={option.description}
+    selected={selected}
+    tooltip={option.description}
+  />
+);
+const renderButtonText = (value) =>
+  isEmpty(value) ? (
+    defaultButtonText
+  ) : (
+    <ColorDotGroup>
+      {value.map((label) => (
+        <ColorDot key={label.name} color={label.color} borderSize={1} />
+      ))}
+    </ColorDotGroup>
   );
-
-  //* FUNC -- Send request
-  useDebounce(
-    () => {
-      searchPeople({
-        variables: { take: 5, input: input },
-      });
-    },
-    350,
-    [input]
+const renderButtonTooltip = (value, defaultValue) =>
+  isEmpty(value) ? (
+    defaultValue
+  ) : (
+    <Stack py="4px" spacing={'3px'}>
+      {value.map((label) => (
+        <Box
+          key={label.name}
+          sx={{
+            height: 20,
+            minWidth: 140,
+            padding: '.15em 4px',
+            fontWeight: 600,
+            lineHeight: '15px',
+            borderRadius: '2px',
+            color: (theme) => theme.palette.getContrastText(label.color),
+          }}
+          style={{
+            backgroundColor: label.color,
+          }}
+        >
+          {label.name}
+        </Box>
+      ))}
+    </Stack>
   );
+const TagIcon = ({ color }) => (
+  <Box
+    component="span"
+    sx={{
+      width: 14,
+      height: 14,
+      flexShrink: 0,
+      borderRadius: '3px',
+      mr: 1,
+      mt: '2px',
+    }}
+    style={{ backgroundColor: color }}
+  />
+);
+
+function SelectTag(props) {
+  const { tooltip = defaultTooltip } = props;
 
   return (
-    <>
-      {/*//* BUTTON */}
-      {isEmpty(person) ? (
-        <ButtonBase tooltip={'Personne'} icon={<AddIcon />} onClick={onOpen}>
-          Add person
-        </ButtonBase>
-      ) : (
-        <ButtonBase
-          tooltip={
-            person ? `${person.givenName} ${person.familyName}` : tooltip
-          }
-          icon={
-            <Avatar
-              {...stringAvatar(
-                person.givenName,
-                person.familyName,
-                avatarProps
-              )}
-            />
-          }
-          className={open ? 'is--focused' : ''}
-          onClick={onOpen}
+    <AutocompleteContext config={{ multiple: false, defaultValue: [] }}>
+      <PopperButton>
+        <AutocompletePopperWithRequest
+          query={GET_PEOPLE}
+          take={5}
         />
-      )}
-
-      {/*//* RESULT */}
-      <PopperSearch
-        label="Choisir une personne"
-        open={open}
-        anchorEl={anchorEl}
-        onClose={onClose}
-        input={input}
-        onChange={onChange}
-        loading={loading}
-      >
-        <PopperList>
-          {!isEmpty(person) && (
-            <SelectOptionItem
-              primary={person.givenName}
-              icon={
-                <Avatar
-                  {...stringAvatar(
-                    person.givenName,
-                    person.familyName,
-                    avatarProps
-                  )}
-                />
-              }
-              secondaryAction={
-                <IconButton
-                  onClick={handleClearClick}
-                  edge="end"
-                  aria-label="comments"
-                >
-                  <CloseIcon />
-                </IconButton>
-              }
-              onClick={handlePersonClick(person)}
-              isActive
-            />
-          )}
-
-          {!isEmpty(data?.rows) &&
-            data?.rows?.map((_person) => (
-              <SelectOptionItem
-                key={_person.id}
-                icon={
-                  <Avatar
-                    {...stringAvatar(
-                      _person.givenName,
-                      _person.familyName,
-                      avatarProps
-                    )}
-                  />
-                }
-                onClick={handlePersonClick(_person)}
-                primary={_person.givenName}
-              />
-            ))}
-          {isEmpty(data?.rows) && <SelectNoResult />}
-        </PopperList>
-      </PopperSearch>
-    </>
+    </AutocompleteContext>
   );
 }
 
-export default SelectPerson;
+export default SelectTag;

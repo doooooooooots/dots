@@ -21,32 +21,12 @@ import { AuthGuard } from '../src/components/authentication/auth-guard';
 import ProjectFormCreate from '../src/components/form/project-create';
 import ProjectDetails from '../src/components/project/project-details';
 import NoProject from './project/no-project';
-import AutocompletePeople from '../src/components/form/atoms/autocomplete-people';
-import { STATUS_OPTIONS } from '../src/constants';
+import InputNumber from '../src/components/form/popper-inputs/popper-input-number';
+import SelectTags from '../src/components/form/molecule/tag/select-tag-multiple';
 
-import SelectPerson from '../src/components/form/atoms/select-person';
-import SelectStep from '../src/components/form/atoms/select-step';
-import SelectEmergency from '../src/components/form/atoms/select-emergency';
-import SelectReaction from '../src/components/form/atoms/select-reaction';
-import SelectStatus from '../src/components/form/atoms/select-status';
-import SelectCalendar from '../src/components/form/atoms/select-calendar';
-import SelectProgress from '../src/components/form/atoms/select-progress';
-import SelectNumber from '../src/components/form/atoms/select-number';
-import SelectTag from '../src/components/form/atoms/select-tag';
-import ButtonFavorite from '../src/components/form/atoms/button-favorite';
-import ButtonComment from '../src/components/form/atoms/button-comment';
-import ButtonStar from '../src/components/form/atoms/button-star';
-import ButtonTask from '../src/components/form/atoms/button-task';
-import ButtonError from '../src/components/form/atoms/button-error';
-import ButtonAction from '../src/components/form/atoms/button-action';
-import ButtonFile from '../src/components/form/atoms/button-file';
-import ButtonExpense from '../src/components/form/atoms/button-expense';
-import ButtonBug from '../src/components/form/atoms/button-bug';
-import ButtonAnalytic from '../src/components/form/atoms/button-analytic';
-import ButtonIdea from '../src/components/form/atoms/button-idea';
-import ButtonNotification from '../src/components/form/atoms/button-notification';
-import ButtonPin from '../src/components/form/atoms/button-pin';
-import ButtonHistory from '../src/components/form/atoms/button-history';
+import SelectTag from '../src/components/form/molecule/tag/select-tag-single';
+import InputWithPopper from '../src/components/form/popper-inputs/popper-input-text';
+import SelectPerson from '../src/components/form/molecule/person/select-person';
 
 const GET_LAST_PROJECTS = gql`
   query GetLastProjects(
@@ -191,22 +171,30 @@ export default function Home() {
         </Stack>
         <Divider />
         {/*//* Résults */}
-        <AutocompletePeople label="People" multiple />
         <Stack direction="row" spacing={1}>
+          <SelectTag />
+          <SelectTags />
+          <SelectPerson />
+          <InputNumber />
+          <InputWithPopper />
+          {/*
+          <AutocompletePeople label="People" multiple />
           <SelectProgress />
+          <SelectProgressSave />
           <SelectEmergency severity={3} />
           <SelectPerson label="People" multiple />
           <SelectTag />
-
           <SelectStep />
           <SelectReaction variant="+1" />
           <SelectStatus />
           <SelectCalendar dateAsDistance />
           <SelectNumber />
 
+          <GitHubLabel />
+
           <ButtonStar isActive />
           <ButtonFavorite isActive />
-          <ButtonTask />
+          <ButtonTask variant="outlined" />
           <ButtonError />
           <ButtonComment />
           <ButtonAction />
@@ -218,11 +206,9 @@ export default function Home() {
           <ButtonHistory />
           <ButtonExpense />
           <ButtonBug />
-
-          <Button variant="outlined">Hello</Button>
-          <Button variant="contained">Hello</Button>
+        */}
         </Stack>
-        <Stack my={2}>
+        {/* <Stack my={2}>
           {error && (
             <Alert severity="error">Erreur pendant le chargement</Alert>
           )}
@@ -235,7 +221,7 @@ export default function Home() {
             </>
           )}
           {!error && !loading && isEmpty(data.projects) && <NoProject />}
-        </Stack>
+        </Stack> */}
       </Stack>
 
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xl">

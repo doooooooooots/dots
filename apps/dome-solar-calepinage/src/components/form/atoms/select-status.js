@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
-import usePopper from '../../../hooks/use-popper';
+import usePopper from './select-with-autocomplete/hooks/use-popper';
 import ButtonBase from './button-base';
 import { isEmpty } from 'lodash';
 import AddIcon from '@mui/icons-material/Add';
@@ -58,7 +58,7 @@ function SelectStatus(props) {
     <>
       {/*//* BUTTON */}
       {isEmpty(value) ? (
-        <ButtonBase tooltip={tooltip} icon={<AddIcon />} onClick={onOpen}>
+        <ButtonBase tooltip={tooltip} startIcon={<AddIcon />} onClick={onOpen}>
           Add status
         </ButtonBase>
       ) : (

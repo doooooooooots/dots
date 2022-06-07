@@ -3,7 +3,11 @@ import { Dialog, Grid, Box } from '@mui/material';
 import Toolbar from '../../src/components/layout/toolbar';
 import TopBar from '../../src/components/layout/topbar-tabs';
 import { useStore } from '../../src/components/context/useStore';
-import { PAGE_PROJECT, SIDEBAR_WIDTH, TOPBAR_SIZE } from '../../src/constants';
+import {
+  PAGE_PROJECT,
+  SIDEBAR_WIDTH,
+  TOPBAR_SIZE,
+} from '../../src/constants/constants';
 import MainCanvas from '../../src/components/layout/main-canvas';
 import LayoutSidebar from '../../src/components/layout/sidebar';
 import MainOnboarding from '../../src/components/layout/main-onboarding';

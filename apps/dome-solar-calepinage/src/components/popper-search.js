@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import PopperGrowWithClickaway from './popper-grow-with-clickaway';
 import { SearchOutlined } from '@mui/icons-material';
-import { POPPER_SEARCH_PADDING } from '../constants';
+import { POPPER_SEARCH_PADDING } from '../constants/constants';
 
 function PopperSearch(props) {
   const {

@@ -16,7 +16,7 @@ import {
   PAGE_PROJECT,
   PAGE_CLADDING,
   PAGE_ROOF,
-} from '../../constants';
+} from '../../constants/constants';
 
 import SolarModuleCreate from '../form/solar-module-create';
 import ProjectFormCreate from '../form/project-create';

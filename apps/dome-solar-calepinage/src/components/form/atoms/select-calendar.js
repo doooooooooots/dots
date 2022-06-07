@@ -11,7 +11,7 @@ import EventOutlinedIcon from '@mui/icons-material/EventOutlined';
 import EventAvailableOutlinedIcon from '@mui/icons-material/EventAvailableOutlined';
 import { CalendarPicker } from '@mui/x-date-pickers/CalendarPicker';
 import PopperGrowWithClickaway from '../../popper-grow-with-clickaway';
-import usePopper from '../../../hooks/use-popper';
+import usePopper from './select-with-autocomplete/hooks/use-popper';
 import ButtonBase from './button-base';
 import { format, formatDistance } from 'date-fns';
 
@@ -50,7 +50,7 @@ export default function SelectCalendar(props) {
     <>
       <ButtonBase
         tooltip={tooltip}
-        icon={<CalendarIcon variant="confirmed" />}
+        startIcon={<CalendarIcon variant="confirmed" />}
         onClick={onOpen}
         className={open ? 'is--focused' : ''}
       >

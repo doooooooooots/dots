@@ -2,7 +2,7 @@ import React from 'react';
 import { alpha, Box, Stack, Typography, Button } from '@mui/material';
 import { useStore } from './context/useStore';
 import { useFormContext } from 'react-hook-form';
-import { SIDEBAR_WIDTH } from '../constants';
+import { SIDEBAR_WIDTH } from '../constants/constants';
 
 function RenderActionOverlay() {
   const store = useStore();

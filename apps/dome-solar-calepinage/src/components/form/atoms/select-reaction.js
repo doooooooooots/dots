@@ -3,7 +3,7 @@ import { MenuItem, Stack, Typography } from '@mui/material';
 import AddReactionOutlinedIcon from '@mui/icons-material/AddReactionOutlined';
 import ButtonBase from './button-base';
 import PopperGrowWithClickaway from '../../popper-grow-with-clickaway';
-import usePopper from '../../../hooks/use-popper';
+import usePopper from './select-with-autocomplete/hooks/use-popper';
 import { uniqueId, isEmpty, remove } from 'lodash';
 import ButtonBaseUnstyled from './button-base-unstyled';
 
@@ -157,7 +157,7 @@ function SelectReaction(props) {
       })}
       <ButtonBase
         tooltip={tooltip}
-        icon={<AddReactionOutlinedIcon />}
+        startIcon={<AddReactionOutlinedIcon />}
         onClick={onOpen}
       />
       <PopperGrowWithClickaway

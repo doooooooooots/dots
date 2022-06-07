@@ -3,10 +3,14 @@ import InsertChartOutlinedOutlinedIcon from '@mui/icons-material/InsertChartOutl
 import ButtonBase from './button-base';
 
 function ButtonAnalytic(props) {
-  const { tooltip = 'analytic', count = 0 } = props;
+  const { tooltip = 'analytic', count = 0, variant = 'outlined' } = props;
 
   return (
-    <ButtonBase tooltip={tooltip} icon={<InsertChartOutlinedOutlinedIcon />}>
+    <ButtonBase
+      tooltip={tooltip}
+      startIcon={<InsertChartOutlinedOutlinedIcon />}
+      variant={variant}
+    >
       {count}
     </ButtonBase>
   );

@@ -6,7 +6,7 @@ function ButtonTag(props) {
   const { tooltip = 'automation', count = 0 } = props;
 
   return (
-    <ButtonBase tooltip={tooltip} icon={<SmartToyOutlinedIcon />}>
+    <ButtonBase tooltip={tooltip} startIcon={<SmartToyOutlinedIcon />}>
       {count}
     </ButtonBase>
   );

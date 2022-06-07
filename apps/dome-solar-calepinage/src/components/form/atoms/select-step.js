@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
-import usePopper from '../../../hooks/use-popper';
+import usePopper from './select-with-autocomplete/hooks/use-popper';
 import ButtonBase from './button-base';
 import { isEmpty } from 'lodash';
 import AddIcon from '@mui/icons-material/Add';
@@ -52,7 +52,6 @@ function SelectStep(props) {
   const { fullColor, defaultValue, tooltip = 'step' } = props;
 
   const { open, anchorEl, onOpen, onClose } = usePopper(false);
-
   const [value, setValue] = useState(defaultValue || '');
 
   //* FUNC -- When select
@@ -68,7 +67,7 @@ function SelectStep(props) {
     <>
       {/*//* BUTTON */}
       {isEmpty(value) ? (
-        <ButtonBase tooltip={tooltip} icon={<AddIcon />} onClick={onOpen}>
+        <ButtonBase tooltip={tooltip} startIcon={<AddIcon />} onClick={onOpen}>
           Add Step
         </ButtonBase>
       ) : (

@@ -7,7 +7,6 @@ const withAnalytics = (app) => ({
     byId: {},
     overrideAnalytic: {},
   },
-
   getSummaryModules() {
     return this.modules.allIndexes.reduce(
       (acc, index) => {
@@ -55,7 +54,6 @@ const withAnalytics = (app) => ({
       2
     );
   },
-
   getAnalytics() {
     return this.analytics.byId;
   },
@@ -65,7 +63,6 @@ const withAnalytics = (app) => ({
   setOverrideAnalytic(key, newValue) {
     this.analytics.overrideAnalytic[key] = newValue;
   },
-
   getFinalAnalytic(tagName) {
     const override =
       tagName in this.analytics.overrideAnalytic &&

@@ -3,10 +3,14 @@ import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import ButtonBase from './button-base';
 
 function ButtonTask(props) {
-  const { tooltip = 'task', count = 0 } = props;
+  const { tooltip = 'task', count = 0, variant = 'outlined' } = props;
 
   return (
-    <ButtonBase tooltip={tooltip} icon={<AssignmentOutlinedIcon />}>
+    <ButtonBase
+      tooltip={tooltip}
+      startIcon={<AssignmentOutlinedIcon />}
+      variant={variant}
+    >
       {count}
     </ButtonBase>
   );

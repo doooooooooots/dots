@@ -4,13 +4,14 @@ import StarIcon from '@mui/icons-material/Star';
 import ButtonBase from './button-base';
 
 function ButtonStar(props) {
-  const { tooltip = 'star', isActive } = props;
+  const { tooltip = 'star', isActive, variant = 'outlined' } = props;
 
   return (
     <ButtonBase
       tooltip={tooltip}
       sx={{ color: isActive ? '#ffdf42' : 'neutral.300' }}
-      icon={isActive ? <StarIcon /> : <StarBorderIcon />}
+      startIcon={isActive ? <StarIcon /> : <StarBorderIcon />}
+      variant={variant}
     />
   );
 }

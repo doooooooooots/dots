@@ -14,7 +14,7 @@ import withUtils from './utils';
 import withPreview from './preview';
 import withRelatedData from './related-data';
 import withAnalytics from './analytics';
-import { SIDEBAR_WIDTH, TOOLBAR_WIDTH } from '../constants';
+import { SIDEBAR_WIDTH, TOOLBAR_WIDTH } from '../constants/constants';
 
 export const config = {
   debounceTime: 500,

@@ -1,62 +1,81 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Grid, IconButton, Stack, Button, TextField } from '@mui/material';
 import PopperGrowWithClickaway from '../../popper-grow-with-clickaway';
-import usePopper from '../../../hooks/use-popper';
 import BackspaceIcon from '@mui/icons-material/BackspaceOutlined';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
-import { styled } from '@mui/system';
-import ButtonBase from './button-base';
+import PopperInputButton from './components/button';
+import { usePopper } from './hooks/use-popper';
+import withPopperContext from './components/hoc/withPopperContext';
+import PopperTextField from './components/popper-textfield';
 
 const DIGITS = new Array(9).fill(1);
 const DIGIT_WIDTH = 80;
 const DIGIT_HEIGHT = 36;
 const GRID_SPACING = 1;
 
-const DigitButton = styled(IconButton)(
-  ({ theme }) => `
-  width:100%;
-  height:${DIGIT_HEIGHT}px;
-  background-color: ${theme.palette.background.default};
-  font-size:18px;
-`
+const DigitButton = ({ sx, ...other }) => (
+  <IconButton
+    sx={[
+      sx,
+      {
+        width: '100%',
+        height: DIGIT_HEIGHT,
+        bgcolor: 'background.default',
+        fontSize: 18,
+        '&:hover': {
+          bgcolor: 'background.default',
+        },
+        '&:active': {
+          bgcolor: 'neutral.main',
+          color: 'neutral.contrastText',
+        },
+      },
+    ]}
+    {...other}
+  />
 );
 
-function SelectNumber(props) {
+function InputNumber(props) {
   const { tooltip = 'number' } = props;
 
-  const { open, anchorEl, onOpen, onClose } = usePopper(false);
-
-  const [number, setNumber] = useState('');
-
-  const handleChange = useCallback((event) => {
-    setNumber(event.target.value);
-  }, []);
+  const {
+    open,
+    anchorEl,
+    value,
+    pendingValue,
+    setPendingValue,
+    onButtonClick,
+    onClose,
+    onConfirm,
+  } = usePopper(false);
 
   const handleDigitClick = useCallback(
     (value) => () => {
-      if (!(value === ',' && number.indexOf(',') !== -1))
-        setNumber(`${number}${value}`);
+      if (!(value === ',' && pendingValue.indexOf(',') !== -1))
+        setPendingValue(`${pendingValue}${value}`);
     },
-    [number]
+    [pendingValue, setPendingValue]
   );
   const handleDeleteClick = useCallback(() => {
-    if (number.length) setNumber(`${number.slice(0, number.length - 1)}`);
-  }, [number]);
+    if (pendingValue.length)
+      setPendingValue(`${pendingValue.slice(0, pendingValue.length - 1)}`);
+  }, [pendingValue, setPendingValue]);
 
   const handleClearClick = useCallback(() => {
-    setNumber('');
-  }, []);
+    setPendingValue('');
+  }, [setPendingValue]);
 
   return (
     <>
-      <ButtonBase
+      <PopperInputButton
         tooltip={tooltip}
-        className={open ? 'is--focused' : ''}
-        onClick={onOpen}
+        onClick={onButtonClick}
+        isActive={open}
+        sx={{ whiteSpace: 'nowrap' }}
       >
-        {number || 'Valeur ?'}
-      </ButtonBase>
+        {value || 'Valeur ?'}
+      </PopperInputButton>
       <PopperGrowWithClickaway
         anchorEl={anchorEl}
         open={open}
@@ -64,13 +83,7 @@ function SelectNumber(props) {
         p={0}
       >
         <Stack p={2} spacing={1}>
-          <TextField
-            autoFocus
-            value={number}
-            onChange={handleChange}
-            label="Enter a number"
-            size="small"
-          />
+          <PopperTextField label="Enter a number" type="number" />
           <Stack
             direction="row"
             p={GRID_SPACING}
@@ -119,7 +132,7 @@ function SelectNumber(props) {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={onClose}
+                  onClick={onConfirm}
                   sx={{
                     width: '100%',
                     height: DIGIT_HEIGHT * 2 + GRID_SPACING * 8,
@@ -136,4 +149,4 @@ function SelectNumber(props) {
   );
 }
 
-export default SelectNumber;
+export default withPopperContext(InputNumber);

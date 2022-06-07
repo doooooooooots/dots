@@ -23,7 +23,7 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 // Constants
-import { TOPBAR_SIZE } from '../../constants';
+import { TOPBAR_SIZE } from '../../constants/constants';
 
 // Tabs
 import TabSolarPanel from './tab-solar-module';

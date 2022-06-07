@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select, MenuItem } from '@mui/material';
-import { AREA_FIELD_OPTIONS } from '../../../constants';
+import { AREA_FIELD_OPTIONS } from '../../../constants/constants';
 
 function AreaField(props, ref) {
   return (

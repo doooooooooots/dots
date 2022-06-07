@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client';
 import { createOneBuilder } from '@dots.cool/schemas';
 import { useStore } from '../context/useStore';
 import SectionTitle from './atoms/section-title';
-import { STATUS_OPTIONS } from '../../constants';
+import { STATUS_OPTIONS } from '../../constants/constants';
 
 const CREATE_SOLAR_MODULE = createOneBuilder('solarModule')('id');
 

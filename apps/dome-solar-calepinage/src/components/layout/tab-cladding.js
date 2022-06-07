@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { gql } from '@apollo/client';
 import PopperSelectFromDb from '../popper-select-from-db';
 import CalendarViewWeekOutlined from '@mui/icons-material/CalendarViewWeekOutlined';
-import { PAGE_CLADDING } from '../../constants';
+import { PAGE_CLADDING } from '../../constants/constants';
 import { useStore } from '../context/useStore';
 import { isEmpty } from 'lodash';
 import { Stack } from '@mui/material';

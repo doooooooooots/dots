@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { gql } from '@apollo/client';
 import PopperSelectFromDb from '../popper-select-from-db';
 import { People } from '@mui/icons-material';
-import { PAGE_PRODUCT } from '../../constants';
+import { PAGE_PRODUCT } from '../../constants/constants';
 import { useStore } from '../context/useStore';
 import { isEmpty } from 'lodash';
 import { Stack } from '@mui/material';

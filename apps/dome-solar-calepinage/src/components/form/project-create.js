@@ -1,8 +1,8 @@
 import * as React from 'react';
-import ProjectStep1 from './project/project-1-basic-infos';
-import ProjectStep2 from './project/project-2-timing';
+import ProjectStep1 from './molecule/project/project-1-basic-infos';
+import ProjectStep2 from './molecule/project/project-2-timing';
 import { Button, Grid, Stack, Container } from '@mui/material';
-import BasicTimeline from './project/project-sidebar';
+import BasicTimeline from './molecule/project/project-sidebar';
 import { Box } from '@mui/system';
 import Sticky from 'react-stickynode';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Stack, Typography, CircularProgress } from '@mui/material';
-import { SIDEBAR_WIDTH } from '../constants';
+import { SIDEBAR_WIDTH } from '../constants/constants';
 
 function Loading() {
   return (

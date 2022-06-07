@@ -10,7 +10,7 @@ import {
 import { Box } from '@mui/system';
 import { observer } from 'mobx-react';
 import { useForm } from 'react-hook-form';
-import { ALIGNMENTS } from '../../constants';
+import { ALIGNMENTS } from '../../constants/constants';
 import ucFirst from '../../utils/uc-first';
 import * as AlignmentIcons from '../../icons/alignments-icons';
 

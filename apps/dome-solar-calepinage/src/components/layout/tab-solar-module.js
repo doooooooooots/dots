@@ -5,7 +5,7 @@ import SolarPowerOutlined from '@mui/icons-material/SolarPowerOutlined';
 import { useStore } from '../context/useStore';
 import { isEmpty } from 'lodash';
 import { Stack } from '@mui/material';
-import { PAGE_SOLAR_MODULE } from '../../constants';
+import { PAGE_SOLAR_MODULE } from '../../constants/constants';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import FielGroup from '../field-group';
 import TabPopperChangeButton from './tab-popper-change-button';

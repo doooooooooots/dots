@@ -3,10 +3,14 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ButtonBase from './button-base';
 
 function ButtonError(props) {
-  const { tooltip = 'error', count = 0 } = props;
+  const { tooltip = 'error', count = 0, variant = 'outlined' } = props;
 
   return (
-    <ButtonBase tooltip={tooltip} icon={<ErrorOutlineIcon />}>
+    <ButtonBase
+      tooltip={tooltip}
+      startIcon={<ErrorOutlineIcon />}
+      variant={variant}
+    >
       {count}
     </ButtonBase>
   );
