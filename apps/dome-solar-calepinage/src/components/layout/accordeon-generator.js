@@ -17,7 +17,7 @@ function AccordeonGenerator(props) {
       <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
         <Typography>Générateur</Typography>
       </AccordionSummary>
-      <AccordionDetails>
+      <AccordionDetails sx={{ bgcolor: 'background.default' }}>
         <SideGenerator />
       </AccordionDetails>
     </Accordion>

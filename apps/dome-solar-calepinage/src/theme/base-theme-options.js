@@ -1,6 +1,5 @@
 const zIndex = {
   popper: 1300,
-  tooltip: 1299,
   appBar: 1200,
   drawer: 1100,
 };

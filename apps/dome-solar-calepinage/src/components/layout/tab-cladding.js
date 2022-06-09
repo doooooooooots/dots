@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { gql } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import PopperSelectFromDb from '../popper-select-from-db';
 import CalendarViewWeekOutlined from '@mui/icons-material/CalendarViewWeekOutlined';
 import { PAGE_CLADDING } from '../../constants/constants';
@@ -9,6 +9,8 @@ import { Stack } from '@mui/material';
 import FielGroup from '../field-group';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import TabPopperChangeButton from './tab-popper-change-button';
+import toast from 'react-hot-toast';
+import FieldGroupContainer from './field-group-container';
 
 const GET_CLADDINGS = gql`
   query GetCladdings {
@@ -28,9 +30,46 @@ const GET_CLADDINGS = gql`
   }
 `;
 
+const UPDATE_CLADDING = gql`
+  mutation UpdateCladding(
+    $where: CladdingWhereUniqueInput!
+    $data: CladdingUpdateInput!
+  ) {
+    updateCladding(where: $where, data: $data) {
+      id
+    }
+  }
+`;
+
 const TabCladding = (props) => {
   const { onChange } = props;
-  const { getRelatedData, setUserData } = useStore();
+  const { getRelatedData, setUserData, updateRelatedData } = useStore();
+
+  const [update] = useMutation(UPDATE_CLADDING);
+  const cladding = getRelatedData('cladding');
+
+  // FIXME: Depending on updateRelatedData, value is updated in front end or not
+  const handleChangeConfirm = useCallback(
+    (key) => async (newValue) => {
+      if (cladding?.id) {
+        updateRelatedData(`cladding.${key}`, newValue);
+        toast.promise(
+          update({
+            variables: {
+              where: { id: cladding?.id },
+              data: { [key]: newValue },
+            },
+          }),
+          {
+            loading: 'Sauvegarde ...',
+            success: 'Le bac a été mis à jour',
+            error: 'Erreur lors de la mise à jour',
+          }
+        );
+      }
+    },
+    [cladding?.id, update, updateRelatedData]
+  );
 
   const handleChoiceClick = useCallback(
     (element) => () => {
@@ -42,8 +81,6 @@ const TabCladding = (props) => {
     },
     [onChange, setUserData]
   );
-
-  const cladding = getRelatedData('cladding');
 
   return (
     <>
@@ -62,53 +99,61 @@ const TabCladding = (props) => {
         />
       ) : (
         <>
-          <Stack p={2} sx={{ minWidth: 385 }} spacing={1}>
+          <FieldGroupContainer>
             <FielGroup
               icon={<EventNoteOutlinedIcon />}
               label={'Color'}
               value={cladding.color}
+              onConfirm={handleChangeConfirm('color')}
             />
             <FielGroup
-              icon={<EventNoteOutlinedIcon />}
               label={'Largeur (⟷)'}
               value={cladding.lengthX}
+              type="dimension"
+              onConfirm={handleChangeConfirm('lengthX')}
             />
             <FielGroup
-              icon={<EventNoteOutlinedIcon />}
               label={'Hauteur (↕︎)'}
               value={cladding.lengthY}
+              type="dimension"
+              onConfirm={handleChangeConfirm('lengthY')}
             />
             <FielGroup
-              icon={<EventNoteOutlinedIcon />}
               label={"Hauteur d'ondes"}
               value={cladding.lengthZ}
+              type="number"
+              onConfirm={handleChangeConfirm('lengthZ')}
             />
             <FielGroup
-              icon={<EventNoteOutlinedIcon />}
               label={"Nombre d'ondes"}
               value={cladding.numberOfWaves}
+              type="number"
+              onConfirm={handleChangeConfirm('numberOfWaves')}
             />
             <FielGroup
-              icon={<EventNoteOutlinedIcon />}
               label={'Epaisseur (↖︎)'}
               value={cladding.thickness}
+              type="dimension"
+              onConfirm={handleChangeConfirm('thickness')}
             />
             <FielGroup
-              icon={<EventNoteOutlinedIcon />}
               label={"Largeur base d'onde"}
               value={cladding.waveBaseWidth}
+              type="dimension"
+              onConfirm={handleChangeConfirm('waveBaseWidth')}
             />
             <FielGroup
-              icon={<EventNoteOutlinedIcon />}
               label={"Largeur hauteur d'onde"}
               value={cladding.waveTopWidth}
+              type="dimension"
+              onConfirm={handleChangeConfirm('waveTopWidth')}
             />
             <FielGroup
-              icon={<EventNoteOutlinedIcon />}
               label={'Matériel'}
               value={cladding.material}
+              onConfirm={handleChangeConfirm('material')}
             />
-          </Stack>
+          </FieldGroupContainer>
           <TabPopperChangeButton name="cladding" />
         </>
       )}

@@ -20,6 +20,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SolarPowerIcon from '@mui/icons-material/SolarPowerOutlined';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 // Constants
@@ -30,6 +31,7 @@ import TabSolarPanel from './tab-solar-module';
 import TabCladding from './tab-cladding';
 import TabProject from './tab-project';
 import TabProduct from './tab-product';
+import TabLayout from './tab-layout';
 import TabRoof from './tab-roof';
 
 // Components
@@ -50,7 +52,8 @@ const id = 'transition-popper';
 const panels = [
   { name: 'project', Icon: <InfoIcon /> },
   { name: 'roof', Icon: <InfoIcon /> },
-  { name: 'cladding', Icon: <CalendarViewWeekOutlinedIcon /> },
+  // { name: 'cladding', Icon: <CalendarViewWeekOutlinedIcon /> },
+  { name: 'layout', Icon: <StarBorderIcon /> },
   { name: 'solarModule', Icon: <SolarPowerIcon /> },
   { name: 'product', Icon: <StarBorderIcon /> },
 ];
@@ -58,7 +61,7 @@ const panels = [
 const StyledTabPanel = styled(TabPanel)({
   padding: 0,
   minWidth: 385,
-  maxWidth: 400,
+  maxWidth: 425,
 });
 
 function TopBar() {
@@ -126,9 +129,14 @@ function TopBar() {
       >
         <Stack direction="row" py={1} spacing={1} alignItems="center">
           {/*//* Home button */}
-          <IconButton size="small" onClick={handleClickHome}>
-            <HomeOutlinedIcon fontSize="small" />
-          </IconButton>
+          <Button
+            startIcon={<HomeOutlinedIcon fontSize="small" />}
+            size="small"
+            color="neutral"
+            onClick={handleClickHome}
+          >
+            Accueil
+          </Button>
           <Divider orientation="vertical" variant="middle" flexItem />
 
           {/*//* Pannels */}
@@ -171,67 +179,77 @@ function TopBar() {
             <LogoutIcon fontSize="small" />
           </IconButton> */}
         </Stack>
-
-        {/*//* Poppers */}
-        <PopperGrow
-          id={id}
-          open={!!open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          placement={'bottom-start'}
-        >
-          {/*//? TopBar */}
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            px={2}
-          >
-            <Typography variant="h6">{value}</Typography>
-            <Button
-              aria-label="delete"
-              size="small"
-              onClick={handleClose}
-              endIcon={<CloseIcon fontSize="inherit" />}
-              sx={{ py: 0.25, px: 2 }}
-            >
-              Fermer
-            </Button>
-          </Stack>
-
-          {/*//* Content */}
-          <StyledTabPanel value="project">
-            <TabProject
-              onChange={handleSelectElement('project')}
-              onClose={handleClose}
-            />
-          </StyledTabPanel>
-          <StyledTabPanel value="roof">
-            <TabRoof
-              onChange={handleSelectElement('roof')}
-              onClose={handleClose}
-            />
-          </StyledTabPanel>
-          <StyledTabPanel value="solarModule">
-            <TabSolarPanel
-              onChange={handleSelectElement('solarModule')}
-              onClose={handleClose}
-            />
-          </StyledTabPanel>
-          <StyledTabPanel value="product">
-            <TabProduct
-              onChange={handleSelectElement('product')}
-              onClose={handleClose}
-            />
-          </StyledTabPanel>
-          <StyledTabPanel value="cladding">
-            <TabCladding
-              onChange={handleSelectElement('cladding')}
-              onClose={handleClose}
-            />
-          </StyledTabPanel>
-        </PopperGrow>
       </Stack>
+
+      {/*//* Poppers */}
+      <PopperGrow
+        id={id}
+        open={!!open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        placement={'bottom-start'}
+        sx={{ minWidth: 425, p: 0 }}
+      >
+        {/*//? TopBar */}
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          px={2}
+          py={1}
+        >
+          <Typography variant="h6">{value}</Typography>
+          <Button
+            aria-label="delete"
+            size="small"
+            onClick={handleClose}
+            endIcon={<CloseIcon fontSize="inherit" />}
+            sx={{ py: 0.25, px: 2 }}
+          >
+            Fermer
+          </Button>
+        </Stack>
+
+        <Divider />
+
+        {/*//* Content */}
+        <StyledTabPanel value="project">
+          <TabProject
+            onChange={handleSelectElement('project')}
+            onClose={handleClose}
+          />
+        </StyledTabPanel>
+        <StyledTabPanel value="roof">
+          <TabRoof
+            onChange={handleSelectElement('roof')}
+            onClose={handleClose}
+          />
+        </StyledTabPanel>
+        <StyledTabPanel value="layout">
+          <TabLayout
+            onChange={handleSelectElement('layout')}
+            onClose={handleClose}
+          />
+        </StyledTabPanel>
+        <StyledTabPanel value="solarModule">
+          <TabSolarPanel
+            onChange={handleSelectElement('solarModule')}
+            onClose={handleClose}
+          />
+        </StyledTabPanel>
+        <StyledTabPanel value="product">
+          <TabProduct
+            onChange={handleSelectElement('product')}
+            onClose={handleClose}
+          />
+        </StyledTabPanel>
+        <StyledTabPanel value="cladding">
+          <TabCladding
+            onChange={handleSelectElement('cladding')}
+            onClose={handleClose}
+          />
+        </StyledTabPanel>
+      </PopperGrow>
     </TabContext>
   );
 }

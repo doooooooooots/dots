@@ -1,18 +1,41 @@
 import * as React from 'react';
 import { useStore } from '../context/useStore';
 import { observer } from 'mobx-react';
-import { Button, Dialog, DialogContent, Divider, Stack } from '@mui/material';
+import {
+  Alert,
+  Button,
+  Dialog,
+  DialogContent,
+  Divider,
+  Stack,
+} from '@mui/material';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import AccordeonGenerator from './accordeon-generator';
 import AccordeonObstacle from './accordeon-obstacle';
 import SideInfobox from './sidebar-layout-infobox';
 import SidebarLayoutTest from './sidebar-layout-test';
 import { gql, useMutation } from '@apollo/client';
-import { isEmpty } from 'lodash';
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
+import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
+import { Box } from '@mui/system';
+import toast from 'react-hot-toast';
 
 const CREATE_LAYOUT = gql`
   mutation CreateLayout($data: LayoutCreateInput!) {
-    createLayout(data: $data) {
+    layout: createLayout(data: $data) {
+      id
+      massBalance
+    }
+  }
+`;
+
+const UPDATE_LAYOUT = gql`
+  mutation UpdateLayout(
+    $where: LayoutWhereUniqueInput!
+    $data: LayoutUpdateInput!
+  ) {
+    layout: updateLayout(where: $where, data: $data) {
       id
       massBalance
     }
@@ -21,68 +44,80 @@ const CREATE_LAYOUT = gql`
 
 function SideDefault() {
   const store = useStore();
+  const { getRelatedData } = store;
 
-  const [expanded, setExpanded] = React.useState('panel2');
+  const layout = getRelatedData('layout');
 
-  const handleChange = (panel) => (_, newExpanded) => {
+  //-> Accordeons - Manage accordeon states
+  const [expanded, setExpanded] = React.useState('');
+  const handleChangeTab = (panel) => (_, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
 
-  const open = !isEmpty(store.getRelatedData('massBalance'));
-
+  //-> Dialog
+  const [open, setOpen] = React.useState(false);
   const handleClose = React.useCallback(() => {
-    store.setRelatedData('massBalance', {});
-  }, [store]);
+    setOpen(false);
+  }, []);
 
+  //-> Functions
   const [createLayout, { loading }] = useMutation(CREATE_LAYOUT);
+  const [updateLayout, { loading: loadingUpdate }] = useMutation(UPDATE_LAYOUT);
 
   const handleSaveClick = React.useCallback(async () => {
     const getModuleSummary = store.getSummaryModules();
+
     const project = store.getRelatedData('project');
     const { id: roofId } = store.getRelatedData('roof');
-    const { id: claddingId } = store.getRelatedData('cladding');
     const { id: solarModuleId } = store.getRelatedData('solarModule');
     const { id: productId } = store.getRelatedData('product');
-    const response = await createLayout({
-      variables: {
-        data: {
-          name: `${project?.name || ''} - Calepinage`,
-          status: 'status_draft',
-          moduleQuantity: {
-            top: getModuleSummary.top,
-            middle: getModuleSummary.middle,
-            bottom: getModuleSummary.bottom,
+
+    let variables = {
+      data: {
+        name: `${project?.name || ''} - Calepinage`,
+        status: 'status_draft',
+        moduleQuantity: {
+          top: getModuleSummary.top,
+          middle: getModuleSummary.middle,
+          bottom: getModuleSummary.bottom,
+        },
+        solarEdge: false,
+        roof: {
+          connect: {
+            id: roofId,
           },
-          solarEdge: false,
-          roof: {
-            connect: {
-              id: roofId,
-            },
+        },
+        product: {
+          connect: {
+            id: productId,
           },
-          product: {
-            connect: {
-              id: productId,
-            },
-          },
-          cladding: {
-            connect: {
-              id: claddingId,
-            },
-          },
-          solarModule: {
-            connect: {
-              id: solarModuleId,
-            },
+        },
+        solarModule: {
+          connect: {
+            id: solarModuleId,
           },
         },
       },
+    };
+    let func = null;
+    if (layout?.id) {
+      variables.where = { id: layout.id };
+      func = updateLayout;
+    } else {
+      func = createLayout;
+    }
+
+    const response = await toast.promise(func({ variables: variables }), {
+      loading: 'Sauvegarde ...',
+      success: 'Le layout a été mis à jour',
+      error: 'Erreur lors de la mise à jour',
     });
 
     store.setRelatedData(
       'massBalance',
-      JSON.parse(response?.data?.createLayout?.massBalance || '[]')
+      JSON.parse(response?.data?.layout?.massBalance || '[]')
     );
-  }, [createLayout, store]);
+  }, [createLayout, layout?.id, store, updateLayout]);
 
   const handleGeneratePdfClick = async () => {
     store.setIsLoading(true);
@@ -99,43 +134,66 @@ function SideDefault() {
     <>
       {/*//* Generator */}
       <AccordeonGenerator
-        expanded={expanded === 'panel2'}
-        onChange={handleChange('panel2')}
+        expanded={expanded === 'generator'}
+        onChange={handleChangeTab('generator')}
       />
       {/*//* Obstacles */}
       <AccordeonObstacle
-        expanded={expanded === 'panel3'}
-        onChange={handleChange('panel3')}
+        expanded={expanded === 'obstacles'}
+        onChange={handleChangeTab('obstacles')}
       />
+
       {/*//* Info box */}
       <SideInfobox />
       <Divider />
 
       {/*//* Actions */}
-      {!store.isPassingTests() ? (
-        <Stack p={2} spacing={1}>
+      <Box p={2}>
+        {!store.isPassingTests() ? (
+          <SidebarLayoutTest />
+        ) : (
+          <Alert severity="success">Tests ok</Alert>
+        )}
+      </Box>
+
+      <Divider />
+
+      {store.isPassingTests() && (
+        <Stack justifyContent="flex-start" alignItems="flex-start">
           <Button
             size="small"
-            variant="outlined"
-            startIcon={<SaveOutlinedIcon />}
+            variant="standard"
+            startIcon={<RemoveRedEyeOutlinedIcon />}
+            endIcon={<ArrowForwardIosOutlinedIcon />}
             onClick={handleSaveClick}
-            fullWidth
           >
-            Calculer le bilan matière
+            Voir le bilan matière
           </Button>
+          <Divider flexItem />
           <Button
             size="small"
-            variant="contained"
-            startIcon={<SaveOutlinedIcon />}
+            variant="standard"
+            startIcon={<PictureAsPdfOutlinedIcon />}
+            endIcon={<ArrowForwardIosOutlinedIcon />}
             onClick={handleGeneratePdfClick}
-            fullWidth
           >
             Générer le pdf
           </Button>
         </Stack>
-      ) : (
-        <SidebarLayoutTest />
       )}
+
+      <Divider flexItem />
+      <Stack p={2}>
+        <Button
+          aria-label="delete"
+          size="small"
+          variant="contained"
+          onClick={handleSaveClick}
+          startIcon={<SaveOutlinedIcon fontSize="inherit" />}
+        >
+          Enregistrer
+        </Button>
+      </Stack>
 
       {/*//* Dialog */}
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">

@@ -1,7 +1,7 @@
-import AutocompleteButton from './components/autocomplete-button';
+import AutocompleteButton from './components/popper-button';
 import { ProvideAutocomplete, useAutocomplete } from './hooks/use-autocomplete';
-import PopperFromList from './components/popper-from-list';
-import PopperFromQuery from './components/popper-from-query';
+import PopperFromList from './components/autoselect-from-list';
+import PopperFromQuery from './components/autoselect-from-query';
 import { useMemo } from 'react';
 import { ucFirst } from '@dots.cool/utils';
 import { Box } from '@mui/system';
@@ -53,6 +53,10 @@ const SelectWithContext = (props) => {
     getOptionLabel = (option) => option,
     filterAttributes,
     hideSearch,
+    // Preview
+    filterPreview,
+    renderPreview,
+    withPreview,
     //-> options from Apollo request
     query,
     take = 5,
@@ -114,6 +118,9 @@ const SelectWithContext = (props) => {
               inputProps={{ placeholder }}
               hideSearch={hideSearch}
               multiple={multiple}
+              filterPreview={filterPreview}
+              renderPreview={renderPreview}
+              withPreview={withPreview}
             />
           ) : (
             <PopperFromList
@@ -126,6 +133,9 @@ const SelectWithContext = (props) => {
               inputProps={{ placeholder }}
               hideSearch={hideSearch}
               multiple={multiple}
+              filterPreview={filterPreview}
+              renderPreview={renderPreview}
+              withPreview={withPreview}
             />
           )}
         </>

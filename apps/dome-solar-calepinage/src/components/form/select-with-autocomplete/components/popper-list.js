@@ -1,33 +1,22 @@
-import { styled } from '@mui/system';
-import { autocompleteClasses } from '@mui/material/Autocomplete';
+import React from 'react';
+import { Box } from '@mui/system';
 
-const PopperList = styled('div')(({ theme }) => ({
-  [`& .${autocompleteClasses.paper}`]: {
-    boxShadow: 'none',
-    margin: 0,
-    color: 'inherit',
-    fontSize: 13,
-  },
-  [`& .${autocompleteClasses.listbox}`]: {
-    backgroundColor: theme.palette.background.default,
-    padding: 0,
-    [`& .${autocompleteClasses.option}`]: {
-      minHeight: 'auto',
-      alignItems: 'flex-start',
-      padding: 8,
-      borderBottom: `1px solid  ${theme.palette.divider}`,
-      '&[aria-selected="true"]': {
-        backgroundColor: 'transparent',
-      },
-      [`&.${autocompleteClasses.focused}, &.${autocompleteClasses.focused}[aria-selected="true"]`]:
+export default function PopperList(props) {
+  const { sx = {}, ...other } = props;
+  return (
+    <Box
+      as="ul"
+      sx={[
         {
-          backgroundColor: theme.palette.action.hover,
+          p: 0,
+          margin: 0,
+          listStyle: 'none',
+          overflow: 'auto',
+          flexGrow: 1,
         },
-    },
-  },
-  [`&.${autocompleteClasses.popperDisablePortal}`]: {
-    position: 'relative',
-  },
-}));
-
-export default PopperList;
+        sx,
+      ]}
+      {...other}
+    />
+  );
+}

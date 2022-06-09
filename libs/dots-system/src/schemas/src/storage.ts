@@ -51,6 +51,10 @@ const storage = {
     }),
     createdAt: timestamp({}),
   },
+  ui: {
+    selectOne: {},
+    selectMany: {},
+  },
 };
 
 export default storage;

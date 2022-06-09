@@ -1,17 +1,18 @@
 import { useCallback } from 'react';
-import { gql } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { People } from '@mui/icons-material';
 import { PAGE_PROJECT } from '../../constants/constants';
 import { useStore } from '../context/useStore';
 import { isEmpty } from 'lodash';
-import { Stack } from '@mui/material';
 import PopperSelectFromDb from '../popper-select-from-db';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import Tag from '../tag';
 import FielGroup from '../field-group';
 import { observer } from 'mobx-react';
 import TabPopperChangeButton from './tab-popper-change-button';
+import toast from 'react-hot-toast';
+import FieldGroupContainer from './field-group-container';
 
 const GET_PROJECTS = gql`
   query GetProjects {
@@ -35,13 +36,28 @@ const GET_PROJECTS = gql`
   }
 `;
 
+const UPDATE_PROJECT = gql`
+  mutation UpdateProject(
+    $where: ProjectWhereUniqueInput!
+    $data: ProjectUpdateInput!
+  ) {
+    updateProject(where: $where, data: $data) {
+      id
+    }
+  }
+`;
+
 const TabProject = (props) => {
   const { onChange } = props;
-  const { getRelatedData } = useStore();
+  const { getRelatedData, updateRelatedData } = useStore();
 
   //-> Get Project Id from Url
   const router = useRouter();
   const { id } = router.query;
+
+  const [update, { loading }] = useMutation(UPDATE_PROJECT);
+
+  const project = getRelatedData('project');
 
   const handleChoiceClick = useCallback(
     (element) => () => {
@@ -50,7 +66,27 @@ const TabProject = (props) => {
     [onChange]
   );
 
-  const project = getRelatedData('project');
+  const handleChangeConfirm = useCallback(
+    (key) => async (newValue) => {
+      if (project?.id) {
+        updateRelatedData(`project.${key}`, newValue);
+        toast.promise(
+          update({
+            variables: {
+              where: { id: project?.id },
+              data: { [key]: newValue },
+            },
+          }),
+          {
+            loading: 'Sauvegarde ...',
+            success: 'Le projet a été mise à jour',
+            error: 'Erreur lors de la mise à jour',
+          }
+        );
+      }
+    },
+    [project?.id, update, updateRelatedData]
+  );
 
   return (
     <>
@@ -70,50 +106,71 @@ const TabProject = (props) => {
         />
       ) : (
         <>
-          <Stack spacing={1} sx={{ p: 2, minWidth: 385 }}>
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Tag type="ref">{project.identifier}</Tag>
-              <Tag type="step">{project.step}</Tag>
-              {project.typeEmergency && <Tag type="emergency" />}
-            </Stack>
-            <Stack direction="column" mt={2}>
-              <FielGroup
-                icon={<EventNoteOutlinedIcon />}
-                label={'Date de réception'}
-                value={new Date(project.dateReception).toLocaleDateString('fr')}
-              />
-              <FielGroup
-                icon={<EventNoteOutlinedIcon />}
-                label={'Date de livraison'}
-                value={new Date(project.dateDelivery).toLocaleDateString('fr')}
-              />
-              <FielGroup
-                icon={<EventNoteOutlinedIcon />}
-                label={'Area field'}
-                value={project.areaField}
-              />
-              <FielGroup
-                icon={<EventNoteOutlinedIcon />}
-                label={'Area snow'}
-                value={project.areaSnow}
-              />
-              <FielGroup
-                icon={<EventNoteOutlinedIcon />}
-                label={'Area sea'}
-                value={project.areaSea}
-              />
-              <FielGroup
-                icon={<EventNoteOutlinedIcon />}
-                label={'Altitude'}
-                value={project.altitude}
-              />
-              <FielGroup
-                icon={<EventNoteOutlinedIcon />}
-                label={'Client'}
-                value={project.customer?.name}
-              />
-            </Stack>
-          </Stack>
+          <FieldGroupContainer>
+            <FielGroup
+              icon={<EventNoteOutlinedIcon />}
+              label={'Ref'}
+              value={<Tag type="ref">{project.identifier}</Tag>}
+              onConfirm={handleChangeConfirm('dateReception')}
+              readOnly
+            />
+            <FielGroup
+              icon={<EventNoteOutlinedIcon />}
+              label={'Step'}
+              value={<Tag type="step">{project.step}</Tag>}
+              onConfirm={handleChangeConfirm('dateReception')}
+              readOnly
+            />
+            <FielGroup
+              icon={<EventNoteOutlinedIcon />}
+              label={'Emergency'}
+              value={<Tag type="emergency" />}
+              onConfirm={handleChangeConfirm('dateReception')}
+              readOnly
+            />
+            <FielGroup
+              label={'Date de réception'}
+              type="date"
+              value={new Date(project.dateReception).toLocaleDateString('fr')}
+              onConfirm={handleChangeConfirm('dateReception')}
+            />
+            <FielGroup
+              label={'Date de livraison'}
+              type="date"
+              value={new Date(project.dateDelivery).toLocaleDateString('fr')}
+              onConfirm={handleChangeConfirm('dateDelivery')}
+            />
+            <FielGroup
+              label={'Area field'}
+              value={project.areaField}
+              type="number"
+              onConfirm={handleChangeConfirm('areaField')}
+            />
+            <FielGroup
+              label={'Area snow'}
+              value={project.areaSnow}
+              type="number"
+              onConfirm={handleChangeConfirm('areaSnow')}
+            />
+            <FielGroup
+              label={'Area sea'}
+              value={project.areaSea}
+              type="number"
+              onConfirm={handleChangeConfirm('areaSea')}
+            />
+            <FielGroup
+              label={'Altitude'}
+              value={project.altitude}
+              type="dimension"
+              onConfirm={handleChangeConfirm('altitude')}
+            />
+            <FielGroup
+              icon={<EventNoteOutlinedIcon />}
+              label={'Client'}
+              value={project.customer?.name}
+              readOnly
+            />
+          </FieldGroupContainer>
           <TabPopperChangeButton name="project" />
         </>
       )}

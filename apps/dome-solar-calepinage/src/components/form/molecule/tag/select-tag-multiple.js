@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash';
 import ColorDotGroup from '../../../icons/color-dot/color-dot-group';
 import ColorDot from '../../../icons/color-dot/color-dot';
 import TagIcon from './icon';
-import SelectItemOption from '../../select-with-autocomplete/components/item-option';
+import SelectItemOption from '../../select-with-autocomplete/components/list-item-option';
 import { Stack } from '@mui/material';
 import ItemTag from './item';
 import { labels } from './labels';
@@ -16,6 +16,7 @@ const SelectTag = withDefaultValues(SelectWithAutocomplete, {
   placeholder: 'Chercher un tag',
   startIcon: DiscountOutlinedIcon,
   withCount: true,
+  withPreview: false,
   options: labels,
   getOptionLabel: (option) => option.name,
   renderOption: (props, option, { selected }) => (

@@ -19,6 +19,7 @@ export const PAGE_PROJECT = 'project';
 export const PAGE_PRODUCT = 'product';
 export const PAGE_CLADDING = 'cladding';
 export const PAGE_ROOF = 'roof';
+export const PAGE_LAYOUT = 'layout';
 
 export const HORIZONTAL_ALIGNMENTS = [LEFT, CENTER, RIGHT];
 export const VERTICAL_ALIGNMENTS = [TOP, MIDDLE, BOTTOM];
@@ -58,17 +59,14 @@ export const PROJECT_STEP_LABELS = {
 /**
  ** STATUS
  */
+export const STATUS_ACTIVE = 'status_active';
+export const STATUS_INACTIVE = 'status_inactive';
 export const STATUS_DRAFT = 'status_draft';
 export const STATUS_AVAILABLE = 'status_available';
 export const STATUS_ARCHIVED = 'status_archived';
 export const STATUS_UNPUBLISHED = 'status_unpublished';
 
-export const STATUS_OPTIONS = [
-  STATUS_DRAFT,
-  STATUS_AVAILABLE,
-  STATUS_ARCHIVED,
-  STATUS_UNPUBLISHED,
-];
+export const STATUS_OPTIONS = [STATUS_ACTIVE, STATUS_INACTIVE];
 
 /**
  ** PURLIN TYPES

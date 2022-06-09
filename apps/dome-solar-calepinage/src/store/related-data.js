@@ -1,3 +1,5 @@
+import { set } from 'lodash';
+
 const withRelatedData = (app) => {
   return {
     ...app,
@@ -9,8 +11,12 @@ const withRelatedData = (app) => {
       solarModule: null,
       product: null,
       massBalance: null,
+      layout: null,
     },
 
+    updateRelatedData(key, value) {
+      set(this.related, key, value);
+    },
     setRelatedData(key, item) {
       this.related[key] = item;
     },

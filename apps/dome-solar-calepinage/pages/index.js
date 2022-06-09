@@ -27,6 +27,7 @@ import SelectTags from '../src/components/form/molecule/tag/select-tag-multiple'
 import SelectTag from '../src/components/form/molecule/tag/select-tag-single';
 import InputWithPopper from '../src/components/form/popper-inputs/popper-input-text';
 import SelectPerson from '../src/components/form/molecule/person/select-person';
+import CustomizedHook from '../src/components/form/select-with-autocomplete/select-custom';
 
 const GET_LAST_PROJECTS = gql`
   query GetLastProjects(
@@ -175,6 +176,7 @@ export default function Home() {
           <SelectTag />
           <SelectTags />
           <SelectPerson />
+          {/* <CustomizedHook /> */}
           <InputNumber />
           <InputWithPopper />
           {/*

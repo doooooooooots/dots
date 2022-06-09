@@ -16,6 +16,7 @@ import {
   PAGE_PROJECT,
   PAGE_CLADDING,
   PAGE_ROOF,
+  PAGE_LAYOUT,
 } from '../../constants/constants';
 
 import SolarModuleCreate from '../form/solar-module-create';
@@ -24,6 +25,7 @@ import CladdingCreate from '../form/cladding-create';
 import { Box } from '@mui/system';
 import { useStore } from '../context/useStore';
 import RoofFormCreate from '../form/roof-create';
+import LayoutFormCreate from '../form/layout-create';
 
 const getDialogTitle = (open) => {
   switch (open) {
@@ -37,6 +39,8 @@ const getDialogTitle = (open) => {
       return 'Créer un bac acier';
     case PAGE_ROOF:
       return 'Créer une toiture';
+    case PAGE_LAYOUT:
+      return 'Créer un calepinage';
     default:
       return '';
   }
@@ -47,7 +51,7 @@ function DialogForms() {
 
   return (
     <>
-      <DialogTitle>
+      <DialogTitle sx={{ bgcolor: 'background.default' }}>
         <Stack
           direction="row"
           alignItems="center"
@@ -62,8 +66,9 @@ function DialogForms() {
         </Stack>
       </DialogTitle>
       <Divider />
-      <DialogContent>
+      <DialogContent sx={{ bgcolor: 'background.default' }}>
         {store.dialog.open === PAGE_PROJECT && <ProjectFormCreate />}
+        {store.dialog.open === PAGE_LAYOUT && <LayoutFormCreate />}
         {store.dialog.open === PAGE_ROOF && <RoofFormCreate />}
         {store.dialog.open === PAGE_CLADDING && <CladdingCreate />}
         {store.dialog.open === PAGE_SOLAR_MODULE && <SolarModuleCreate />}

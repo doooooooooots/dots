@@ -5,10 +5,10 @@ import { People } from '@mui/icons-material';
 import { PAGE_PRODUCT } from '../../constants/constants';
 import { useStore } from '../context/useStore';
 import { isEmpty } from 'lodash';
-import { Stack } from '@mui/material';
 import FielGroup from '../field-group';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import TabPopperChangeButton from './tab-popper-change-button';
+import FieldGroupContainer from './field-group-container';
 
 const GET_PRODUCTS = gql`
   query GetProducts {
@@ -53,23 +53,26 @@ const TabProduct = (props) => {
         />
       ) : (
         <>
-          <Stack p={2} sx={{ minWidth: 385 }} spacing={1}>
+          <FieldGroupContainer>
             <FielGroup
               icon={<EventNoteOutlinedIcon />}
               label={'Largeur (⟷)'}
               value={product.lengthX}
+              readOnly
             />
             <FielGroup
               icon={<EventNoteOutlinedIcon />}
               label={'Hauteur (↕︎)'}
               value={product.lengthY}
+              readOnly
             />
             <FielGroup
               icon={<EventNoteOutlinedIcon />}
               label={'Epaisseur (↖︎)'}
               value={product.lengthZ}
+              readOnly
             />
-          </Stack>
+          </FieldGroupContainer>
           <TabPopperChangeButton name="product" />
         </>
       )}

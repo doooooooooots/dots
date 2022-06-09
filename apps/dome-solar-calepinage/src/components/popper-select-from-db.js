@@ -58,12 +58,12 @@ function PopperSelectFromDb(props) {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchOutlined />
+                <SearchOutlined fontSize="small" />
               </InputAdornment>
             ),
           }}
           fullWidth
-          sx={{ mb: 1, pt: 2, px: 2 }}
+          sx={{ mb: 1, pt: 1, px: 2 }}
         />
         <PopperSectionTitle>
           {seachInput ? 'Résultats' : 'Récents'}

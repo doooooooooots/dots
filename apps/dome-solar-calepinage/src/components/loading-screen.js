@@ -10,7 +10,7 @@ function Loading() {
       left={0}
       right={SIDEBAR_WIDTH}
       height="100%"
-      backgroundColor={(theme) => theme.palette.neutralTints[100]}
+      bgcolor="neutral.background"
       display="flex"
       justifyContent="center"
       alignItems="center"

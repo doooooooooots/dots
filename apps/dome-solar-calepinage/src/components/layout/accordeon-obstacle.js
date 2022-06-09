@@ -12,7 +12,7 @@ function AccordeonObstacle(props) {
       <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
         <Typography>Obstacles</Typography>
       </AccordionSummary>
-      <AccordionDetails>
+      <AccordionDetails sx={{ bgcolor: 'background.default' }}>
         <SideObstacles />
       </AccordionDetails>
     </Accordion>

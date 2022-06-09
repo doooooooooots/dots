@@ -1,10 +1,13 @@
-import { isEmpty, uniqueId } from 'lodash';
+import { isEmpty } from 'lodash';
 
 let indexObs = 1;
 
+const createRandomId = () =>
+  [...Array(9)].map(() => Math.random().toString(36)[2]).join('');
+
 class Obstacle {
   constructor({ name, x, y, width, height, type }) {
-    this.id = uniqueId();
+    this.id = createRandomId();
     this.index = indexObs++;
     this.name = name;
     this.x = parseFloat(x, 10);
@@ -42,6 +45,7 @@ export const withObstacles = (app) => ({
     const newObstacle = new Obstacle(attrs);
     this.obstacles.push(newObstacle);
     this.addObstacleInterceptions(newObstacle);
+    return this.obstacles;
   },
 
   removeObstacle(id) {
@@ -49,8 +53,12 @@ export const withObstacles = (app) => ({
     const removedObstacle = this.getObstacleById(id);
     this.removeObstacleInterceptions(removedObstacle);
 
-    // Filter out this obstacle from obstacles
-    this.obstacles = this.obstacles.filter((obstacle) => obstacle.id !== id);
+    // // Filter out this obstacle from obstacles
+    const filteredObstacles = this.obstacles.filter(
+      (obstacle) => obstacle.id !== id
+    );
+    this.obstacles = filteredObstacles;
+    return filteredObstacles;
   },
 
   isModuleInterceptedByObstacle(index, obstacleId) {

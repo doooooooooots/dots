@@ -21,16 +21,15 @@ function useProvideAutocomplete(config = {}) {
 
   const { id, anchorEl, open, onOpen, onClose } = usePopper();
 
-  //-> Input
+  //* Input
   const [inputValue, setInputValue] = useState('');
-
-  //-> Selected values
-  const [value, setValue] = useState(defaultValue || []);
-  const [pendingValue, setPendingValue] = useState([]);
-
   const handleInputChange = useCallback((_, newInputValue) => {
     setInputValue(newInputValue);
   }, []);
+
+  //* Selected values
+  const [value, setValue] = useState(defaultValue || []);
+  const [pendingValue, setPendingValue] = useState([]);
 
   const handleChange = useCallback(
     (event, newValue, reason) => {
@@ -41,15 +40,24 @@ function useProvideAutocomplete(config = {}) {
       ) {
         return;
       }
-      console.log(newValue);
       setPendingValue(
         multiple ? newValue : newValue.length === 1 ? newValue : [newValue[1]]
       );
     },
     [multiple]
   );
+  const handleDelete = useCallback(
+    (index) => () => {
+      setPendingValue((current) => {
+        const _current = [...current];
+        _current.splice(index, 1);
+        return _current;
+      });
+    },
+    []
+  );
 
-  //-> Open popper
+  //* Open popper
   const handleClick = (event) => {
     setPendingValue(value);
     onOpen(event.currentTarget);
@@ -87,6 +95,7 @@ function useProvideAutocomplete(config = {}) {
     onButtonClick: handleClick,
     onConfirm: handleClose,
     onCancel: handleCancel,
+    onDelete: handleDelete,
   };
 }
 

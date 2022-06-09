@@ -11,6 +11,7 @@ function PopperGrow(props) {
     anchorEl,
     placement,
     onClose,
+    sx = {},
     children,
   } = props;
 
@@ -53,13 +54,16 @@ function PopperGrow(props) {
           <Grow direction="left" {...TransitionProps} timeout={timeout}>
             <Box pt={1.4}>
               <Box
-                sx={{
-                  backgroundColor: 'background.default',
-                  boxShadow: (theme) => theme.shadows[18],
-                  overflow: 'hidden',
-                  borderRadius: 2,
-                  pt: 2,
-                }}
+                sx={[
+                  {
+                    backgroundColor: 'background.default',
+                    boxShadow: (theme) => theme.shadows[18],
+                    overflow: 'hidden',
+                    borderRadius: 2,
+                    pt: 2,
+                  },
+                  sx,
+                ]}
               >
                 {children}
               </Box>

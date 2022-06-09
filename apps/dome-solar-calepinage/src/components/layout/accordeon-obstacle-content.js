@@ -23,6 +23,16 @@ import { observer } from 'mobx-react';
 import { useStore } from '../context/useStore';
 import List from '../../../design-system/list';
 import FenceIcon from '@mui/icons-material/Fence';
+import { toast } from 'react-hot-toast';
+import { gql, useMutation } from '@apollo/client';
+
+const UPDATE_ROOF = gql`
+  mutation UpdateRoof($where: RoofWhereUniqueInput!, $data: RoofUpdateInput!) {
+    updateRoof(where: $where, data: $data) {
+      id
+    }
+  }
+`;
 
 const initialState = {
   width: 500,
@@ -33,18 +43,34 @@ const initialState = {
 
 const SideObstacles = () => {
   const store = useStore();
+  const { getRelatedData } = store;
+
   const [obstacleForm, setObstacleForm] = useState(initialState);
   const [open, setOpen] = React.useState(false);
   const obstaclesList = store.allObstacles();
+
+  const roof = getRelatedData('roof');
+
+  const [update] = useMutation(UPDATE_ROOF);
+  const updateRoof = (obstaclesObj) =>
+    toast.promise(
+      update({
+        variables: {
+          where: { id: roof?.id },
+          data: { obstacles: obstaclesObj },
+        },
+      }),
+      {
+        loading: 'Sauvegarde ...',
+        success: 'La toiture a été mise à jour',
+        error: 'Erreur lors de la mise à jour',
+      }
+    );
 
   /**
    * Modal
    * ----
    */
-
-  const openModal = () => {
-    setOpen(true);
-  };
   const closeModal = () => {
     setOpen(false);
   };
@@ -54,13 +80,14 @@ const SideObstacles = () => {
    * ----
    */
 
-  const handleCreate = () => {
+  //-> Click on Add Obstacle Btn
+  const handleAddButtonClick = () => {
     setObstacleForm((current) => ({
       ...current,
       name: `Obstacle ${obstaclesList.length + 1}`,
       id: null,
     }));
-    openModal();
+    setOpen(true);
   };
 
   const handleChange = (event) => {
@@ -93,22 +120,25 @@ const SideObstacles = () => {
     if (allObstacles.length) {
       console.info('Already an obstacle with these Characteristics');
     } else {
-      store.addObstacle({ ...obstacleForm });
+      const newObstacles = store.addObstacle({ ...obstacleForm });
+      updateRoof(newObstacles);
     }
     setOpen(false);
   };
 
   const handleRemoveObstacle = useCallback(
     (id) => () => {
-      store.removeObstacle(id);
+      const newObstacles = store.removeObstacle(id);
+      updateRoof([...newObstacles]);
     },
     []
   );
 
-  const handleEditObstacle = useCallback(
+  //? Click on Edit button
+  const handleEditButtonClick = useCallback(
     (id) => () => {
       setObstacleForm(store.getObstacleById(id));
-      openModal();
+      setOpen(true);
     },
     []
   );
@@ -126,7 +156,7 @@ const SideObstacles = () => {
           variant="outlined"
           color="primary"
           fullWidth
-          onClick={handleCreate}
+          onClick={handleAddButtonClick}
           size="small"
         >
           Ajouter un Obstacle
@@ -145,8 +175,8 @@ const SideObstacles = () => {
                     >
                       <IconButton
                         edge="end"
-                        aria-label="delete"
-                        onClick={handleEditObstacle(obstacle.id)}
+                        aria-label="edit"
+                        onClick={handleEditButtonClick(obstacle.id)}
                       >
                         <EditIcon fontSize="small" />
                       </IconButton>

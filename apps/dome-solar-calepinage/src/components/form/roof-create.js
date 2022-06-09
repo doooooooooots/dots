@@ -1,40 +1,52 @@
 import React, { useCallback } from 'react';
-import {
-  Button,
-  TextField,
-  Grid,
-  Typography,
-  Stack,
-  Alert,
-} from '@mui/material';
-import { useFormContext } from 'react-hook-form';
+import { Button, TextField, Grid, Typography, Alert } from '@mui/material';
+import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { createOneBuilder } from '@dots.cool/schemas';
 import { useStore } from '../context/useStore';
 
-const CREATE_CLADDING = createOneBuilder('roof')('id');
+const CREATE_ROOF = createOneBuilder('roof')('id');
 
 const RoofFormCreate = () => {
-  const { renderView, closeDialog, setRelatedData, getRelatedData } =
-    useStore();
+  const {
+    renderView,
+    closeDialog,
+    setRelatedData,
+    getRelatedData,
+    setUserData,
+  } = useStore();
+
   const project = getRelatedData('project');
   const { id: projectID } = project;
 
-  const { register, handleSubmit } = useFormContext();
-  const [createCladding] = useMutation(CREATE_CLADDING);
+  const { handleSubmit, register, control } = useForm({
+    defaultValues: {},
+  });
+
+  const [createRoof] = useMutation(CREATE_ROOF);
 
   const onSubmit = useCallback(
     async (data) => {
       const output = {
-        ...data.roof,
+        ...data,
         project: { connect: { id: projectID } },
       };
-      await createCladding({ variables: { data: output } });
-      setRelatedData('roof', data.solarModule);
+
+      await createRoof({ variables: { data: output } });
+      setUserData('Tx', data.lengthX);
+      setUserData('Ty', data.lengthY);
+      setRelatedData('roof', data);
       renderView();
       closeDialog();
     },
-    [projectID, createCladding, setRelatedData, renderView, closeDialog]
+    [
+      projectID,
+      createRoof,
+      setUserData,
+      setRelatedData,
+      renderView,
+      closeDialog,
+    ]
   );
 
   return (
@@ -42,21 +54,9 @@ const RoofFormCreate = () => {
       <Grid item xs={12}>
         <Typography variant="h6">Informations de base</Typography>
       </Grid>
-      <Grid item xs={8}>
-        <TextField
-          label="Nom"
-          size="small"
-          fullWidth
-          {...register('roof.name')}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <TextField
-          label="Status"
-          size="small"
-          fullWidth
-          {...register('roof.status')}
-        />
+
+      <Grid item xs={12}>
+        <TextField label="Nom" size="small" fullWidth {...register('name')} />
       </Grid>
 
       <Grid item xs={12}>
@@ -68,7 +68,7 @@ const RoofFormCreate = () => {
           size="small"
           type="number"
           fullWidth
-          {...register('roof.typology', {
+          {...register('typology', {
             valueAsNumber: true,
           })}
         />
@@ -80,7 +80,7 @@ const RoofFormCreate = () => {
           size="small"
           type="number"
           fullWidth
-          {...register('roof.lengthX', {
+          {...register('lengthX', {
             valueAsNumber: true,
           })}
         />
@@ -92,7 +92,7 @@ const RoofFormCreate = () => {
           size="small"
           type="number"
           fullWidth
-          {...register('roof.lengthY', {
+          {...register('lengthY', {
             valueAsNumber: true,
           })}
         />
@@ -104,7 +104,7 @@ const RoofFormCreate = () => {
           size="small"
           type="number"
           fullWidth
-          {...register('roof.incline', {
+          {...register('incline', {
             valueAsNumber: true,
           })}
         />
@@ -116,7 +116,7 @@ const RoofFormCreate = () => {
           size="small"
           type="number"
           fullWidth
-          {...register('roof.ridgeHeight', {
+          {...register('ridgeHeight', {
             valueAsNumber: true,
           })}
         />
@@ -132,7 +132,7 @@ const RoofFormCreate = () => {
           size="small"
           type="number"
           fullWidth
-          {...register('roof.purlinType', {
+          {...register('purlinType', {
             valueAsNumber: true,
           })}
         />
@@ -144,7 +144,7 @@ const RoofFormCreate = () => {
           size="small"
           type="number"
           fullWidth
-          {...register('roof.purlinBetweenAxis', {
+          {...register('purlinBetweenAxis', {
             valueAsNumber: true,
           })}
         />
@@ -156,7 +156,7 @@ const RoofFormCreate = () => {
           size="small"
           type="number"
           fullWidth
-          {...register('roof.purlinThickness', {
+          {...register('purlinThickness', {
             valueAsNumber: true,
           })}
         />

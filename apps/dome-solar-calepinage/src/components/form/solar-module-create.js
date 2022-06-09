@@ -15,7 +15,7 @@ const SolarModuleCreate = () => {
   const { handleSubmit, register, control } = useForm({
     defaultValues: {
       name: '',
-      status: 'status_available',
+      status: 'status_active',
       lengthX: 1200,
       lengthY: 950,
       lengthZ: 45,

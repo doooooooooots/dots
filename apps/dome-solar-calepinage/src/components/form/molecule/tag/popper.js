@@ -1,6 +1,6 @@
 import React from 'react';
-import SelectItemOption from '../../select-with-autocomplete/components/item-option';
-import SelectFromList from '../../select-with-autocomplete/components/popper-from-list';
+import SelectItemOption from '../../select-with-autocomplete/components/list-item-option';
+import SelectFromList from '../../select-with-autocomplete/components/autoselect-from-list';
 import TagIcon from './icon';
 
 function TagPopper() {

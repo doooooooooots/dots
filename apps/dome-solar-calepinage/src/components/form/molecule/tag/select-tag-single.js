@@ -3,7 +3,7 @@ import DiscountOutlinedIcon from '@mui/icons-material/DiscountOutlined';
 import { isEmpty } from 'lodash';
 import ColorDot from '../../../icons/color-dot/color-dot';
 import TagIcon from './icon';
-import SelectItemOption from '../../select-with-autocomplete/components/item-option';
+import SelectItemOption from '../../select-with-autocomplete/components/list-item-option';
 import ItemTag from './item';
 import { labels } from './labels';
 import withDefaultValues from '../../../hoc/with-default-values';
