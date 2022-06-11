@@ -1,4 +1,4 @@
-import { set } from 'lodash';
+import { set, isEmpty } from 'lodash';
 
 const withRelatedData = (app) => {
   return {
@@ -7,11 +7,12 @@ const withRelatedData = (app) => {
     related: {
       project: null,
       roof: null,
-      cladding: null,
+      layout: null,
       solarModule: null,
       product: null,
       massBalance: null,
-      layout: null,
+      tests: null,
+      isPassingTest: false,
     },
 
     updateRelatedData(key, value) {
@@ -19,12 +20,26 @@ const withRelatedData = (app) => {
     },
     setRelatedData(key, item) {
       this.related[key] = item;
+      if (key === 'tests') {
+        if (!isEmpty(item))
+          this.related.isPassingTest = this.related.tests.reduce(
+            (acc, { isPassingChecks }) => acc * isPassingChecks,
+            true
+          );
+        else this.related.isPassingTest = false;
+      } else {
+        this.related.tests = null;
+        this.related.isPassingTest = false;
+      }
     },
     getAllRelatedData() {
       return this.related;
     },
     getRelatedData(key) {
       return this.related[key];
+    },
+    isPassingTests() {
+      return this.related.isPassingTest;
     },
   };
 };

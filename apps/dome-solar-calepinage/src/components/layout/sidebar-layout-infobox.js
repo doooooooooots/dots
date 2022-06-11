@@ -1,14 +1,14 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import { round } from 'lodash';
 import { observer } from 'mobx-react';
 import { useStore } from '../context/useStore';
 
-function SideInfobox() {
+function SideInfobox(props) {
+  const { sx = { p: 2 } } = props;
   const store = useStore();
 
   return (
-    <Box p={2}>
+    <Box sx={sx}>
       <Typography variant="h6">
         Nombre de panneaux : {store.totalModules()}
       </Typography>

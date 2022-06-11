@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import {
   Box,
   Button,
@@ -15,6 +14,8 @@ import {
   ListItemIcon,
   ListItemText,
   Stack,
+  Divider,
+  Alert,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -25,6 +26,7 @@ import List from '../../../design-system/list';
 import FenceIcon from '@mui/icons-material/Fence';
 import { toast } from 'react-hot-toast';
 import { gql, useMutation } from '@apollo/client';
+import SidebarLayoutInfobox from './sidebar-layout-infobox';
 
 const UPDATE_ROOF = gql`
   mutation UpdateRoof($where: RoofWhereUniqueInput!, $data: RoofUpdateInput!) {
@@ -41,7 +43,7 @@ const initialState = {
   y: 2500,
 };
 
-const SideObstacles = () => {
+const SidebarObstacles = () => {
   const store = useStore();
   const { getRelatedData } = store;
 
@@ -151,7 +153,9 @@ const SideObstacles = () => {
 
   return (
     <>
-      <Box>
+      <Stack spacing={2} p={2}>
+        <Typography variant="h6">Gestion des obstacles</Typography>
+
         <Button
           variant="outlined"
           color="primary"
@@ -161,50 +165,61 @@ const SideObstacles = () => {
         >
           Ajouter un Obstacle
         </Button>
-        <List>
-          {obstaclesList.length > 0
-            ? obstaclesList.map((obstacle, index) => (
-                <ListItem
-                  key={obstacle.id}
-                  sx={{ py: 0, minHeight: 32 }}
-                  secondaryAction={
-                    <Stack
-                      spacing={1}
-                      direction="row"
-                      justifyContent="flex-end"
-                    >
-                      <IconButton
-                        edge="end"
-                        aria-label="edit"
-                        onClick={handleEditButtonClick(obstacle.id)}
-                      >
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                      <IconButton
-                        edge="end"
-                        aria-label="delete"
-                        onClick={handleRemoveObstacle(obstacle.id)}
-                      >
-                        <ClearIcon fontSize="small" />
-                      </IconButton>
-                    </Stack>
-                  }
-                >
-                  <ListItemIcon sx={{ color: 'inherit' }}>
-                    <FenceIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={obstacle.name || `Obstacle ${index}`}
-                    primaryTypographyProps={{
-                      fontSize: 14,
-                      fontWeight: 'medium',
-                    }}
-                  />
-                </ListItem>
-              ))
-            : null}
-        </List>
-      </Box>
+      </Stack>
+
+      <Divider />
+
+      <List>
+        {obstaclesList.length > 0 ? (
+          obstaclesList.map((obstacle, index) => (
+            <ListItem
+              key={obstacle.id}
+              sx={{ py: 0, minHeight: 32 }}
+              secondaryAction={
+                <Stack spacing={1} direction="row" justifyContent="flex-end">
+                  <IconButton
+                    edge="end"
+                    aria-label="edit"
+                    onClick={handleEditButtonClick(obstacle.id)}
+                  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={handleRemoveObstacle(obstacle.id)}
+                  >
+                    <ClearIcon fontSize="small" />
+                  </IconButton>
+                </Stack>
+              }
+            >
+              <ListItemIcon sx={{ color: 'inherit' }}>
+                <FenceIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={obstacle.name || `Obstacle ${index}`}
+                primaryTypographyProps={{
+                  fontSize: 14,
+                  fontWeight: 'medium',
+                }}
+              />
+            </ListItem>
+          ))
+        ) : (
+          <Box px={2}>
+            <Alert severity="info">
+              <Typography variant="body2">
+                Cette toiture ne possède pas d&apos;obstacles
+              </Typography>
+            </Alert>
+          </Box>
+        )}
+      </List>
+
+      <Divider />
+      <SidebarLayoutInfobox />
+      <Divider />
 
       <Dialog
         open={open}
@@ -300,19 +315,4 @@ const SideObstacles = () => {
   );
 };
 
-SideObstacles.propTypes = {
-  store: PropTypes.shape({
-    allObstacles: PropTypes.any,
-    addObstacle: PropTypes.any,
-    removeObstacle: PropTypes.any,
-    userDatas: PropTypes.shape({
-      Tx: PropTypes.any,
-      Ty: PropTypes.any,
-    }),
-    root: PropTypes.shape({
-      obstacles: PropTypes.any,
-    }),
-  }),
-};
-
-export default observer(SideObstacles);
+export default observer(SidebarObstacles);

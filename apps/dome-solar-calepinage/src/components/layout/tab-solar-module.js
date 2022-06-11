@@ -4,7 +4,6 @@ import PopperSelectFromDb from '../popper-select-from-db';
 import SolarPowerOutlined from '@mui/icons-material/SolarPowerOutlined';
 import { useStore } from '../context/useStore';
 import { isEmpty } from 'lodash';
-import { Stack } from '@mui/material';
 import { PAGE_SOLAR_MODULE } from '../../constants/constants';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import FielGroup from '../field-group';
@@ -23,6 +22,7 @@ const GET_SOLAR_MODULES = gql`
       lengthX
       lengthY
       lengthZ
+      frameType
       electricalPower
     }
   }

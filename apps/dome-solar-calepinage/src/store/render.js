@@ -1,4 +1,4 @@
-export const withRender = (app) => ({
+const withRender = (app) => ({
   ...app,
 
   stage: {
@@ -140,3 +140,5 @@ export const withRender = (app) => ({
     }
   },
 });
+
+export default withRender;

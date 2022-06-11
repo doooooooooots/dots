@@ -1,6 +1,6 @@
 import { getIndexTrunc } from '../utils/trunc-int';
 
-export const withUserDatas = (app) => ({
+const withUserDatas = (app) => ({
   ...app,
 
   userDatas: {

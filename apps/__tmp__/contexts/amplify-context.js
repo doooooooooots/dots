@@ -9,7 +9,7 @@ Amplify.configure(amplifyConfig);
 const initialState = {
   isAuthenticated: false,
   isInitialized: false,
-  user: null
+  user: null,
 };
 
 const handlers = {
@@ -20,7 +20,7 @@ const handlers = {
       ...state,
       isAuthenticated,
       isInitialized: true,
-      user
+      user,
     };
   },
   LOGIN: (state, action) => {
@@ -29,22 +29,23 @@ const handlers = {
     return {
       ...state,
       isAuthenticated: true,
-      user
+      user,
     };
   },
   LOGOUT: (state) => ({
     ...state,
     isAuthenticated: false,
-    user: null
+    user: null,
   }),
   REGISTER: (state) => ({ ...state }),
   VERIFY_CODE: (state) => ({ ...state }),
   RESEND_CODE: (state) => ({ ...state }),
   PASSWORD_RECOVERY: (state) => ({ ...state }),
-  PASSWORD_RESET: (state) => ({ ...state })
+  PASSWORD_RESET: (state) => ({ ...state }),
 };
 
-const reducer = (state, action) => (handlers[action.type] ? handlers[action.type](state, action) : state);
+const reducer = (state, action) =>
+  handlers[action.type] ? handlers[action.type](state, action) : state;
 
 export const AuthContext = createContext({
   ...initialState,
@@ -55,7 +56,7 @@ export const AuthContext = createContext({
   verifyCode: () => Promise.resolve(),
   resendCode: () => Promise.resolve(),
   passwordRecovery: () => Promise.resolve(),
-  passwordReset: () => Promise.resolve()
+  passwordReset: () => Promise.resolve(),
 });
 
 export const AuthProvider = (props) => {
@@ -80,17 +81,17 @@ export const AuthProvider = (props) => {
               avatar: '/assets/mock-images/avatars/avatar-anika_visser.png',
               email: user.attributes.email,
               name: 'Anika Visser',
-              plan: 'Premium'
-            }
-          }
+              plan: 'Premium',
+            },
+          },
         });
       } catch (error) {
         dispatch({
           type: 'INITIALIZE',
           payload: {
             isAuthenticated: false,
-            user: null
-          }
+            user: null,
+          },
         });
       }
     };
@@ -116,16 +117,16 @@ export const AuthProvider = (props) => {
           avatar: '/assets/mock-images/avatars/avatar-anika_visser.png',
           email: user.attributes.email,
           name: 'Anika Visser',
-          plan: 'Premium'
-        }
-      }
+          plan: 'Premium',
+        },
+      },
     });
   };
 
   const logout = async () => {
     await Auth.signOut();
     dispatch({
-      type: 'LOGOUT'
+      type: 'LOGOUT',
     });
   };
 
@@ -133,38 +134,38 @@ export const AuthProvider = (props) => {
     await Auth.signUp({
       username: email,
       password,
-      attributes: { email }
+      attributes: { email },
     });
     dispatch({
-      type: 'REGISTER'
+      type: 'REGISTER',
     });
   };
 
   const verifyCode = async (username, code) => {
     await Auth.confirmSignUp(username, code);
     dispatch({
-      type: 'VERIFY_CODE'
+      type: 'VERIFY_CODE',
     });
   };
 
   const resendCode = async (username) => {
     await Auth.resendSignUp(username);
     dispatch({
-      type: 'RESEND_CODE'
+      type: 'RESEND_CODE',
     });
   };
 
   const passwordRecovery = async (username) => {
     await Auth.forgotPassword(username);
     dispatch({
-      type: 'PASSWORD_RECOVERY'
+      type: 'PASSWORD_RECOVERY',
     });
   };
 
   const passwordReset = async (username, code, newPassword) => {
     await Auth.forgotPasswordSubmit(username, code, newPassword);
     dispatch({
-      type: 'PASSWORD_RESET'
+      type: 'PASSWORD_RESET',
     });
   };
 
@@ -179,7 +180,7 @@ export const AuthProvider = (props) => {
         verifyCode,
         resendCode,
         passwordRecovery,
-        passwordReset
+        passwordReset,
       }}
     >
       {children}
@@ -188,7 +189,7 @@ export const AuthProvider = (props) => {
 };
 
 AuthProvider.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };
 
 export const AuthConsumer = AuthContext.Consumer;

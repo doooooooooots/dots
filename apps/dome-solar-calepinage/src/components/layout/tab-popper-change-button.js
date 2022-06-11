@@ -10,7 +10,6 @@ function TabPopperChangeButton(props) {
   const handleDeleteButtonClick = useCallback(() => {
     store.setRelatedData(name, {});
     if (name === 'project') store.setRelatedData('roof', {});
-    store.setIsPassingTests(false);
   }, [store, name]);
 
   return (

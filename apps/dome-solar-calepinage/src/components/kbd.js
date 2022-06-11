@@ -1,7 +1,8 @@
 import { Stack } from '@mui/material';
+import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
 
 function Kbd(props) {
-  const { sx, ...other } = props;
+  const { shortcut, children, useCmd, sx, ...other } = props;
   return (
     <Stack
       direction="row"
@@ -21,7 +22,20 @@ function Kbd(props) {
         },
       ]}
       {...other}
-    />
+    >
+      <span>{children}</span>
+      {shortcut && (
+        <Stack direction="row" alignItems="center">
+          {useCmd && (
+            <>
+              <KeyboardCommandKeyIcon fontSize="inherit" />
+              <span>+</span>
+            </>
+          )}
+          <span>{shortcut}</span>
+        </Stack>
+      )}
+    </Stack>
   );
 }
 

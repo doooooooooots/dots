@@ -52,14 +52,14 @@ const LayoutFormCreate = () => {
         <TextField label="Nom" size="small" fullWidth {...register('name')} />
       </Grid>
 
-      <Grid item xs={12}>
+      {/* <Grid item xs={12}>
         <TextField
           label="Opérateur"
           size="small"
           fullWidth
           {...register('operator')}
         />
-      </Grid>
+      </Grid> */}
 
       <Grid item xs={12}>
         <Alert severity="info">

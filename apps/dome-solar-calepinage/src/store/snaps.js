@@ -1,4 +1,4 @@
-export const withSnaps = (app) => ({
+const withSnaps = (app) => ({
   ...app,
   snaps: {
     currentRows: [],
@@ -152,3 +152,5 @@ export const withSnaps = (app) => ({
     });
   },
 });
+
+export default withSnaps;

@@ -11,7 +11,6 @@ const withApp = (config) => ({
     currentPage: 'layout',
     needRerender: false,
     hasConfirmedOnBoarding: false,
-    isPassingTests: false,
   },
 
   refs: {
@@ -74,12 +73,6 @@ const withApp = (config) => ({
       !isEmpty(this.getRelatedData('solarModule')) &&
       !isEmpty(this.getRelatedData('product'))
     );
-  },
-  isPassingTests() {
-    return this.app.isPassingTests;
-  },
-  setIsPassingTests(state) {
-    this.app.isPassingTests = state;
   },
   isLoading() {
     return this.app.isLoading;

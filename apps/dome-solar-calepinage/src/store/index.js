@@ -3,17 +3,18 @@ import withApp from './app';
 import withKeyboard from './keyboard';
 import withDialog from './dialog';
 import withUserDatas from './user-datas';
-import { withRender } from './render';
-import { withModules } from './modules';
-import { withObstacles } from './obstacles';
+import withRender from './render';
+import withModules from './modules';
+import withObstacles from './obstacles';
 import withSelection from './selection';
-import { withSnaps } from './snaps';
-import { withComments } from './comments';
-import { withMediaObjects } from './media-object';
+import withSnaps from './snaps';
+import withComments from './comments';
+import withMediaObjects from './media-object';
 import withUtils from './utils';
 import withPreview from './preview';
 import withRelatedData from './related-data';
 import withAnalytics from './analytics';
+import withToolbar from './toolbar';
 import { SIDEBAR_WIDTH, TOOLBAR_WIDTH } from '../constants/constants';
 
 export const config = {
@@ -56,6 +57,7 @@ const createStore = () =>
     withKeyboard,
     withUtils,
     withDialog,
+    withToolbar,
     withApp
   )(config);
 

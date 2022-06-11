@@ -1,4 +1,4 @@
-export const withComments = (app) => ({
+const withComments = (app) => ({
   ...app,
 
   comments: {
@@ -26,3 +26,5 @@ export const withComments = (app) => ({
     this.comments.byId = comments;
   },
 });
+
+export default withComments;

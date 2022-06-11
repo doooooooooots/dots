@@ -27,6 +27,7 @@ const GET_PROJECTS = gql`
       areaField
       areaSnow
       areaSea
+      areaWind
       altitude
       customer {
         id
@@ -51,14 +52,19 @@ const TabProject = (props) => {
   const { onChange } = props;
   const { getRelatedData, updateRelatedData } = useStore();
 
-  //-> Get Project Id from Url
+  const project = getRelatedData('project');
+
   const router = useRouter();
   const { id } = router.query;
 
-  const [update, { loading }] = useMutation(UPDATE_PROJECT);
+  /**
+   * Create mutation function
+   */
+  const [update] = useMutation(UPDATE_PROJECT);
 
-  const project = getRelatedData('project');
-
+  /**
+   * Save clicked project from project list
+   */
   const handleChoiceClick = useCallback(
     (element) => () => {
       onChange(element);
@@ -66,6 +72,9 @@ const TabProject = (props) => {
     [onChange]
   );
 
+  /**
+   * Send updates to db
+   */
   const handleChangeConfirm = useCallback(
     (key) => async (newValue) => {
       if (project?.id) {
@@ -157,6 +166,12 @@ const TabProject = (props) => {
               value={project.areaSea}
               type="number"
               onConfirm={handleChangeConfirm('areaSea')}
+            />
+            <FielGroup
+              label={'Area wind'}
+              value={project.areaWind}
+              type="number"
+              onConfirm={handleChangeConfirm('areaWind')}
             />
             <FielGroup
               label={'Altitude'}

@@ -12,9 +12,9 @@ const StyledButton = styled((props) => {
     sx={[
       {
         minWidth: 40,
-        open && {
         bgcolor: `neutral.background`,
       },
+      open && {
         '&, & .MuiTypography-root': {
           typography: 'body2',
           fontWeight: '500',

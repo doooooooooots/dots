@@ -8,10 +8,12 @@ import SidebarPdf from './sidebar-pdf';
 const LayoutSidebar = () => {
   const store = useStore();
 
-  if (!store.hasRequiredInfos()) return null;
+  // if (!store.hasRequiredInfos()) return null;
+
   if (store.getCurrentPage() === 'preview') return <SidePreview />;
   if (store.getCurrentPage() === 'pdf') return <SidebarPdf />;
   if (store.allSelected().length !== 0) return <SideBarSelect />;
+
   return <SideBarLayout />;
 };
 

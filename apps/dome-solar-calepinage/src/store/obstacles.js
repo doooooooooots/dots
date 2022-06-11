@@ -18,7 +18,7 @@ class Obstacle {
   }
 }
 
-export const withObstacles = (app) => ({
+const withObstacles = (app) => ({
   ...app,
 
   obstacles: [],
@@ -30,7 +30,8 @@ export const withObstacles = (app) => ({
   },
 
   setObstacles(data) {
-    this.obstacles = data;
+    if (isEmpty(data)) this.obstacles = [];
+    else this.obstacles = data;
   },
 
   getObstacleById(id) {
@@ -128,3 +129,4 @@ export const withObstacles = (app) => ({
     this.modules.desactived = [];
   },
 });
+export default withObstacles;

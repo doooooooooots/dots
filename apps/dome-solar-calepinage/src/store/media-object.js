@@ -1,7 +1,7 @@
 import { last } from 'lodash';
 import cyrb53 from '../utils/cryb-53';
 
-export const withMediaObjects = (app) => ({
+const withMediaObjects = (app) => ({
   ...app,
 
   allMedias: [],
@@ -16,3 +16,5 @@ export const withMediaObjects = (app) => ({
     return last(this.allMedias);
   },
 });
+
+export default withMediaObjects;

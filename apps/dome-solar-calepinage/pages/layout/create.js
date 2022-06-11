@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Dialog, Grid, Box } from '@mui/material';
+import { Dialog, Grid, Box, Stack, Typography, Button } from '@mui/material';
 import Toolbar from '../../src/components/layout/toolbar';
 import TopBar from '../../src/components/layout/topbar-tabs';
 import { useStore } from '../../src/components/context/useStore';
@@ -14,8 +14,10 @@ import MainOnboarding from '../../src/components/layout/main-onboarding';
 import DialogForms from '../../src/components/layout/dialog-forms';
 import SidePreview from '../../src/components/layout/sidebar-preview';
 import { AuthGuard } from '../../src/components/authentication/auth-guard';
+import { useKey } from 'react-use';
+import { toast } from 'react-hot-toast';
 
-const LayoutByProjectId = () => {
+const PageCreateLayout = () => {
   const store = useStore();
 
   // useEffect(() => {
@@ -52,11 +54,6 @@ const LayoutByProjectId = () => {
           flexWrap: 'nowrap',
         }}
       >
-        {/*//? Toolbar */}
-        <Grid item width={36} sx={{ borderRight: 1, borderColor: 'divider' }}>
-          <Toolbar />
-        </Grid>
-
         {/*//? Canvas */}
         {/*-> We need at least solarModules and a product */}
         <Grid item xs>
@@ -67,10 +64,15 @@ const LayoutByProjectId = () => {
           )}
         </Grid>
 
+        {/*//? Toolbar */}
+        <Grid item width={36} sx={{ borderLeft: 1, borderColor: 'divider' }}>
+          <Toolbar />
+        </Grid>
+
         {/*//? Side */}
         <Grid
           item
-          flex={`0 0 ${store.hasRequiredInfos() ? SIDEBAR_WIDTH : 35}px`}
+          flex={`0 0 ${SIDEBAR_WIDTH}px`}
           sx={{ borderLeft: 1, borderColor: 'divider' }}
         >
           {store.getCurrentPage() !== 'preview' ? (
@@ -94,7 +96,7 @@ const LayoutByProjectId = () => {
   );
 };
 
-const LayoutCreate = observer(LayoutByProjectId);
+const LayoutCreate = observer(PageCreateLayout);
 
 LayoutCreate.getLayout = function getLayout(page) {
   return <AuthGuard>{page}</AuthGuard>;

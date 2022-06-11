@@ -1,4 +1,3 @@
-
 class Module {
   constructor({ index, x, y }) {
     this.nodeType = 'module';
@@ -10,7 +9,7 @@ class Module {
   }
 }
 
-export const withModules = (app) => ({
+const withModules = (app) => ({
   ...app,
 
   modules: {
@@ -21,16 +20,7 @@ export const withModules = (app) => ({
     selected: [],
     focused: [],
 
-    viewMode: 'default',
-    lastSelectedIndex: null
-  },
-
-  // ViewMode
-  getViewMode() {
-    return this.modules.viewMode;
-  },
-  setViewMode(mode) {
-    this.modules.viewMode = mode;
+    lastSelectedIndex: null,
   },
 
   // Last Selected
@@ -65,7 +55,7 @@ export const withModules = (app) => ({
     return Object.values(this.modules.byIndex);
   },
   allSelected() {
-    return this.modules.selected
+    return this.modules.selected;
   },
   setModulesState(key, id, state) {
     if (state && !this.modules[key].includes(id)) {
@@ -105,7 +95,10 @@ export const withModules = (app) => ({
     return this.modules.desactived;
   },
   isActive(index) {
-    return this.allModuleIndexes().includes(index) && !this.allDesactivatedIndex().includes(index);
+    return (
+      this.allModuleIndexes().includes(index) &&
+      !this.allDesactivatedIndex().includes(index)
+    );
   },
   setActive(id, state) {
     this.setModulesState('desactived', id, !state);
@@ -116,15 +109,23 @@ export const withModules = (app) => ({
   },
   setActiveAll(state) {
     if (!state) {
-      this.modules.desactived = [...this.allDesactivatedIndex(), ...this.modules.selected];
+      this.modules.desactived = [
+        ...this.allDesactivatedIndex(),
+        ...this.modules.selected,
+      ];
     } else {
-      this.modules.desactived = this.allDesactivatedIndex().filter((index) => !this.modules.selected.includes(index));
+      this.modules.desactived = this.allDesactivatedIndex().filter(
+        (index) => !this.modules.selected.includes(index)
+      );
     }
   },
 
   // Focused
   isFocused(index) {
-    return this.allModuleIndexes().includes(index) && this.modules.focused.includes(index);
+    return (
+      this.allModuleIndexes().includes(index) &&
+      this.modules.focused.includes(index)
+    );
   },
   setFocused(indexes) {
     this.modules.focused = indexes;
@@ -134,7 +135,10 @@ export const withModules = (app) => ({
     if (this.getViewMode() === 'select') {
       this.setSelected(index, !this.isSelected(index));
     } else if (this.getViewMode() === 'default') {
-      this.setActive(index, withLastRef ? this.isActive(lastIndex) : !this.isActive(index));
+      this.setActive(
+        index,
+        withLastRef ? this.isActive(lastIndex) : !this.isActive(index)
+      );
     }
   },
   toggleAllRange(clickedIndex, withLastRef = false) {
@@ -174,7 +178,7 @@ export const withModules = (app) => ({
   },
   totalModules() {
     return this.allModuleIndexes().length - this.allDesactivatedIndex().length;
-  }
+  },
 });
 
-
+export default withModules;

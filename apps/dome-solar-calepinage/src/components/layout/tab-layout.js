@@ -12,6 +12,7 @@ import {
   Stack,
   CircularProgress,
   ClickAwayListener,
+  Typography,
 } from '@mui/material';
 import { observer } from 'mobx-react';
 import PopperList from '../popper-list';
@@ -57,8 +58,8 @@ const GET_LAYOUTS = gql`
 
 const UPDATE_LAYOUT = gql`
   mutation UpdateLayout(
-    $where: RoofWhereUniqueInput!
-    $data: RoofUpdateInput!
+    $where: LayoutWhereUniqueInput!
+    $data: LayoutUpdateInput!
   ) {
     updateLayout(where: $where, data: $data) {
       id
@@ -88,15 +89,14 @@ const GET_PEOPLE = gql`
 
 const TabLayout = (props) => {
   const { onChange } = props;
-  const {
-    getRelatedData,
-    setRelatedData,
-    setUserData,
-    onOpenToClick,
-    updateRelatedData,
-    reloadSize,
-  } = useStore();
 
+  //* Store
+  const { getRelatedData, setRelatedData, onOpenToClick, updateRelatedData } =
+    useStore();
+  const roof = getRelatedData('roof');
+  const layout = getRelatedData('layout');
+
+  //* Popper
   const [anchorEl, setAnchorEl] = useState(null);
   const [popper, setPopper] = useState(null);
 
@@ -108,35 +108,35 @@ const TabLayout = (props) => {
   const open = Boolean(anchorEl);
   const id = open ? 'input-popper' : undefined;
 
+  //* Request - Get projet related roofs
   const [update] = useMutation(UPDATE_LAYOUT);
-  const roof = getRelatedData('roof');
-  const layout = getRelatedData('layout');
 
+  const { data, loading, error } = useQuery(GET_LAYOUTS, {
+    variables: { id: roof?.id },
+    skip: !roof?.id,
+  });
+
+  //* Interactions
   const handleChangeConfirm = useCallback(
     (key) => async (newValue) => {
-      if (roof?.id) {
-        updateRelatedData(`roof.${key}`, newValue);
+      if (layout?.id) {
+        updateRelatedData(`layout.${key}`, newValue);
         toast.promise(
           update({
             variables: {
-              where: { id: roof?.id },
+              where: { id: layout?.id },
               data: { [key]: newValue },
             },
           }),
           {
             loading: 'Sauvegarde ...',
-            success: 'La toiture a été mise à jour',
+            success: 'Le layout a été mis à jour',
             error: 'Erreur lors de la mise à jour',
           }
         );
-        if (key === 'lengthX') setUserData('Tx', newValue);
-        if (key === 'lengthY') setUserData('Ty', newValue);
-        if (['lengthX', 'lengthY'].includes(key)) {
-          reloadSize();
-        }
       }
     },
-    [roof?.id, setUserData, update, updateRelatedData, reloadSize]
+    [layout?.id, updateRelatedData, update]
   );
 
   const handleChoiceClick = useCallback(
@@ -148,12 +148,7 @@ const TabLayout = (props) => {
     [onChange, setRelatedData]
   );
 
-  //* REQUEST - Get projet related roofs
-  const { data, loading, error } = useQuery(GET_LAYOUTS, {
-    variables: { id: roof?.id },
-    skip: !roof?.id,
-  });
-
+  //* Render
   if (loading)
     return (
       <Stack height={120} alignItems="center" justifyContent="center">
@@ -163,7 +158,9 @@ const TabLayout = (props) => {
 
   return (
     <>
-      {/* WARNING */}
+      {/**
+       * Warning Message
+       */}
       {isEmpty(roof) && (
         <Box px={1} py={3}>
           <Alert severity="error">
@@ -173,30 +170,46 @@ const TabLayout = (props) => {
         </Box>
       )}
 
+      {!isEmpty(roof) && isEmpty(layout) && isEmpty(data?.layouts) && (
+        <Box display="flex" justifyContent="center" alignItems="center" p={2}>
+          <Typography>Pas de résultat</Typography>
+        </Box>
+      )}
+
+      {/**
+       * Choice List
+       */}
       {!isEmpty(roof) && isEmpty(layout) && (
         <>
-          <PopperList>
-            {data &&
-              data.layouts.map((layout) => (
-                <ListItemButton
-                  key={'__create_new__'}
-                  sx={{ py: 0, minHeight: 32 }}
-                  onClick={handleChoiceClick(layout)}
-                >
-                  <ListItemIcon>
-                    <RoofingIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={layout.name}
-                    primaryTypographyProps={{
-                      fontSize: 14,
-                      fontWeight: 'medium',
-                    }}
-                  />
-                </ListItemButton>
-              ))}
-          </PopperList>
+          {!isEmpty(data?.layouts) && (
+            <PopperList>
+              {data &&
+                data?.layouts?.map((layout) => (
+                  <ListItemButton
+                    key={'__create_new__'}
+                    sx={{ py: 0, minHeight: 32 }}
+                    onClick={handleChoiceClick(layout)}
+                  >
+                    <ListItemIcon>
+                      <RoofingIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={layout.name}
+                      primaryTypographyProps={{
+                        fontSize: 14,
+                        fontWeight: 'medium',
+                      }}
+                    />
+                  </ListItemButton>
+                ))}
+            </PopperList>
+          )}
+
           <Divider />
+
+          {/**
+           *  Create Button
+           */}
           <Button
             onClick={onOpenToClick('layout')}
             startIcon={<AddIcon fontSize="small" />}
@@ -217,7 +230,9 @@ const TabLayout = (props) => {
         </>
       )}
 
-      {/* Choice details */}
+      {/**
+       *  Current choice details
+       */}
       {!isEmpty(roof) && !isEmpty(layout) && (
         <>
           <FieldGroupContainer>
@@ -230,14 +245,23 @@ const TabLayout = (props) => {
             <FielGroup
               icon={<AccountCircleOutlinedIcon />}
               label={'Opérateur'}
-              value={'Adrien Euverte'}
+              value={
+                layout?.operator?.length && layout?.operator[0]?.familyName
+              }
               onClick={handleClick('operator')}
               onConfirm={handleChangeConfirm('operator')}
               readOnly
             />
           </FieldGroupContainer>
+
           <TabPopperChangeButton name="layout" />
-          <Popper open={open} anchorEl={anchorEl} placement="bottom-start">
+
+          <Popper
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            placement="bottom-start"
+          >
             <ClickAwayListener onClickAway={handleClick}>
               <Stack bgcolor="background.default" minWidth={238} boxShadow={12}>
                 {popper === 'operator' && (
@@ -247,9 +271,8 @@ const TabLayout = (props) => {
                     take={10}
                     skip={0}
                     orderBy={[]}
-                    multiple
                     onClose={(values) => {
-                      console.log(values);
+                      handleChangeConfirm('operator')(values);
                       handleClick()();
                     }}
                     getOptionLabel={(option) =>

@@ -5,7 +5,6 @@ import CalendarViewWeekOutlined from '@mui/icons-material/CalendarViewWeekOutlin
 import { PAGE_CLADDING } from '../../constants/constants';
 import { useStore } from '../context/useStore';
 import { isEmpty } from 'lodash';
-import { Stack } from '@mui/material';
 import FielGroup from '../field-group';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import TabPopperChangeButton from './tab-popper-change-button';

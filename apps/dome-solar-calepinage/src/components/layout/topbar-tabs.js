@@ -1,14 +1,7 @@
 import React, { useCallback } from 'react';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
-import {
-  Button,
-  IconButton,
-  Stack,
-  Typography,
-  Divider,
-  Chip,
-} from '@mui/material';
+import { Button, Stack, Typography, Divider, Chip } from '@mui/material';
 import { styled } from '@mui/system';
 
 // Icons
@@ -20,8 +13,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SolarPowerIcon from '@mui/icons-material/SolarPowerOutlined';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
-import LogoutIcon from '@mui/icons-material/Logout';
 
 // Constants
 import { TOPBAR_SIZE } from '../../constants/constants';
@@ -46,13 +37,15 @@ import { useRouter } from 'next/router';
 import { isEmpty } from 'lodash';
 import { observer } from 'mobx-react-lite';
 import { toast } from 'react-hot-toast';
+import Kbd from '../kbd';
+import { useKey } from 'react-use';
 
 const id = 'transition-popper';
 
 const panels = [
   { name: 'project', Icon: <InfoIcon /> },
   { name: 'roof', Icon: <InfoIcon /> },
-  // { name: 'cladding', Icon: <CalendarViewWeekOutlinedIcon /> },
+  { name: 'cladding', Icon: <CalendarViewWeekOutlinedIcon /> },
   { name: 'layout', Icon: <StarBorderIcon /> },
   { name: 'solarModule', Icon: <SolarPowerIcon /> },
   { name: 'product', Icon: <StarBorderIcon /> },
@@ -91,8 +84,11 @@ function TopBar() {
   const handleDeleteButtonClick = useCallback(
     (pageName) => () => {
       store.setRelatedData(pageName, {});
-      if (pageName === 'project') store.setRelatedData('roof', {});
-      store.setIsPassingTests(false);
+      if (pageName === 'project') {
+        store.setRelatedData('roof', null);
+        store.setRelatedData('cladding', null);
+      }
+      if (pageName === 'roof') store.setRelatedData('cladding', null);
     },
     [store]
   );
@@ -103,15 +99,22 @@ function TopBar() {
     setOpen(false);
   };
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      router.push('/authentication/login').catch(console.error);
-    } catch (err) {
-      console.error(err);
-      toast.error('Unable to logout.');
+  useKey('s', (event) => {
+    if (event.metaKey) {
+      event.preventDefault();
+      toast.error('Rien a sauvegarder');
     }
-  };
+  });
+
+  // const handleLogout = async () => {
+  //   try {
+  //     await logout();
+  //     router.push('/authentication/login').catch(console.error);
+  //   } catch (err) {
+  //     console.error(err);
+  //     toast.error('Unable to logout.');
+  //   }
+  // };
 
   return (
     <TabContext value={value}>
@@ -178,6 +181,14 @@ function TopBar() {
           {/* <IconButton size="small" onClick={handleLogout}>
             <LogoutIcon fontSize="small" />
           </IconButton> */}
+        </Stack>
+
+        <Stack direction="row">
+          <Button color="neutral" size="small">
+            <Kbd shortcut="s" useCmd>
+              Sauvegarder
+            </Kbd>
+          </Button>
         </Stack>
       </Stack>
 

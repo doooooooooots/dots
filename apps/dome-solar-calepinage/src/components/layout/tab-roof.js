@@ -36,6 +36,15 @@ const GET_ROOF = gql`
       incline
       ridgeHeight
       obstacles
+      cladding {
+        id
+        name
+        numberOfWaves
+        lengthX
+        lengthY
+        lengthZ
+        thickness
+      }
     }
   }
 `;
@@ -52,6 +61,7 @@ const TabRoof = (props) => {
   const { onChange } = props;
   const {
     getRelatedData,
+    setRelatedData,
     setUserData,
     setObstacles,
     updateRelatedData,
@@ -94,10 +104,14 @@ const TabRoof = (props) => {
     (element) => () => {
       setUserData('Tx', element.lengthX);
       setUserData('Ty', element.lengthY);
-      setObstacles(element.obstacles || '[]');
+      setUserData('Cx', element.cladding?.lengthY);
+      setUserData('Cy', element.cladding?.lengthY);
+      setUserData('CnbOfWaves', element.cladding?.lengthY);
+      setRelatedData('cladding', element.cladding || null);
+      setObstacles(element.obstacles || []);
       onChange(element);
     },
-    [onChange, setObstacles, setUserData]
+    [onChange, setObstacles, setRelatedData, setUserData]
   );
 
   //* REQUEST - Get projet related roofs
@@ -229,7 +243,7 @@ const TabRoof = (props) => {
             <FielGroup
               label={'Bac acier'}
               icon={<RoofingIcon />}
-              value={roof.ridgeHeight}
+              value={roof?.cladding?.name}
               onConfirm={handleChangeConfirm('Cladding')}
             />
           </FieldGroupContainer>
