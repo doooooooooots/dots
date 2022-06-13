@@ -4,7 +4,7 @@ import Layout from '../../src/components/layout';
 import { observer } from 'mobx-react';
 
 const DynamicStep = dynamic(
-  () => import('../../src/components/steps/show-template'),
+  () => import('../../src/components/layout/steps/show-template'),
   { ssr: false }
 );
 

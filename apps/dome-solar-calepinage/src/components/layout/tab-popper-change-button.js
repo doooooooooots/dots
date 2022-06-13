@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Divider, Button } from '@mui/material';
 import CompareArrowsOutlinedIcon from '@mui/icons-material/CompareArrowsOutlined';
-import { useStore } from '../context/useStore';
+import { useStore } from '../../context/useStore';
 
 function TabPopperChangeButton(props) {
   const { name } = props;

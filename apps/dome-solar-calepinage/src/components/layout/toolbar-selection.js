@@ -2,7 +2,7 @@ import React from 'react';
 import Cursor from '../../icons/cursor';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { HighlightAltOutlined, PanToolOutlined } from '@mui/icons-material';
-import { useStore } from '../context/useStore';
+import { useStore } from '../../context/useStore';
 import { observer } from 'mobx-react';
 
 function ToolbarSelection(props) {

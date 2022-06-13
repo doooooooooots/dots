@@ -3,12 +3,12 @@ import { gql } from '@apollo/client';
 import PopperSelectFromDb from '../popper-select-from-db';
 import { People } from '@mui/icons-material';
 import { PAGE_PRODUCT } from '../../constants/constants';
-import { useStore } from '../context/useStore';
+import { useStore } from '../../context/useStore';
 import { isEmpty } from 'lodash';
-import FielGroup from '../field-group';
+import FielInput from '../dots-system/components/field-input';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import TabPopperChangeButton from './tab-popper-change-button';
-import FieldGroupContainer from './field-group-container';
+import FieldGroupContainer from '../dots-system/components/field-group-container';
 
 const GET_PRODUCTS = gql`
   query GetProducts {
@@ -54,19 +54,19 @@ const TabProduct = (props) => {
       ) : (
         <>
           <FieldGroupContainer>
-            <FielGroup
+            <FielInput
               icon={<EventNoteOutlinedIcon />}
               label={'Largeur (⟷)'}
               value={product.lengthX}
               readOnly
             />
-            <FielGroup
+            <FielInput
               icon={<EventNoteOutlinedIcon />}
               label={'Hauteur (↕︎)'}
               value={product.lengthY}
               readOnly
             />
-            <FielGroup
+            <FielInput
               icon={<EventNoteOutlinedIcon />}
               label={'Epaisseur (↖︎)'}
               value={product.lengthZ}

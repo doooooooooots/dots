@@ -18,16 +18,16 @@ import {
 import { gql, useQuery } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import { AuthGuard } from '../src/components/authentication/auth-guard';
-import ProjectFormCreate from '../src/components/form/project-create';
+import ProjectFormCreate from '../src/components/project-create/project-create';
 import ProjectDetails from '../src/components/project/project-details';
 import NoProject from './project/no-project';
-import InputNumber from '../src/components/form/popper-inputs/popper-input-number';
-import SelectTags from '../src/components/form/molecule/tag/select-tag-multiple';
+import InputNumber from '../src/components/design-system/popper-inputs/popper-input-number';
+import SelectTags from '../src/components/molecule/tag/select-tag-multiple';
 
-import SelectTag from '../src/components/form/molecule/tag/select-tag-single';
-import InputWithPopper from '../src/components/form/popper-inputs/popper-input-text';
-import SelectPerson from '../src/components/form/molecule/person/select-person';
-import CustomizedHook from '../src/components/form/select-with-autocomplete/select-custom';
+import SelectTag from '../src/components/molecule/tag/select-tag-single';
+import InputWithPopper from '../src/components/design-system/popper-inputs/popper-input-text';
+import SelectPerson from '../src/components/dots-system/person/select-person';
+import CustomizedHook from '../src/components/design-system/select-with-autocomplete/select-custom';
 
 const GET_LAST_PROJECTS = gql`
   query GetLastProjects(

@@ -19,13 +19,13 @@ import {
   PAGE_LAYOUT,
 } from '../../constants/constants';
 
-import SolarModuleCreate from '../form/solar-module-create';
-import ProjectFormCreate from '../form/project-create';
-import CladdingCreate from '../form/cladding-create';
+import SolarModuleCreate from '../solar-module-create/solar-module-create';
+import ProjectFormCreate from '../project-create/project-create';
+import CladdingCreate from '../cladding-create/cladding-create';
 import { Box } from '@mui/system';
-import { useStore } from '../context/useStore';
-import RoofFormCreate from '../form/roof-create';
-import LayoutFormCreate from '../form/layout-create';
+import { useStore } from '../../context/useStore';
+import RoofFormCreate from '../roof-create/roof-create';
+import LayoutFormCreate from '../layout-create/layout-create';
 
 const getDialogTitle = (open) => {
   switch (open) {

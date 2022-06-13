@@ -1,8 +1,8 @@
 import { Rect } from '@react-pdf/renderer';
 import React, { useRef } from 'react';
 import { Group, Layer, Stage } from 'react-konva';
-import { useStore } from './Context/useStore';
-import Contour from './canvas/contour';
+import { useStore } from '../context/useStore';
+import Contour from './layout/canvas/contour';
 import Module from './module';
 
 export default function Snaps() {

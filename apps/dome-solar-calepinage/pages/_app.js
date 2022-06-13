@@ -6,14 +6,14 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider } from '@emotion/react';
 import { createTheme } from '../src/theme';
 import createEmotionCache from '../src/lib/create-emotion-cache';
-import { StoreProvider } from '../src/components/context/useStore';
+import { StoreProvider } from '../src/context/useStore';
 import frLocale from 'date-fns/locale/fr';
 
 // Apollo
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../src/lib/apollo-client';
 import { AuthConsumer, AuthProvider } from '../src/contexts/keystone-context';
-import { SplashScreen } from '../src/components/splash-screen';
+import { SplashScreen } from '../src/components/design-system/screens/splash-screen';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Toaster } from 'react-hot-toast';

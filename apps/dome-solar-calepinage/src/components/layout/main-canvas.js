@@ -1,21 +1,21 @@
 import React from 'react';
-import { useStore } from '../context/useStore';
-import StepSummary from '../steps/step-summary';
+import { useStore } from '../../context/useStore';
+import StepSummary from './steps/step-summary';
 import RenderActionOverlay from '../render-action-overlay';
-import StepShowPdf from '../steps/show-pdf';
+import StepShowPdf from './steps/show-pdf';
 import { observer } from 'mobx-react';
 import dynamic from 'next/dynamic';
 import { Box } from '@mui/material';
-import Loading from '../loading-screen';
+import Loading from '../design-system/screens/loading-screen';
 
 const SnapAllColumnDetails = dynamic(
-  () => import('../steps/snap-all-column-details'),
+  () => import('./steps/snap-all-column-details'),
   { ssr: false }
 );
-const SnapTypeColumn = dynamic(() => import('../steps/snap-type-column'), {
+const SnapTypeColumn = dynamic(() => import('./steps/snap-type-column'), {
   ssr: false,
 });
-const StepLayout = dynamic(() => import('../steps/step-layout'), {
+const StepLayout = dynamic(() => import('./steps/step-layout'), {
   ssr: false,
 });
 

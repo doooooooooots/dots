@@ -1,4 +1,4 @@
-import { useStore } from '../context/useStore';
+import { useStore } from '../../context/useStore';
 import { observer } from 'mobx-react';
 import SideBarLayout from './sidebar-layout';
 import SideBarSelect from './sidebar-select';

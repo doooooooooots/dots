@@ -9,3 +9,4 @@ export { default as deleteOneBuilder } from './delete-one-builder';
 export { default as deleteManyBuilder } from './delete-many-builder';
 export { default as findOneBuilder } from './find-one-builder';
 export { default as findManyBuilder } from './find-many-builder';
+export { default as searchManyBuilder } from './search-many-builder';

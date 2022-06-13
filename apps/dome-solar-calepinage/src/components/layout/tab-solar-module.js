@@ -2,14 +2,14 @@ import { useCallback } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import PopperSelectFromDb from '../popper-select-from-db';
 import SolarPowerOutlined from '@mui/icons-material/SolarPowerOutlined';
-import { useStore } from '../context/useStore';
+import { useStore } from '../../context/useStore';
 import { isEmpty } from 'lodash';
 import { PAGE_SOLAR_MODULE } from '../../constants/constants';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
-import FielGroup from '../field-group';
+import FielInput from '../dots-system/components/field-input';
 import TabPopperChangeButton from './tab-popper-change-button';
 import toast from 'react-hot-toast';
-import FieldGroupContainer from './field-group-container';
+import FieldGroupContainer from '../dots-system/components/field-group-container';
 
 const GET_SOLAR_MODULES = gql`
   query GetSolarModules($search: String, $take: Int) {
@@ -98,28 +98,28 @@ const TabSolarModule = (props) => {
       ) : (
         <>
           <FieldGroupContainer>
-            <FielGroup
+            <FielInput
               icon={<EventNoteOutlinedIcon />}
               label={'Largeur (⟷)'}
               type="number"
               value={solarModule.lengthX}
               onConfirm={handleChangeConfirm('lengthX')}
             />
-            <FielGroup
+            <FielInput
               icon={<EventNoteOutlinedIcon />}
               label={'Hauteur (↕︎)'}
               type="number"
               value={solarModule.lengthY}
               onConfirm={handleChangeConfirm('lengthY')}
             />
-            <FielGroup
+            <FielInput
               icon={<EventNoteOutlinedIcon />}
               label={'Frame'}
               type="number"
               value={solarModule.frameType}
               onConfirm={handleChangeConfirm('frameType')}
             />
-            <FielGroup
+            <FielInput
               icon={<EventNoteOutlinedIcon />}
               label={'Puissance électrique'}
               type="number"

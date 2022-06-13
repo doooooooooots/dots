@@ -5,7 +5,7 @@ import { findAction } from '../../utils/entity-model';
 import App from './app';
 import { stringifyQuery } from '../../utils/stringify-query';
 import fetchGQL from '../../database/fetch-gql';
-import { useStore } from './context/useStore';
+import { useStore } from '../context/useStore';
 
 function EditLayout() {
   const { id } = useParams();

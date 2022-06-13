@@ -5,7 +5,7 @@ import MouseOutlinedIcon from '@mui/icons-material/MouseOutlined';
 import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
 import ToggleButton from '@mui/material/ToggleButton';
 import { observer } from 'mobx-react';
-import { useStore } from './context/useStore';
+import { useStore } from '../context/useStore';
 
 const ModeToggle = (props) => {
   const store = useStore();
@@ -18,16 +18,22 @@ const ModeToggle = (props) => {
   };
 
   return (
-    <ToggleButtonGroup size='small' value={store.getViewMode()} onChange={handleChange} exclusive {...props}>
-      <ToggleButton value='default'>
+    <ToggleButtonGroup
+      size="small"
+      value={store.getViewMode()}
+      onChange={handleChange}
+      exclusive
+      {...props}
+    >
+      <ToggleButton value="default">
         <MouseOutlinedIcon />
       </ToggleButton>
 
-      <ToggleButton value='select'>
+      <ToggleButton value="select">
         <AppRegistrationOutlinedIcon />
       </ToggleButton>
 
-      <ToggleButton value='pan'>
+      <ToggleButton value="pan">
         <PanToolIcon sx={{ mr: 1 }} />
         <kbd>space</kbd>
       </ToggleButton>

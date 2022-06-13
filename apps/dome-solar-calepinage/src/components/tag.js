@@ -29,6 +29,8 @@ function Tag(props) {
     case 'emergency':
       _emoji = '🚨';
       break;
+    default:
+      break;
   }
 
   return (
@@ -55,7 +57,10 @@ function Tag(props) {
       alignItems="center"
     >
       {!isEmpty(icon) && icon}
-      {_emoji && <Typography variant="caption">{_emoji}</Typography>}
+      {_emoji && typeof _emoji === 'string' && (
+        <Typography variant="caption">{_emoji}</Typography>
+      )}
+      {_emoji && typeof _emoji !== 'string' && _emoji}
       <Typography variant="body2">{children}</Typography>
     </Stack>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { observer } from 'mobx-react';
-import { useStore } from '../context/useStore';
+import { useStore } from '../../context/useStore';
 
 function SideInfobox(props) {
   const { sx = { p: 2 } } = props;

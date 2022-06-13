@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Stack, Button } from '@mui/material';
 import SaveIcon from '@mui/icons-material/SaveOutlined';
-import { useStore } from '../context/useStore';
+import { useStore } from '../../context/useStore';
 
 function SidebarPdf() {
   const { setCurrentPage } = useStore();

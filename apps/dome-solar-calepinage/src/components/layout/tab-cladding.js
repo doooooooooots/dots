@@ -3,13 +3,13 @@ import { gql, useMutation } from '@apollo/client';
 import PopperSelectFromDb from '../popper-select-from-db';
 import CalendarViewWeekOutlined from '@mui/icons-material/CalendarViewWeekOutlined';
 import { PAGE_CLADDING } from '../../constants/constants';
-import { useStore } from '../context/useStore';
+import { useStore } from '../../context/useStore';
 import { isEmpty } from 'lodash';
-import FielGroup from '../field-group';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import TabPopperChangeButton from './tab-popper-change-button';
 import toast from 'react-hot-toast';
-import FieldGroupContainer from './field-group-container';
+import FieldGroupContainer from '../dots-system/components/field-group-container';
+import FielInput from '../dots-system/components/field-input';
 
 const GET_CLADDINGS = gql`
   query GetCladdings {
@@ -99,55 +99,55 @@ const TabCladding = (props) => {
       ) : (
         <>
           <FieldGroupContainer>
-            <FielGroup
+            <FielInput
               icon={<EventNoteOutlinedIcon />}
               label={'Color'}
               value={cladding.color}
               onConfirm={handleChangeConfirm('color')}
             />
-            <FielGroup
+            <FielInput
               label={'Largeur (⟷)'}
               value={cladding.lengthX}
               type="dimension"
               onConfirm={handleChangeConfirm('lengthX')}
             />
-            <FielGroup
+            <FielInput
               label={'Hauteur (↕︎)'}
               value={cladding.lengthY}
               type="dimension"
               onConfirm={handleChangeConfirm('lengthY')}
             />
-            <FielGroup
+            <FielInput
               label={"Hauteur d'ondes"}
               value={cladding.lengthZ}
               type="number"
               onConfirm={handleChangeConfirm('lengthZ')}
             />
-            <FielGroup
+            <FielInput
               label={"Nombre d'ondes"}
               value={cladding.numberOfWaves}
               type="number"
               onConfirm={handleChangeConfirm('numberOfWaves')}
             />
-            <FielGroup
+            <FielInput
               label={'Epaisseur (↖︎)'}
               value={cladding.thickness}
               type="dimension"
               onConfirm={handleChangeConfirm('thickness')}
             />
-            <FielGroup
+            <FielInput
               label={"Largeur base d'onde"}
               value={cladding.waveBaseWidth}
               type="dimension"
               onConfirm={handleChangeConfirm('waveBaseWidth')}
             />
-            <FielGroup
+            <FielInput
               label={"Largeur hauteur d'onde"}
               value={cladding.waveTopWidth}
               type="dimension"
               onConfirm={handleChangeConfirm('waveTopWidth')}
             />
-            <FielGroup
+            <FielInput
               label={'Matériel'}
               value={cladding.material}
               onConfirm={handleChangeConfirm('material')}

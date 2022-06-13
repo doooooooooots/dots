@@ -1,7 +1,7 @@
 import { Button, Container, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
-import ProjectFormCreate from '../../src/components/form/project-create';
+import ProjectFormCreate from '../../src/components/project-create/project-create';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 function ProjectPageCreate() {

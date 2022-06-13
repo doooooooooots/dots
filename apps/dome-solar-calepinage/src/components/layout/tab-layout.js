@@ -1,5 +1,5 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
-import { useStore } from '../context/useStore';
+import { useStore } from '../../context/useStore';
 import { isEmpty } from 'lodash';
 import {
   Box,
@@ -11,21 +11,19 @@ import {
   Button,
   Stack,
   CircularProgress,
-  ClickAwayListener,
   Typography,
 } from '@mui/material';
 import { observer } from 'mobx-react';
 import PopperList from '../popper-list';
 import RoofingIcon from '@mui/icons-material/Roofing';
-import FielGroup from '../field-group';
+import FielInput from '../dots-system/components/field-input';
 import { useCallback, useState } from 'react';
 import TabPopperChangeButton from './tab-popper-change-button';
 import toast from 'react-hot-toast';
-import FieldGroupContainer from './field-group-container';
+import FieldGroupContainer from '../dots-system/components/field-group-container';
 import AddIcon from '@mui/icons-material/Add';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import AutocompleteFromQuery from '../autocomplete-from-query';
-import Popper from '../popper-styled';
+import FieldSelect from '../dots-system/components/field-select';
 
 const GET_LAYOUTS = gql`
   query GetLayouts($id: ID!) {
@@ -236,13 +234,13 @@ const TabLayout = (props) => {
       {!isEmpty(roof) && !isEmpty(layout) && (
         <>
           <FieldGroupContainer>
-            <FielGroup
+            <FielInput
               icon={<RoofingIcon />}
               label={'name'}
               value={layout.name}
               onConfirm={handleChangeConfirm('name')}
             />
-            <FielGroup
+            <FieldSelect
               icon={<AccountCircleOutlinedIcon />}
               label={'Opérateur'}
               value={
@@ -250,44 +248,27 @@ const TabLayout = (props) => {
               }
               onClick={handleClick('operator')}
               onConfirm={handleChangeConfirm('operator')}
-              readOnly
+              query={GET_PEOPLE}
+              where={{}}
+              take={10}
+              skip={0}
+              orderBy={[]}
+              onClose={(values) => {
+                handleChangeConfirm('operator')(values);
+                handleClick()();
+              }}
+              getOptionLabel={(option) =>
+                `${option.givenName} ${option.familyName}`
+              }
+              renderOptionProps={(option, selected) => ({
+                primary: option.givenName,
+                secondary: option.familyName,
+                selected,
+              })}
             />
           </FieldGroupContainer>
 
           <TabPopperChangeButton name="layout" />
-
-          <Popper
-            id={id}
-            open={open}
-            anchorEl={anchorEl}
-            placement="bottom-start"
-          >
-            <ClickAwayListener onClickAway={handleClick}>
-              <Stack bgcolor="background.default" minWidth={238} boxShadow={12}>
-                {popper === 'operator' && (
-                  <AutocompleteFromQuery
-                    query={GET_PEOPLE}
-                    where={{}}
-                    take={10}
-                    skip={0}
-                    orderBy={[]}
-                    onClose={(values) => {
-                      handleChangeConfirm('operator')(values);
-                      handleClick()();
-                    }}
-                    getOptionLabel={(option) =>
-                      `${option.givenName} ${option.familyName}`
-                    }
-                    renderOptionProps={(option, selected) => ({
-                      primary: option.givenName,
-                      secondary: option.familyName,
-                      selected,
-                    })}
-                  />
-                )}
-              </Stack>
-            </ClickAwayListener>
-          </Popper>
         </>
       )}
     </>

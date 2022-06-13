@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import ProgressCircular from '../../design-system/progress-circular';
 import { isEmpty } from 'lodash';
-import { useStore } from './context/useStore';
+import { useStore } from '../context/useStore';
 import { useCallback, useState } from 'react';
 import PopperSectionTitle from './popper-section-title';
 import PopperList from './popper-list';
@@ -65,6 +65,7 @@ function PopperSelectFromDb(props) {
           fullWidth
           sx={{ mb: 1, pt: 1, px: 2 }}
         />
+        <Divider />
         <PopperSectionTitle>
           {seachInput ? 'Résultats' : 'Récents'}
         </PopperSectionTitle>

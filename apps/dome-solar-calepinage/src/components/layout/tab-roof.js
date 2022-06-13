@@ -1,5 +1,5 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
-import { useStore } from '../context/useStore';
+import { useStore } from '../../context/useStore';
 import { isEmpty } from 'lodash';
 import {
   Box,
@@ -15,11 +15,11 @@ import {
 import { observer } from 'mobx-react';
 import PopperList from '../popper-list';
 import RoofingIcon from '@mui/icons-material/Roofing';
-import FielGroup from '../field-group';
+import FielInput from '../dots-system/components/field-input';
 import { useCallback } from 'react';
 import TabPopperChangeButton from './tab-popper-change-button';
 import toast from 'react-hot-toast';
-import FieldGroupContainer from './field-group-container';
+import FieldGroupContainer from '../dots-system/components/field-group-container';
 import AddIcon from '@mui/icons-material/Add';
 
 const GET_ROOF = gql`
@@ -187,60 +187,60 @@ const TabRoof = (props) => {
       {!isEmpty(project) && !isEmpty(roof) && (
         <>
           <FieldGroupContainer>
-            <FielGroup
+            <FielInput
               label={'Name'}
               value={roof.name}
               onConfirm={handleChangeConfirm('name')}
             />
-            <FielGroup
+            <FielInput
               label={'Typology'}
               type="list"
               value={roof.roofTypology}
               onConfirm={handleChangeConfirm('typology')}
             />
-            <FielGroup
+            <FielInput
               label={'Hauteur'}
               type="dimension"
               value={roof.lengthX}
               onConfirm={handleChangeConfirm('lengthX')}
             />
-            <FielGroup
+            <FielInput
               label={'Largeur'}
               type="dimension"
               value={roof.lengthY}
               onConfirm={handleChangeConfirm('lengthY')}
             />
-            <FielGroup
+            <FielInput
               label={'Type de panne'}
               type="list"
               value={roof.purlinType}
               onConfirm={handleChangeConfirm('purlinType')}
             />
-            <FielGroup
+            <FielInput
               label={'Entre axes'}
               type="dimension"
               value={roof.purlinBetweenAxis}
               onConfirm={handleChangeConfirm('purlinBetweenAxis')}
             />
-            <FielGroup
+            <FielInput
               label={'Epaisseur des pannes'}
               type="dimension"
               value={roof.purlinThickness}
               onConfirm={handleChangeConfirm('purlinThickness')}
             />
-            <FielGroup
+            <FielInput
               label={'Pente'}
               type="dimension"
               value={roof.incline}
               onConfirm={handleChangeConfirm('incline')}
             />
-            <FielGroup
+            <FielInput
               label={'Hauteur de crête'}
               type="dimension"
               value={roof.ridgeHeight}
               onConfirm={handleChangeConfirm('ridgeHeight')}
             />
-            <FielGroup
+            <FielInput
               label={'Bac acier'}
               icon={<RoofingIcon />}
               value={roof?.cladding?.name}

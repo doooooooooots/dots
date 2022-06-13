@@ -1,7 +1,9 @@
-export { default as DialogProvider } from './dialog-provider';
+export * from './use-autocomplete';
 export * from './settings-provider';
+
+export { default as DialogProvider } from './dialog-provider';
 export { default as SettingsProvider } from './settings-provider';
-//
+
 export { default as useAsync } from './use-async';
 export { default as useDatagrid } from './use-datagrid';
 export { default as useDialog } from './use-dialog';

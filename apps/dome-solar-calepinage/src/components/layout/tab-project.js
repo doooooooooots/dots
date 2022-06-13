@@ -3,16 +3,18 @@ import { gql, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { People } from '@mui/icons-material';
 import { PAGE_PROJECT } from '../../constants/constants';
-import { useStore } from '../context/useStore';
+import { useStore } from '../../context/useStore';
 import { isEmpty } from 'lodash';
 import PopperSelectFromDb from '../popper-select-from-db';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import Tag from '../tag';
-import FielGroup from '../field-group';
+import FielInput from '../dots-system/components/field-input';
 import { observer } from 'mobx-react';
 import TabPopperChangeButton from './tab-popper-change-button';
 import toast from 'react-hot-toast';
-import FieldGroupContainer from './field-group-container';
+import FieldGroupContainer from '../dots-system/components/field-group-container';
+import FieldSelect from '../dots-system/components/field-select';
+import FieldLink from '../dots-system/components/field-link';
 
 const GET_PROJECTS = gql`
   query GetProjects {
@@ -116,73 +118,108 @@ const TabProject = (props) => {
       ) : (
         <>
           <FieldGroupContainer>
-            <FielGroup
-              icon={<EventNoteOutlinedIcon />}
+            <FielInput
+              icon={EventNoteOutlinedIcon}
               label={'Ref'}
-              value={<Tag type="ref">{project.identifier}</Tag>}
-              onConfirm={handleChangeConfirm('dateReception')}
+              value={project.identifier}
+              renderValue={(value) => <Tag type="ref">{value}</Tag>}
               readOnly
             />
-            <FielGroup
-              icon={<EventNoteOutlinedIcon />}
+            <FielInput
+              icon={EventNoteOutlinedIcon}
               label={'Step'}
-              value={<Tag type="step">{project.step}</Tag>}
-              onConfirm={handleChangeConfirm('dateReception')}
-              readOnly
+              value={project.step}
+              renderValue={(value) => <Tag type="step">{value}</Tag>}
+              onConfirm={handleChangeConfirm('Step')}
             />
-            <FielGroup
-              icon={<EventNoteOutlinedIcon />}
+            <FielInput
+              icon={EventNoteOutlinedIcon}
               label={'Emergency'}
-              value={<Tag type="emergency" />}
-              onConfirm={handleChangeConfirm('dateReception')}
-              readOnly
+              value={project.emergency}
+              renderValue={(value) => <Tag type="emergency" />}
+              onConfirm={handleChangeConfirm('Emergency')}
             />
-            <FielGroup
+            <FielInput
               label={'Date de réception'}
               type="date"
               value={new Date(project.dateReception).toLocaleDateString('fr')}
               onConfirm={handleChangeConfirm('dateReception')}
             />
-            <FielGroup
+            <FielInput
               label={'Date de livraison'}
               type="date"
               value={new Date(project.dateDelivery).toLocaleDateString('fr')}
               onConfirm={handleChangeConfirm('dateDelivery')}
             />
-            <FielGroup
+            <FielInput
               label={'Area field'}
               value={project.areaField}
               type="number"
               onConfirm={handleChangeConfirm('areaField')}
             />
-            <FielGroup
+            <FielInput
               label={'Area snow'}
               value={project.areaSnow}
               type="number"
               onConfirm={handleChangeConfirm('areaSnow')}
             />
-            <FielGroup
+            <FielInput
               label={'Area sea'}
               value={project.areaSea}
               type="number"
               onConfirm={handleChangeConfirm('areaSea')}
             />
-            <FielGroup
+            <FielInput
               label={'Area wind'}
               value={project.areaWind}
               type="number"
               onConfirm={handleChangeConfirm('areaWind')}
             />
-            <FielGroup
+            <FielInput
               label={'Altitude'}
               value={project.altitude}
               type="dimension"
               onConfirm={handleChangeConfirm('altitude')}
             />
-            <FielGroup
-              icon={<EventNoteOutlinedIcon />}
+            <FielInput
+              icon={EventNoteOutlinedIcon}
               label={'Client'}
               value={project.customer?.name}
+              readOnly
+            />
+            <FieldLink
+              icon={EventNoteOutlinedIcon}
+              label={'Link'}
+              query={'person'}
+              fields={['id', 'givenName', 'familyName']}
+              filterAttributes={['givenName', 'familyName']}
+              getOptionLabel={(option) =>
+                `${option.givenName} ${option.familyName}`
+              }
+              value={project.customer?.name}
+              readOnly
+              multiple
+            />
+            <FieldSelect
+              icon={EventNoteOutlinedIcon}
+              label={'Client'}
+              value={'ham'}
+              options={[
+                'ham',
+                'stram',
+                'gram',
+                'pick',
+                'etpick',
+                'a',
+                'z',
+                'e',
+                'r',
+                't',
+                'y',
+                'u',
+                'i',
+              ]}
+              onConfirm={(value) => console.log(value)}
               readOnly
             />
           </FieldGroupContainer>

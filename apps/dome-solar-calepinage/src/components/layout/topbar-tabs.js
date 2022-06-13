@@ -30,15 +30,15 @@ import PopperGrow from '../../../design-system/popper-grow';
 
 // Hooks
 import { useAuth } from '../../hooks/use-auth';
-import { useStore } from '../context/useStore';
+import { useStore } from '../../context/useStore';
 import { useRouter } from 'next/router';
 
 //Utils
 import { isEmpty } from 'lodash';
 import { observer } from 'mobx-react-lite';
 import { toast } from 'react-hot-toast';
-import Kbd from '../kbd';
 import { useKey } from 'react-use';
+import Kbd from '../design-system/kbd/kbd';
 
 const id = 'transition-popper';
 
