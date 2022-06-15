@@ -17,7 +17,7 @@ import {
   Select,
   Stack,
 } from '@mui/material';
-import { useStore } from '../context/useStore';
+import { useStore } from '../contexts/useStore';
 
 const TAGS = {
   vis: {

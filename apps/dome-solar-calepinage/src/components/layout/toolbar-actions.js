@@ -1,6 +1,6 @@
 import React from 'react';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 import VerticalAlignCenterIcon from '@mui/icons-material/VerticalAlignCenter';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';

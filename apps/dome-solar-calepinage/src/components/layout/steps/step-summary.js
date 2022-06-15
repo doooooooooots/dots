@@ -11,7 +11,7 @@ import {
   FormControlLabel,
 } from '@mui/material';
 import { useState } from 'react';
-import { useStore } from '../../../context/useStore';
+import { useStore } from '../../../contexts/useStore';
 import StepSummaryQuantitative from './summary/step-summary-quantitative';
 
 const slideProps = {

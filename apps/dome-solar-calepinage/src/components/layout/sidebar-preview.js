@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Stack, Button, Divider } from '@mui/material';
 import SaveIcon from '@mui/icons-material/SaveOutlined';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackOutlined';
 
 function SidePreview() {

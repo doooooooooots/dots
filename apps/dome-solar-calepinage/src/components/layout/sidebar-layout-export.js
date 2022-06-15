@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stack, Button, Divider, Alert } from '@mui/material';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';

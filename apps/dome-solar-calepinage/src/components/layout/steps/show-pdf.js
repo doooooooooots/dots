@@ -3,7 +3,7 @@ import { usePDF, PDFViewer } from '@react-pdf/renderer';
 import { useEffect, useMemo, useState } from 'react';
 import { format } from 'date-fns';
 import PdfLayoutTemplate from '../pdf/pdf-layout-template';
-import { useStore } from '../../../context/useStore';
+import { useStore } from '../../../contexts/useStore';
 // import { addNewMediaTo } from '../../slices/media-object-slice';
 
 export default function StepPreview() {

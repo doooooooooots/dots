@@ -1,18 +1,28 @@
 import { Dispatch, SetStateAction, useCallback, useState } from 'react';
+import { isEmpty } from 'lodash';
 
-function useInput({
-  type,
-  defaultValue,
-}: {
+function useInput(config: {
+  name: string;
   type: string;
-  defaultValue?: unknown;
+  multiple: boolean;
+  initialValue: unknown[] | string | number | null;
 }) {
+  const {
+    name,
+    type = 'string',
+    multiple = false,
+    initialValue = null,
+  } = config;
+
   const [input, setInput] = useState(
-    defaultValue ?? type === 'number' ? null : ''
-  ) as [string | null, Dispatch<SetStateAction<string | null | number>>];
+    initialValue ?? type === 'number' ? null : ''
+  ) as [
+    any[] | string | null,
+    Dispatch<SetStateAction<typeof config.initialValue>>
+  ];
 
   const handleChange = useCallback(
-    (_, newValue) => {
+    (newValue) => {
       if (type === 'number') {
         if (newValue !== null) {
           setInput(parseInt(newValue, 10));
@@ -24,29 +34,72 @@ function useInput({
     [type]
   );
 
-  const handleChangeEvent = useCallback(
-    (event) => {
-      const newValue = event.target.value;
-      if (type === 'number') {
-        if (newValue !== null) {
-          setInput(parseInt(newValue, 10));
-        }
-      } else {
-        setInput(newValue);
-      }
+  const handleChangeSelect = useCallback(
+    (_, newValue) => {
+      handleChange(newValue);
     },
-    [type]
+    [handleChange]
+  );
+
+  const handleChangeClick = useCallback(
+    (event) => {
+      handleChange(event.target.value);
+    },
+    [handleChange]
   );
 
   const handleReset = useCallback(() => {
     setInput('');
   }, []);
 
+  const handleChangeList = useCallback(
+    (submitFunc) => (event: any, newValue: any, reason: string) => {
+      if (
+        event.type === 'keydown' &&
+        event.key === 'Backspace' &&
+        reason === 'removeOption'
+      ) {
+        return;
+      }
+
+      let _newValue;
+
+      if (isEmpty(newValue)) _newValue = [];
+      else _newValue = multiple ? newValue : [newValue.pop()];
+      setInput(_newValue);
+
+      if (typeof submitFunc === 'function') {
+        if (!multiple && !isEmpty(_newValue)) {
+          submitFunc(_newValue.pop());
+        }
+      }
+    },
+    [multiple]
+  );
+
+  const handleDeleteList = useCallback(
+    (id) => () => {
+      setInput((current) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const _current = [...(current as any[])];
+        const elem = _current.find((item) => item.id === id);
+        const index = _current.indexOf(elem);
+        _current.splice(index, 1);
+        return _current;
+      });
+    },
+    []
+  );
+
   return {
+    id: `${name}-input-field`,
     input,
     setInput,
     onChange: handleChange,
-    onChangeEvent: handleChangeEvent,
+    onChangeSelect: handleChangeSelect,
+    onChangeClick: handleChangeClick,
+    onChangeList: handleChangeList,
+    onDeleteList: handleDeleteList,
     onReset: handleReset,
   };
 }

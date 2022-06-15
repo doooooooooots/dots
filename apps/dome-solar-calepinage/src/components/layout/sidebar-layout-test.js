@@ -9,7 +9,7 @@ import {
   Divider,
 } from '@mui/material';
 import { observer } from 'mobx-react';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 import { gql, useLazyQuery } from '@apollo/client';
 import { Box } from '@mui/system';
 import { isEmpty } from 'lodash';

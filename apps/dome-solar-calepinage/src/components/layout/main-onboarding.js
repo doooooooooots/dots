@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Stack, Typography, Box, Button } from '@mui/material';
 import { observer } from 'mobx-react';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 
 function MainOnboarding() {
   const store = useStore();

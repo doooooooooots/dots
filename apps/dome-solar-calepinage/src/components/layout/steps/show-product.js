@@ -5,7 +5,7 @@ import { observer } from 'mobx-react';
 import { Fields } from '../../../components/entity/molecules/form';
 import ActionRow from '../../../components/layouts/form/ActionRow';
 import { DrawerContentSource } from '../../../components/teleporters/DrawerContent';
-import { useStore } from '../../../context/useStore';
+import { useStore } from '../../../contexts/useStore';
 import Canvas from '../canvas/canvas';
 import Module from '../../module';
 import StepDrawerContainer from './_trash/StepDrawerContainer';

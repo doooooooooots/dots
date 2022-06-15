@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import { useQuery } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import PopperInput from '../popper/popper-input';
-import SelectItemOption from '../list-item/list-item-option';
+import SelectItemOption from '../../dots-system/components/list-item/list-item-option';
 import AutocompletePopper from './autocomplete-popper';
 
 export default function AutocompleteFromQuery(props) {

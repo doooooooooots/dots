@@ -1,5 +1,5 @@
 import React from 'react';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 import StepSummary from './steps/step-summary';
 import RenderActionOverlay from '../render-action-overlay';
 import StepShowPdf from './steps/show-pdf';

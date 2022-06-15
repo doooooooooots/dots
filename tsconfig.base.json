@@ -21,6 +21,7 @@
       "@dots.cool/dots-system": ["libs/dots-system/src/index.ts"],
       "@dots.cool/form-builder": ["libs/form-builder/src/index.ts"],
       "@dots.cool/hooks": ["libs/hooks/src/index.ts"],
+      "@dots.cool/render": ["libs/render/src/index.ts"],
       "@dots.cool/schemas": ["libs/schemas/src/index.ts"],
       "@dots.cool/theme": ["libs/theme/src/index.ts"],
       "@dots.cool/tokens": ["libs/tokens/src/index.ts"],

@@ -7,7 +7,7 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import SaveIcon from '@mui/icons-material/Save';
 
 import { isEmpty } from 'lodash';
-import { useStore } from '../../../../context/useStore';
+import { useStore } from '../../../../contexts/useStore';
 
 export default function StepButtons(props) {
   const { onNext, disabled } = props;

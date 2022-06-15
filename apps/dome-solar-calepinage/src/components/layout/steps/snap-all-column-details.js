@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
-import { useStore } from '../../../context/useStore';
+import { useStore } from '../../../contexts/useStore';
 import Canvas from '../canvas/canvas';
 import Roof from '../canvas/roof';
 

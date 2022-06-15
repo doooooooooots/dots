@@ -3,7 +3,7 @@ import { Button, Grid, TextField } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { createOneBuilder } from '@dots.cool/schemas';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 import SectionTitle from '../atoms/section-title';
 
 const CREATE_SOLAR_MODULE = createOneBuilder('solarModule')('id');

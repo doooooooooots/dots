@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import { observer } from 'mobx-react';
-import { useStore } from '../../../context/useStore';
+import { useStore } from '../../../contexts/useStore';
 
 const InputCheckbox = (props) => {
   const { element } = props;

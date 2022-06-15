@@ -50,7 +50,7 @@ function PopperGrow(props) {
       }}
     >
       {({ TransitionProps }) => (
-        <ClickAwayListener onClickAway={onClose}>
+        <ClickAwayListener onClickAway={onClose} mouseEvent="onMouseDown">
           <Grow direction="left" {...TransitionProps} timeout={timeout}>
             <Box pt={1.4}>
               <Box

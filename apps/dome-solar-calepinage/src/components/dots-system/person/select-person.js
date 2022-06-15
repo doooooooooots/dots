@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash';
-import SelectItemOption from '../../design-system/list-item/list-item-option';
+import SelectItemOption from '../components/list-item/list-item-option';
 import {
   Avatar,
   AvatarGroup,

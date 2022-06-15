@@ -3,20 +3,10 @@ import { isArray, isEmpty } from 'lodash';
 
 import useInput from '../use-input/use-input';
 
-import {
-  usePopupState,
-  bindToggle,
-  bindTrigger,
-  bindPopover,
-  bindPopper,
-  Variant,
-} from 'material-ui-popup-state/hooks';
-
 function useAutocomplete(config: {
   id: string;
   name: string;
   type: string;
-  variant: Variant;
   multiple: boolean;
   value: string | number | null;
 }) {
@@ -25,16 +15,8 @@ function useAutocomplete(config: {
     name,
     value: _value = null,
     type = 'string',
-    variant = 'popper',
     multiple = false,
   } = config;
-
-  const popupState = usePopupState({
-    variant,
-    popupId: `${variant}-select-${name}`,
-  });
-  const { anchorEl, open, close, isOpen } = popupState;
-  const { onClick } = bindToggle(popupState);
 
   //* States
   const {
@@ -63,10 +45,20 @@ function useAutocomplete(config: {
   );
 
   /**
-   * User clicks on an element of the list
+   * User cancels his selection
+   */
+  const handleCancel = useCallback(
+    (_, reason) => {
+      close();
+    },
+    [close]
+  );
+
+  /**
+   * Render value for user
    */
   const handleChange = useCallback(
-    (event, newValue, reason) => {
+    (submitFunc) => (event: any, newValue: any, reason: string) => {
       if (
         event.type === 'keydown' &&
         event.key === 'Backspace' &&
@@ -76,28 +68,25 @@ function useAutocomplete(config: {
       }
 
       let _newValue;
-      if (isEmpty(newValue)) _newValue = [];
-      else
-        _newValue = multiple
-          ? newValue
-          : newValue.length === 1
-          ? newValue
-          : [newValue[1]];
 
+      if (isEmpty(newValue)) _newValue = [];
+      else _newValue = multiple ? newValue : [newValue.pop()];
       setPendingValue(_newValue);
+
+      if (typeof submitFunc === 'function') {
+        if (!multiple && !isEmpty(_newValue)) {
+          submitFunc(_newValue.pop());
+          close();
+        }
+      }
     },
-    [multiple]
+    [close, multiple]
   );
 
   /**
-   * User cancels his selection
+   * User clicks on an element of the list
    */
-  const handleCancel = useCallback(
-    (_, reason) => {
-      close();
-    },
-    [close]
-  );
+  const onChange = handleChange(null);
 
   /**
    * Render value for user
@@ -122,9 +111,11 @@ function useAutocomplete(config: {
    * User clicks on delete in selected element list
    */
   const handleDelete = useCallback(
-    (index) => () => {
+    (id) => () => {
       setPendingValue((current) => {
         const _current = [...current];
+        const elem = _current.find((item) => item.id === id);
+        const index = _current.indexOf(elem);
         _current.splice(index, 1);
         return _current;
       });
@@ -136,22 +127,18 @@ function useAutocomplete(config: {
     id,
     // pending value
     pendingValue,
-    onChange: handleChange,
+    onChange: onChange,
     onCancel: handleCancel,
     onDelete: handleDelete,
     onClear: onReset,
     handleSubmit,
+    handleChange,
     // user input
     inputValue,
     onInputChange: handleInputChange,
     // local value
     value,
     // popper
-    anchorEl,
-    popupState,
-    isOpen,
-    open,
-    close,
     onButtonClick: handleOpen,
     // utils & config
     multiple,
@@ -159,4 +146,3 @@ function useAutocomplete(config: {
 }
 
 export default useAutocomplete;
-export { bindToggle, bindTrigger, bindPopover, bindPopper };

@@ -3,7 +3,7 @@ import { Button, Grid, MenuItem, Select, TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { createOneBuilder } from '@dots.cool/schemas';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 import SectionTitle from '../atoms/section-title';
 import { STATUS_OPTIONS } from '../../constants/constants';
 

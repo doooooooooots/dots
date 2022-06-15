@@ -30,7 +30,7 @@ import PopperGrow from '../../../design-system/popper-grow';
 
 // Hooks
 import { useAuth } from '../../hooks/use-auth';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 import { useRouter } from 'next/router';
 
 //Utils

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stack } from '@mui/material';
 
-function FieldGroupContainer(props) {
+function FieldContainer(props) {
   const { children } = props;
   return (
     <Stack
@@ -17,4 +17,4 @@ function FieldGroupContainer(props) {
   );
 }
 
-export default FieldGroupContainer;
+export default FieldContainer;

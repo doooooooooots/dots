@@ -21,7 +21,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/EditOutlined';
 import { observer } from 'mobx-react';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 import List from '../../../design-system/list';
 import FenceIcon from '@mui/icons-material/Fence';
 import { toast } from 'react-hot-toast';

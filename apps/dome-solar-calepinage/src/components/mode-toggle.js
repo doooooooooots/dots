@@ -5,7 +5,7 @@ import MouseOutlinedIcon from '@mui/icons-material/MouseOutlined';
 import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
 import ToggleButton from '@mui/material/ToggleButton';
 import { observer } from 'mobx-react';
-import { useStore } from '../context/useStore';
+import { useStore } from '../contexts/useStore';
 
 const ModeToggle = (props) => {
   const store = useStore();

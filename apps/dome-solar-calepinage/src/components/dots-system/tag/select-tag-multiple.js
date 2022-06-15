@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash';
 import ColorDotGroup from '../../design-system/icons/color-dot/color-dot-group';
 import ColorDot from '../../design-system/icons/color-dot/color-dot';
 import TagIcon from './icon';
-import SelectItemOption from '../../design-system/list-item/list-item-option';
+import SelectItemOption from '../components/list-item/list-item-option';
 import { Stack } from '@mui/material';
 import ItemTag from './item';
 import { labels } from './labels';

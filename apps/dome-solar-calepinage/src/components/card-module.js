@@ -3,7 +3,7 @@ import { Box, Typography, IconButton, Stack } from '@mui/material';
 import React from 'react';
 import PowerSettingsNewOutlinedIcon from '@mui/icons-material/PowerSettingsNewOutlined';
 import { observer } from 'mobx-react';
-import { useStore } from '../context/useStore';
+import { useStore } from '../contexts/useStore';
 
 const CardModule = (props) => {
   const { moduleIndex } = props;

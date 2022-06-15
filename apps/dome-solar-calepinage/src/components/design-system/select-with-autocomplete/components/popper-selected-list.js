@@ -6,18 +6,19 @@ import {
   IconButton,
   TextField,
 } from '@mui/material';
-import PopperList from './popper-list';
 import { isEmpty } from 'lodash';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
-import { useAutocomplete } from '../hooks/use-autocomplete';
+import PopperList from '../../popper/popper-list';
+import { matchSorter } from 'match-sorter';
+import NoResult from '../../screens/no-result';
 
 const SelectionTitle = (props) => {
-  const { onClick } = props;
+  const { count, onClick } = props;
   return (
     <>
       <Typography variant="subtitle" textTransform="uppercase">
-        Selection
+        {`Selection (${count})`}
       </Typography>
       <IconButton size="small" onClick={onClick}>
         <SearchIcon fontSize="small" />
@@ -47,20 +48,21 @@ const SelectionSearch = (props) => {
 };
 
 function PopperSelectedList(props) {
-  const { pendingValue, filterPreview, renderOption } = props;
+  const { pendingValue, filterAttributes, renderOption, onDelete } = props;
 
   const [search, setSearch] = useState(false);
   const [input, setInput] = useState('');
-
-  const { onDelete } = useAutocomplete();
 
   const handleChange = (e) => {
     setInput(e.target.value);
   };
 
   const _pendingValue = useMemo(() => {
-    return filterPreview(pendingValue, input);
-  }, [filterPreview, pendingValue, input]);
+    if (!input) return pendingValue;
+    return matchSorter(pendingValue, input, {
+      keys: filterAttributes,
+    });
+  }, [pendingValue, input, filterAttributes]);
 
   return (
     <>
@@ -77,10 +79,16 @@ function PopperSelectedList(props) {
           <SelectionSearch
             input={input}
             onChange={handleChange}
-            onClick={() => setSearch(false)}
+            onClick={() => {
+              setSearch(false);
+              setInput('');
+            }}
           />
         ) : (
-          <SelectionTitle onClick={() => setSearch(true)} />
+          <SelectionTitle
+            onClick={() => setSearch(true)}
+            count={pendingValue.length}
+          />
         )}
       </Stack>
       <Divider />
@@ -88,15 +96,23 @@ function PopperSelectedList(props) {
         {!isEmpty(_pendingValue) ? (
           <>
             {_pendingValue.map((item, index) =>
-              renderOption(item, { onDelete: onDelete(index) })
+              renderOption(
+                { onDelete: onDelete(item.id), key: item.id },
+                item,
+                {
+                  selected: true,
+                }
+              )
             )}
           </>
         ) : (
           <Stack p={2} justifyContent="center" height="100%">
             <Typography variant="h6" textAlign="center">
-              {pendingValue
-                ? "Vous n'avez pas encore fait de sélection"
-                : 'Erf'}
+              {isEmpty(pendingValue) ? (
+                "Vous n'avez pas encore fait de sélection"
+              ) : (
+                <NoResult />
+              )}
             </Typography>
           </Stack>
         )}

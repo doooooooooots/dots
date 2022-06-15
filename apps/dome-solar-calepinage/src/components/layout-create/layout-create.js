@@ -3,7 +3,7 @@ import { Button, TextField, Grid, Typography, Alert } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { createOneBuilder } from '@dots.cool/schemas';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 
 const CREATE_LAYOUT = createOneBuilder('layout')('id');
 

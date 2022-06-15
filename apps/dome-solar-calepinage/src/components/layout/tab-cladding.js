@@ -3,12 +3,12 @@ import { gql, useMutation } from '@apollo/client';
 import PopperSelectFromDb from '../popper-select-from-db';
 import CalendarViewWeekOutlined from '@mui/icons-material/CalendarViewWeekOutlined';
 import { PAGE_CLADDING } from '../../constants/constants';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 import { isEmpty } from 'lodash';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import TabPopperChangeButton from './tab-popper-change-button';
 import toast from 'react-hot-toast';
-import FieldGroupContainer from '../dots-system/components/field-group-container';
+import FieldGroupContainer from '../dots-system/components/field-container';
 import FielInput from '../dots-system/components/field-input';
 
 const GET_CLADDINGS = gql`

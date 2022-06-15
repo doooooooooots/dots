@@ -7,7 +7,7 @@ import InputSelect from '../../input-select';
 import InputCheckbox from '../design-system/form/input-checkbox';
 import InputString from '../../input-string';
 import * as Rows from '../../../components/layouts/form/rows';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 
 const Container = ({ variant, ...other }) => {
   switch (variant) {

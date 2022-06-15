@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
-import { useStore } from '../../../context/useStore';
+import { useStore } from '../../../contexts/useStore';
 import Canvas from '../canvas/canvas';
 import Cover from '../canvas/cover';
 

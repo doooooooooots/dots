@@ -19,7 +19,7 @@ import {
   AppBarLeftSource,
   AppBarRightSource,
 } from '../../components/teleporters/AppBarTeleporter';
-import { useStore } from '../context/useStore';
+import { useStore } from '../contexts/useStore';
 import * as actionsBdd from '../../libraries/actions';
 import BtnBack from '../../components/atoms/buttons/ButtonBack';
 import StepPreview from './layout/steps/show-pdf';

@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 const SelectItemOption = (props) => {
   const {
     title,
-    icon,
+    Icon,
     description,
     selected,
     tooltip,
@@ -49,15 +49,15 @@ const SelectItemOption = (props) => {
           }}
         />
       )}
-      {icon && typeof icon === 'function' ? (
-        <Box component={icon} sx={{ width: 17, height: 17, mr: '1' }} />
-      ) : (
-        icon
-      )}
+      {Boolean(Icon) && Icon}
       <Box
         sx={{
           flexGrow: 1,
           ml: 1,
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          width: '100%',
           '& span': {
             color: theme.palette.text.secondary,
           },
@@ -67,7 +67,7 @@ const SelectItemOption = (props) => {
         {description && (
           <>
             <br />
-            <span>{description}</span>
+            <Box component="span">{description}</Box>
           </>
         )}
       </Box>
@@ -97,5 +97,13 @@ const SelectItemOption = (props) => {
   }
   return RenderComponent;
 };
+
+SelectItemOption.bindProps = (getters, option, state) => ({
+  Icon: getters.avatar(option),
+  title: getters.primary(option),
+  description: getters.secondary(option),
+  tooltip: getters.info(option),
+  selected: state.selected,
+});
 
 export default SelectItemOption;

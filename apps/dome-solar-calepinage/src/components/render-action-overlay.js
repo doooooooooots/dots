@@ -1,6 +1,6 @@
 import React from 'react';
 import { alpha, Box, Stack, Typography, Button } from '@mui/material';
-import { useStore } from '../context/useStore';
+import { useStore } from '../contexts/useStore';
 import { useFormContext } from 'react-hook-form';
 import { SIDEBAR_WIDTH } from '../constants/constants';
 

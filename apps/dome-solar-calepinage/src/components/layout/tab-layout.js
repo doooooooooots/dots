@@ -1,5 +1,5 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 import { isEmpty } from 'lodash';
 import {
   Box,
@@ -20,7 +20,7 @@ import FielInput from '../dots-system/components/field-input';
 import { useCallback, useState } from 'react';
 import TabPopperChangeButton from './tab-popper-change-button';
 import toast from 'react-hot-toast';
-import FieldGroupContainer from '../dots-system/components/field-group-container';
+import FieldGroupContainer from '../dots-system/components/field-container';
 import AddIcon from '@mui/icons-material/Add';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import FieldSelect from '../dots-system/components/field-select';

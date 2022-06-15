@@ -11,7 +11,7 @@ import {
   updateEntity,
 } from '../../../slices/entity-slice';
 import { useSelector } from '../../store/store';
-import { useStore } from '../../../../context/useStore';
+import { useStore } from '../../../../contexts/useStore';
 import Form from '../../form';
 import ActionRow from '../../../components/layouts/form/ActionRow';
 import { Fields } from '../../../components/entity/molecules/form';

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 import {
   Button,
   Divider,

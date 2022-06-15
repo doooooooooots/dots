@@ -52,6 +52,7 @@ const searchManyBuilder =
         orderBy: $orderBy,
         where: ${_where}
       ) {
+        id
         ${query}
       }
       count: ${plurial}Count(where: ${_where})

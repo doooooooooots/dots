@@ -1,7 +1,7 @@
 import React from 'react';
 import { Divider, IconButton, Stack, Box } from '@mui/material';
 import { observer } from 'mobx-react';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 import AspectRatioOutlinedIcon from '@mui/icons-material/AspectRatioOutlined';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import ToolbarSelection from './toolbar-selection';

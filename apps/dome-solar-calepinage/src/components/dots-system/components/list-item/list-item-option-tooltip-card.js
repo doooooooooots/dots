@@ -9,4 +9,12 @@ const SelectItemOptionTooltipCard = (props) => {
   );
 };
 
+SelectItemOptionTooltipCard.bindProps = (getters, option, state) => ({
+  Icon: getters.avatar(option),
+  title: getters.primary(option),
+  description: getters.secondary(option),
+  tooltip: getters.info(option),
+  selected: state.selected,
+});
+
 export default SelectItemOptionTooltipCard;

@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import { Dialog, Grid, Box, Stack, Typography, Button } from '@mui/material';
 import Toolbar from '../../src/components/layout/toolbar';
 import TopBar from '../../src/components/layout/topbar-tabs';
-import { useStore } from '../../src/context/useStore';
+import { useStore } from '../../src/contexts/useStore';
 import {
   PAGE_PROJECT,
   SIDEBAR_WIDTH,

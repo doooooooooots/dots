@@ -1,7 +1,7 @@
 import { Rect } from '@react-pdf/renderer';
 import React, { useRef } from 'react';
 import { Group, Layer, Stage } from 'react-konva';
-import { useStore } from '../context/useStore';
+import { useStore } from '../contexts/useStore';
 import Contour from './layout/canvas/contour';
 import Module from './module';
 

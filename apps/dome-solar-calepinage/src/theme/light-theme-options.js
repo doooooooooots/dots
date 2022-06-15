@@ -125,7 +125,7 @@ const text = {
 };
 const background = {
   default: common.white,
-  paper: grey[50],
+  paper: common.white,
 };
 
 const divider = grey[75];
@@ -146,8 +146,8 @@ const neutral = {
   main: grey[300],
   dark: grey[500],
   contrastText: text.primary,
-  background: grey[50],
-  hover: grey[100],
+  background: grey[25],
+  hover: grey[75],
   ...grey,
 };
 const primary = {

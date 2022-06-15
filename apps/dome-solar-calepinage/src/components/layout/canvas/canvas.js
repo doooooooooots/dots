@@ -3,7 +3,7 @@ import { debounce, isEmpty } from 'lodash';
 import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { Stage, Layer, Group, Rect } from 'react-konva';
-import { useStore } from '../../../context/useStore';
+import { useStore } from '../../../contexts/useStore';
 import Markup from './markup';
 import { Box } from '@mui/material';
 

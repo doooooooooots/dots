@@ -6,7 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider } from '@emotion/react';
 import { createTheme } from '../src/theme';
 import createEmotionCache from '../src/lib/create-emotion-cache';
-import { StoreProvider } from '../src/context/useStore';
+import { StoreProvider } from '../src/contexts/useStore';
 import frLocale from 'date-fns/locale/fr';
 
 // Apollo
@@ -17,6 +17,10 @@ import { SplashScreen } from '../src/components/design-system/screens/splash-scr
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Toaster } from 'react-hot-toast';
+import { DotsProvider } from '../src/components/dots-system/context/dots-context';
+import createSchema from '../src/components/dots-system/schema/create-schema';
+import Person from '../src/components/dots-system/schema/person';
+import Project from '../src/components/dots-system/schema/project';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -25,6 +29,11 @@ const theme = createTheme({
   direction: 'ltr',
   responsiveFontSizes: true,
   mode: 'light',
+});
+
+const schema = createSchema({
+  Person,
+  Project,
 });
 
 export default function MyApp(props) {
@@ -39,41 +48,43 @@ export default function MyApp(props) {
         dateAdapter={AdapterDateFns}
         adapterLocale={frLocale}
       >
-        <ApolloProvider client={apolloClient}>
-          <AuthProvider>
-            <StoreProvider>
-              <Head>
-                <meta
-                  name="viewport"
-                  content="initial-scale=1, width=device-width"
-                />
-              </Head>
-              <ThemeProvider theme={theme}>
-                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                <CssBaseline />
-                <Toaster
-                  position="bottom-center"
-                  reverseOrder={false}
-                  toastOptions={{
-                    style: {
-                      backgroundColor: theme.palette.background.default,
-                      color: theme.palette.text.primary,
-                    },
-                  }}
-                />
-                <AuthConsumer>
-                  {(auth) =>
-                    !auth.isInitialized ? (
-                      <SplashScreen />
-                    ) : (
-                      getLayout(<Component {...pageProps} />)
-                    )
-                  }
-                </AuthConsumer>
-              </ThemeProvider>
-            </StoreProvider>
-          </AuthProvider>
-        </ApolloProvider>
+        <DotsProvider schema={schema}>
+          <ApolloProvider client={apolloClient}>
+            <AuthProvider>
+              <StoreProvider>
+                <Head>
+                  <meta
+                    name="viewport"
+                    content="initial-scale=1, width=device-width"
+                  />
+                </Head>
+                <ThemeProvider theme={theme}>
+                  {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                  <CssBaseline />
+                  <Toaster
+                    position="bottom-center"
+                    reverseOrder={false}
+                    toastOptions={{
+                      style: {
+                        backgroundColor: theme.palette.background.default,
+                        color: theme.palette.text.primary,
+                      },
+                    }}
+                  />
+                  <AuthConsumer>
+                    {(auth) =>
+                      !auth.isInitialized ? (
+                        <SplashScreen />
+                      ) : (
+                        getLayout(<Component {...pageProps} />)
+                      )
+                    }
+                  </AuthConsumer>
+                </ThemeProvider>
+              </StoreProvider>
+            </AuthProvider>
+          </ApolloProvider>
+        </DotsProvider>
       </LocalizationProvider>
     </CacheProvider>
   );

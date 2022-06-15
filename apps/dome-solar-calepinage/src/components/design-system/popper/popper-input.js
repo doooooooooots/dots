@@ -10,12 +10,18 @@ import {
 import Clear from '@mui/icons-material/Clear';
 
 const PopperInput = (props, ref) => {
-  const { loading, onClear, inputProps, ...other } = props;
+  const { loading, onClear, inputProps, sx = {}, ...other } = props;
   const { value } = inputProps;
   const theme = useTheme();
 
   return (
-    <Stack direction="row" alignItems="center" ref={ref}>
+    <Stack
+      direction="row"
+      alignItems="center"
+      ref={ref}
+      position="relative"
+      sx={sx}
+    >
       <InputBase
         inputProps={inputProps}
         {...other}
@@ -26,7 +32,7 @@ const PopperInput = (props, ref) => {
             borderBottom: 1,
             borderColor: 'divider',
             '& input': {
-              borderRadius: 1,
+              borderRadius: 0.5,
               backgroundColor: 'background.default',
               p: 1,
               pr: 5,

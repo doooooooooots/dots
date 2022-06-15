@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import Canvas from '../canvas/canvas';
 import Cover from '../canvas/cover';
-import { useStore } from '../../../context/useStore';
+import { useStore } from '../../../contexts/useStore';
 
 function StepTemplate() {
   const store = useStore();

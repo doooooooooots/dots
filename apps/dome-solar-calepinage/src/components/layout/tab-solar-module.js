@@ -2,14 +2,14 @@ import { useCallback } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import PopperSelectFromDb from '../popper-select-from-db';
 import SolarPowerOutlined from '@mui/icons-material/SolarPowerOutlined';
-import { useStore } from '../../context/useStore';
+import { useStore } from '../../contexts/useStore';
 import { isEmpty } from 'lodash';
 import { PAGE_SOLAR_MODULE } from '../../constants/constants';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import FielInput from '../dots-system/components/field-input';
 import TabPopperChangeButton from './tab-popper-change-button';
 import toast from 'react-hot-toast';
-import FieldGroupContainer from '../dots-system/components/field-group-container';
+import FieldGroupContainer from '../dots-system/components/field-container';
 
 const GET_SOLAR_MODULES = gql`
   query GetSolarModules($search: String, $take: Int) {
