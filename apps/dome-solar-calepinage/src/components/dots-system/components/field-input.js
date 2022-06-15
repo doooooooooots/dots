@@ -1,5 +1,5 @@
 import React from 'react';
-import Popper from '../../popper-styled';
+import PopperStyled from './field-popper-styled';
 import {
   bindPopper,
   bindToggle,
@@ -15,30 +15,24 @@ function FieldInput(props) {
     variant: 'popper',
     popupId: `${name}-popper-field`,
   });
-  const { isOpen } = popupState;
-  const { onClick, ...toggleProps } = bindToggle(popupState);
+  const { isOpen, close } = popupState;
 
   return (
     <>
-      <FieldInputValue
-        {...toggleProps}
-        onMouseDown={onClick}
-        isOpen={isOpen}
-        sx={sx}
-      >
+      <FieldInputValue {...bindToggle(popupState)} isOpen={isOpen} sx={sx}>
         {value}
       </FieldInputValue>
-      <Popper {...bindPopper(popupState)} placement="bottom-start">
+      <PopperStyled {...bindPopper(popupState)} placement="bottom-start">
         {isOpen && (
           <FieldInputEdit
             id={`${name}-popper-input`}
             type={type}
             value={value}
             onChange={onChange}
-            onClose={onClick}
+            onClose={close}
           />
         )}
-      </Popper>
+      </PopperStyled>
     </>
   );
 }

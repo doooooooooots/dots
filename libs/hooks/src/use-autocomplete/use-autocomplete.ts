@@ -1,8 +1,6 @@
 import { useCallback, useState } from 'react';
 import { isArray, isEmpty } from 'lodash';
 
-import useInput from '../use-input/use-input';
-
 function useAutocomplete(config: {
   id: string;
   name: string;
@@ -19,13 +17,6 @@ function useAutocomplete(config: {
   } = config;
 
   //* States
-  const {
-    input: inputValue,
-    onReset,
-    onChange: handleInputChange,
-  } = useInput({
-    type,
-  });
   const [value, setValue] = useState(
     _value && isArray(_value) ? [..._value] : _value ? [_value] : []
   );
@@ -38,21 +29,16 @@ function useAutocomplete(config: {
   const handleOpen = useCallback(
     (event) => {
       setPendingValue(value);
-      onReset();
-      onClick(event);
     },
-    [value, onReset, onClick]
+    [value]
   );
 
   /**
    * User cancels his selection
    */
-  const handleCancel = useCallback(
-    (_, reason) => {
-      close();
-    },
-    [close]
-  );
+  const handleCancel = useCallback((_, reason) => {
+    console.log(reason);
+  }, []);
 
   /**
    * Render value for user
@@ -76,11 +62,10 @@ function useAutocomplete(config: {
       if (typeof submitFunc === 'function') {
         if (!multiple && !isEmpty(_newValue)) {
           submitFunc(_newValue.pop());
-          close();
         }
       }
     },
-    [close, multiple]
+    [multiple]
   );
 
   /**
@@ -130,12 +115,9 @@ function useAutocomplete(config: {
     onChange: onChange,
     onCancel: handleCancel,
     onDelete: handleDelete,
-    onClear: onReset,
     handleSubmit,
     handleChange,
     // user input
-    inputValue,
-    onInputChange: handleInputChange,
     // local value
     value,
     // popper

@@ -1,12 +1,13 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Dialog, DialogContent, ClickAwayListener } from '@mui/material';
 import PopperNumber from './popper-number';
 import { Box } from '@mui/system';
+import PopperText from './popper-text';
+import PopperDate from './popper-date';
+import PopperLink from './popper-link';
 
 function FieldInputEdit(props) {
   const { type, value, onChange, onClose, askForConfirmation } = props;
-
-  const input = useRef(value);
 
   let PopperContent;
   switch (type) {
@@ -15,29 +16,34 @@ function FieldInputEdit(props) {
       break;
     case 'text':
     default:
-      PopperContent = PopperNumber;
+      PopperContent = PopperText;
       break;
     case 'select':
       PopperContent = PopperNumber;
       break;
+    case 'date':
+      PopperContent = PopperDate;
+      break;
     case 'link':
-      PopperContent = PopperNumber;
+      PopperContent = PopperLink;
       break;
   }
 
   return (
-    <PopperContent value={input} onSubmit={onChange} onCancel={onClose}>
-      {({ submit, cancel, content }) => (
-        <>
-          <ClickAwayListener onClickAway={onClose} mouseEvent={'onMouseDown'}>
-            <Box>{content}</Box>
-          </ClickAwayListener>
-          <Dialog open={false}>
-            <DialogContent>Hello</DialogContent>
-          </Dialog>
-        </>
-      )}
-    </PopperContent>
+    <>
+      <PopperContent value={value} onSubmit={onChange} onCancel={onClose}>
+        {({ submit, cancel, content }) => (
+          <>
+            <ClickAwayListener onClickAway={onClose} mouseEvent={'onMouseDown'}>
+              <Box>{content}</Box>
+            </ClickAwayListener>
+            <Dialog open={false}>
+              <DialogContent>Hello</DialogContent>
+            </Dialog>
+          </>
+        )}
+      </PopperContent>
+    </>
   );
 }
 

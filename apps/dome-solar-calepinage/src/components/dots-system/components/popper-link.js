@@ -1,201 +1,326 @@
+import { useLazyQuery } from '@apollo/client';
+import { useAutocomplete } from '@dots.cool/hooks';
 import {
-  Typography,
+  Autocomplete,
+  autocompleteClasses,
+  Divider,
+  MenuItem,
+  Select,
   Stack,
-  TextField,
-  IconButton,
-  ClickAwayListener,
+  styled,
+  Typography,
 } from '@mui/material';
+import { useCallback, useMemo, useState } from 'react';
+import { useDebounce } from 'react-use';
+import PopperTitle from '../../design-system/popper/popper-title';
+import { useDots } from '../context/dots-context';
+import PopperActions from './popper-actions';
 import { isEmpty } from 'lodash';
-import { useState } from 'react';
-import { Box } from '@mui/system';
+import { searchManyBuilder } from '@dots.cool/schemas';
+import PopperInput from '../../design-system/popper/popper-input';
+import PopperSelectedList from '../../design-system/select-with-autocomplete/components/popper-selected-list';
 
-// Icons
-import AbcIcon from '@mui/icons-material/Abc';
-import PermDataSettingOutlinedIcon from '@mui/icons-material/PermDataSettingOutlined';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
-import Filter1OutlinedIcon from '@mui/icons-material/Filter1Outlined';
-import ListOutlinedIcon from '@mui/icons-material/ListOutlined';
-import CloseIcon from '@mui/icons-material/Close';
-import DoneIcon from '@mui/icons-material/Done';
-import PopperContainer from '../../design-system/popper/popper-container';
+const StyledAutocompletePopper = styled('div')(({ theme }) => ({
+  [`& .${autocompleteClasses.paper}`]: {
+    boxShadow: 'none',
+    margin: 0,
+    color: 'inherit',
+    fontSize: 13,
+  },
+  [`& .${autocompleteClasses.listbox}`]: {
+    backgroundColor: theme.palette.mode === 'light' ? '#fff' : '#1c2128',
+    padding: 0,
+    [`& .${autocompleteClasses.option}`]: {
+      minHeight: 'auto',
+      alignItems: 'flex-start',
+      padding: 8,
+      borderBottom: `1px solid  ${
+        theme.palette.mode === 'light' ? ' #eaecef' : '#30363d'
+      }`,
+      '&[aria-selected="true"]': {
+        backgroundColor: 'transparent',
+      },
+      [`&.${autocompleteClasses.focused}, &.${autocompleteClasses.focused}[aria-selected="true"]`]:
+        {
+          backgroundColor: theme.palette.action.hover,
+        },
+    },
+  },
+  [`&.${autocompleteClasses.popperDisablePortal}`]: {
+    position: 'relative',
+  },
+}));
 
-const FieldInput = (props) => {
+function PopperComponent(props) {
+  const { disablePortal, anchorEl, open, ...other } = props;
+  return <StyledAutocompletePopper {...other} />;
+}
+
+function PopperLink(props) {
   const {
-    icon,
+    // Field input
+    title = '',
+    name,
     label,
     value,
-    type = 'text',
-    onClick = (event) => null,
-    onConfirm = (newValue) => null,
-    readOnly,
-    isActive,
-    children,
+    onSubmit,
+    isOpen = true,
+    // Autocomplete
+    entity = 'Person',
+    renderModel = 'default',
+    where = [],
+    take = 10,
+    skip = 0,
+    orderBy = [],
+    // Config
+    withPreview = true,
+    withDetails,
+    variant,
+    multiple = true,
   } = props;
 
-  const [open, setOpen] = useState(false);
-  const [pendingValue, setPendingValue] = useState(value);
+  const {
+    // Pending value
+    pendingValue,
+    onChange,
+    onCancel,
+    onDelete,
+    handleSubmit,
+    // User input
+    inputValue,
+    onInputChange,
+    onClear,
+    // Local value
+    value: localValue,
+    // Popper
+    popupState,
+    onButtonClick,
+  } = useAutocomplete({
+    id: `field-select-${name}`,
+    name: 'lol',
+    type: 'link',
+    value: [],
+    multiple,
+  });
 
-  let Icon = icon;
-  if (!Icon) {
-    switch (type) {
-      case 'list':
-        Icon = ListOutlinedIcon;
-        break;
-      case 'dimension':
-        Icon = PermDataSettingOutlinedIcon;
-        break;
-      case 'number':
-        Icon = Filter1OutlinedIcon;
-        break;
-      case 'text':
-        Icon = AbcIcon;
-        break;
-      case 'date':
-        Icon = CalendarTodayOutlinedIcon;
-        break;
+  //* Render template
+  const [currentTemplate, setCurrentTemplate] = useState(renderModel);
+
+  const { [entity]: model } = useDots();
+  const { singular, default: defaultModel, templates } = model;
+  const templateList = Object.entries(templates).map(([key, { name }]) => ({
+    value: key,
+    label: name,
+  }));
+
+  const { query, filterAttributes, components, getters } = useMemo(() => {
+    if (!(currentTemplate in templates)) return defaultModel;
+
+    let { query, filterAttributes, components, getters } = defaultModel;
+    const currentModel = templates[currentTemplate];
+
+    if ('query' in currentModel) {
+      query = currentModel.query;
     }
-  }
-
-  /**
-   * User clicks on value field
-   *-> Open popper
-   *-> initialize pending value
-   */
-  const handleOpen = (event) => {
-    event.preventDefault();
-    setOpen(!readOnly);
-    setPendingValue(value);
-    if (typeof onClick === 'function') onClick(event);
-  };
-
-  /**
-   * User clicks on cancel button
-   *-> Close poper
-   */
-  const handleCancel = () => {
-    setOpen(false);
-  };
-
-  /**
-   * User change value in input
-   *-> Change pending value
-   */
-  const handleChange = (event) => {
-    if (event.target.type === 'number')
-      setPendingValue(parseInt(event.target.value, 10));
-    else setPendingValue(event.target.value);
-  };
-
-  /**
-   * User press enter key
-   *-> Trigger confirm
-   */
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      handleConfirm();
+    if ('filterAttributes' in currentModel) {
+      filterAttributes = currentModel.filterAttributes;
     }
-  };
+    if ('components' in currentModel) {
+      components = {
+        ...components,
+        ...currentModel.components,
+      };
+    }
+    if ('getters' in currentModel) {
+      getters = {
+        ...getters,
+        ...currentModel.getters,
+      };
+    }
 
-  /**
-   * User confirms value
-   *-> Trigger user callback
-   *-> Close popper
-   */
-  const handleConfirm = () => {
-    if (typeof onConfirm === 'function' && pendingValue !== value)
-      onConfirm(pendingValue);
-    setOpen(false);
-  };
+    return { query, filterAttributes, components, getters };
+  }, [defaultModel, templates, currentTemplate]);
+
+  const { Icon, Option, Preview } = components;
+
+  const handleTemplateChange = useCallback(
+    (event) => setCurrentTemplate(event.target.value),
+    []
+  );
+
+  //* FUNC -- Send request
+  const _query = useMemo(
+    () => searchManyBuilder(singular)(query, filterAttributes),
+    [singular, query, filterAttributes]
+  );
+  const [searchFunc, { data, loading, error }] = useLazyQuery(_query, {
+    skip: !isOpen,
+  });
+
+  //* Autocomplete
+  const getOptionLabel = useMemo(() => {
+    return (option) =>
+      filterAttributes.reduce((acc, key) => `${acc} ${option[key]} `, '');
+  }, [filterAttributes]);
+
+  // Add selected values to all results
+  const options = useMemo(() => {
+    return data?.rows || [];
+  }, [data?.rows]);
+
+  //* Effect
+  useDebounce(
+    () => {
+      if (isOpen) {
+        searchFunc({
+          variables: {
+            take: take,
+            skip: skip,
+            input: inputValue,
+            where: [
+              {
+                id: { notIn: [] },
+              },
+              ...where,
+            ],
+            orderBy: orderBy,
+          },
+        });
+      }
+    },
+    250,
+    [inputValue, isOpen]
+  );
 
   return (
-    <Stack direction="row" alignItems="center">
-      <Stack
-        direction="row"
-        spacing={1}
-        width={155}
-        color="grey.600"
-        alignItems="center"
-        sx={{
-          borderRight: 1,
-          borderColor: 'divider',
-          '& .MuiSvgIcon-root': {
-            width: 16,
-            height: 16,
-          },
-        }}
-      >
-        {!isEmpty(Icon) && <Icon />}
-        <Typography
-          variant="body2"
-          sx={{
-            py: 0.5,
-            display: 'block',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {label}
-        </Typography>
+    <Stack direction="row">
+      <Stack flex={1} overflow="hidden" width={270}>
+        {title && <PopperTitle title={title} loading={loading} />}
+        <Autocomplete
+          loading={!title && loading}
+          options={options}
+          // Value
+          value={pendingValue}
+          onChange={onChange}
+          // Input
+          inputValue={inputValue}
+          onInputChange={onInputChange}
+          renderInput={(params) => (
+            <Stack ref={params.InputProps.ref}>
+              <PopperInput
+                inputProps={params.inputProps}
+                loading={loading}
+                onClear={onClear}
+                autoFocus
+              />
+              {!isEmpty(templateList) && (
+                <>
+                  <Stack
+                    direction="row"
+                    justifyContent="flex-end"
+                    px={1}
+                    spacing={1}
+                    sx={{ color: 'neutral.500' }}
+                  >
+                    <Typography variant="caption">Search by:</Typography>
+                    <Select
+                      value={currentTemplate}
+                      onChange={handleTemplateChange}
+                      variant="standard"
+                      sx={{
+                        fontSize: 12,
+                        height: 20,
+                        px: 1,
+                        borderRadius: 1,
+                        '& .MuiSelect-select.MuiSelect-standard.MuiInput-input.MuiInputBase-input':
+                          {
+                            pr: 1,
+                          },
+                        '& .MuiSvgIcon-root': {
+                          fontSize: 16,
+                        },
+                        '&:before, &:after': {
+                          content: 'none',
+                        },
+                        '& fieldset': {
+                          border: 0,
+                        },
+                        '&:hover': {
+                          bgcolor: 'neutral.background',
+                        },
+                        '& .MuiInput-input:focus': {
+                          bgcolor: 'transparent',
+                        },
+                      }}
+                    >
+                      <MenuItem key={value} value={'default'}>
+                        default
+                      </MenuItem>
+                      {templateList.map(({ value, label }) => (
+                        <MenuItem key={value} value={value}>
+                          {label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </Stack>
+                  <Divider />
+                </>
+              )}
+            </Stack>
+          )}
+          renderOption={(props, _option, state) => (
+            <Option {...props} {...Option.bindProps(getters, _option, state)} />
+          )}
+          getOptionLabel={getOptionLabel}
+          filterOptions={(options) => options}
+          isOptionEqualToValue={(option, value) => option?.id === value?.id}
+          filterSelectedOptions={withPreview}
+          onClose={() => null}
+          clearOnBlur={false}
+          PopperComponent={PopperComponent}
+          disableCloseOnSelect
+          multiple
+          open
+        />
+        <Divider />
+        <PopperActions onConfirm={() => null} onCancel={onCancel} />
       </Stack>
 
-      <Stack
-        direction="row"
-        alignItems="center"
-        sx={[
-          {
-            cursor: 'pointer',
-            flex: 1,
-            height: 30,
-            py: 0.5,
-            pl: 1,
-            overflow: 'hidden',
-            '&:hover': {
-              backgroundColor: 'neutral.background',
-            },
-          },
-          open && {
-            border: 1,
-            boxShadow: 8,
-            borderTop: 0,
-            borderColor: 'background.default',
-            backgroundColor: 'neutral.25',
-            py: 0,
-            '&  input': {
-              typography: 'body2',
-              py: '1px',
-            },
-          },
-          isActive && {
-            backgroundColor: 'neutral.50',
-          },
-        ]}
-        onClick={!open ? handleOpen : handleCancel}
-      >
-        {open ? (
-          <ClickAwayListener onClickAway={open ? handleConfirm : handleCancel}>
-            <PopperContainer>
-              {children({
-                pendingValue,
-              })}
-            </PopperContainer>
-          </ClickAwayListener>
-        ) : (
-          <Typography
-            variant="body2"
-            sx={{
-              display: 'block',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {value}
-          </Typography>
-        )}
-      </Stack>
+      {withPreview && (
+        <Stack width={270} borderLeft={1} borderColor="divider">
+          <PopperSelectedList
+            filterAttributes={filterAttributes}
+            renderOption={(props, _option, state) => (
+              <Preview
+                {...props}
+                {...Preview.bindProps(getters, _option, state)}
+              />
+            )}
+            pendingValue={pendingValue}
+            onDelete={onDelete}
+          />
+        </Stack>
+      )}
+
+      {/* [ ](Adrien): Implements logic */}
+      {withDetails && !isEmpty(pendingValue) && (
+        <Stack
+          width={270}
+          borderLeft={1}
+          borderColor="divider"
+          spacing={1}
+          p={2}
+        >
+          {Object.entries(pendingValue[0]).map(([key, value]) => (
+            <Stack key={key} borderBottom={1} borderColor="divider">
+              <Typography variant="caption">{key}</Typography>
+              <Typography variant="body2">{value}</Typography>
+            </Stack>
+          ))}
+        </Stack>
+      )}
     </Stack>
   );
-};
+}
 
-export default FieldInput;
+export default PopperLink;

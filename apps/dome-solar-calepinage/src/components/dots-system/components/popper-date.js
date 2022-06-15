@@ -1,201 +1,228 @@
+import React, { useMemo, useState } from 'react';
 import {
-  Typography,
-  Stack,
-  TextField,
+  Button,
+  Divider,
+  Grid,
   IconButton,
-  ClickAwayListener,
+  Stack,
+  Typography,
 } from '@mui/material';
-import { isEmpty } from 'lodash';
-import { useState } from 'react';
-import { Box } from '@mui/system';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { PickersDay } from '@mui/x-date-pickers';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
-// Icons
-import AbcIcon from '@mui/icons-material/Abc';
-import PermDataSettingOutlinedIcon from '@mui/icons-material/PermDataSettingOutlined';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
-import Filter1OutlinedIcon from '@mui/icons-material/Filter1Outlined';
-import ListOutlinedIcon from '@mui/icons-material/ListOutlined';
-import CloseIcon from '@mui/icons-material/Close';
-import DoneIcon from '@mui/icons-material/Done';
-import PopperContainer from '../../design-system/popper/popper-container';
+function getAllDaysInMonth(year, month) {
+  const date = new Date(year, month, 1);
 
-const FieldInput = (props) => {
-  const {
-    icon,
-    label,
-    value,
-    type = 'text',
-    onClick = (event) => null,
-    onConfirm = (newValue) => null,
-    readOnly,
-    isActive,
-    children,
-  } = props;
+  const dates = [];
 
-  const [open, setOpen] = useState(false);
-  const [pendingValue, setPendingValue] = useState(value);
-
-  let Icon = icon;
-  if (!Icon) {
-    switch (type) {
-      case 'list':
-        Icon = ListOutlinedIcon;
-        break;
-      case 'dimension':
-        Icon = PermDataSettingOutlinedIcon;
-        break;
-      case 'number':
-        Icon = Filter1OutlinedIcon;
-        break;
-      case 'text':
-        Icon = AbcIcon;
-        break;
-      case 'date':
-        Icon = CalendarTodayOutlinedIcon;
-        break;
-    }
+  while (date.getMonth() === month) {
+    dates.push(new Date(date));
+    date.setDate(date.getDate() + 1);
   }
 
-  /**
-   * User clicks on value field
-   *-> Open popper
-   *-> initialize pending value
-   */
-  const handleOpen = (event) => {
-    event.preventDefault();
-    setOpen(!readOnly);
-    setPendingValue(value);
-    if (typeof onClick === 'function') onClick(event);
-  };
+  return dates;
+}
 
-  /**
-   * User clicks on cancel button
-   *-> Close poper
-   */
-  const handleCancel = () => {
-    setOpen(false);
-  };
+const DAYS_OF_WEEK = ['L', 'M', 'Me', 'J', 'V', 'S', 'D'];
+const MONTHS = [
+  'Jan.',
+  'Fev',
+  'Mars',
+  'Avril',
+  'Mai',
+  'Juin',
+  'Juil.',
+  'Août',
+  'Sept.',
+  'Oct.',
+  'Nov.',
+  'Dec.',
+];
 
-  /**
-   * User change value in input
-   *-> Change pending value
-   */
-  const handleChange = (event) => {
-    if (event.target.type === 'number')
-      setPendingValue(parseInt(event.target.value, 10));
-    else setPendingValue(event.target.value);
+const extractDateData = (date) => {
+  const output = {
+    year: date.getFullYear(),
+    month: date.getMonth(),
+    date: date.getDate(),
   };
-
-  /**
-   * User press enter key
-   *-> Trigger confirm
-   */
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      handleConfirm();
-    }
+  return {
+    ...output,
+    offset: new Date(output.year, output.month, 1).getDay(),
   };
+};
 
-  /**
-   * User confirms value
-   *-> Trigger user callback
-   *-> Close popper
-   */
-  const handleConfirm = () => {
-    if (typeof onConfirm === 'function' && pendingValue !== value)
-      onConfirm(pendingValue);
-    setOpen(false);
-  };
-
+const DateSwiper = (props) => {
+  const { value, onNext, onNextFast, onPrevious, onPreviousFast, onClick } =
+    props;
   return (
-    <Stack direction="row" alignItems="center">
-      <Stack
-        direction="row"
-        spacing={1}
-        width={155}
-        color="grey.600"
-        alignItems="center"
-        sx={{
-          borderRight: 1,
-          borderColor: 'divider',
-          '& .MuiSvgIcon-root': {
-            width: 16,
-            height: 16,
-          },
-        }}
+    <Stack flex={1} border={1} borderColor="divider" borderRadius={1}>
+      <Typography
+        variant="h5"
+        textAlign="center"
+        py={2}
+        bgcolor="neutral.background"
+        onClick={onClick}
+        sx={{ cursor: 'pointer', '&:hover': { bgcolor: 'neutral.hover' } }}
       >
-        {!isEmpty(Icon) && <Icon />}
-        <Typography
-          variant="body2"
-          sx={{
-            py: 0.5,
-            display: 'block',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {label}
-        </Typography>
-      </Stack>
-
-      <Stack
-        direction="row"
-        alignItems="center"
-        sx={[
-          {
-            cursor: 'pointer',
-            flex: 1,
-            height: 30,
-            py: 0.5,
-            pl: 1,
-            overflow: 'hidden',
-            '&:hover': {
-              backgroundColor: 'neutral.background',
-            },
-          },
-          open && {
-            border: 1,
-            boxShadow: 8,
-            borderTop: 0,
-            borderColor: 'background.default',
-            backgroundColor: 'neutral.25',
-            py: 0,
-            '&  input': {
-              typography: 'body2',
-              py: '1px',
-            },
-          },
-          isActive && {
-            backgroundColor: 'neutral.50',
-          },
-        ]}
-        onClick={!open ? handleOpen : handleCancel}
-      >
-        {open ? (
-          <ClickAwayListener onClickAway={open ? handleConfirm : handleCancel}>
-            <PopperContainer>
-              {children({
-                pendingValue,
-              })}
-            </PopperContainer>
-          </ClickAwayListener>
-        ) : (
-          <Typography
-            variant="body2"
-            sx={{
-              display: 'block',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {value}
-          </Typography>
+        {value}
+      </Typography>
+      <Divider />
+      <Stack direction="row" spacing={0} justifyContent="center">
+        {onPreviousFast && (
+          <IconButton size="small" onClick={onPreviousFast}>
+            <KeyboardDoubleArrowLeftIcon fontSize="inherit" />
+          </IconButton>
+        )}
+        <IconButton size="small" onClick={onPrevious}>
+          <ArrowBackIosIcon fontSize="inherit" />
+        </IconButton>
+        <IconButton size="small" onClick={onNext}>
+          <ArrowForwardIosIcon fontSize="inherit" />
+        </IconButton>
+        {onNextFast && (
+          <IconButton size="small" onClick={onNextFast}>
+            <KeyboardDoubleArrowRightIcon fontSize="inherit" />
+          </IconButton>
         )}
       </Stack>
     </Stack>
   );
 };
 
-export default FieldInput;
+function PopperDate() {
+  const [date, setDate] = useState(new Date());
+
+  const [showDate, setShowDate] = useState(() => {
+    const today = new Date();
+    return extractDateData(today);
+  });
+
+  const [view, setView] = useState('days');
+
+  const allDays = useMemo(() => {
+    return getAllDaysInMonth(showDate.year, showDate.month);
+  }, [showDate]);
+
+  const handlePreviousYearFast = () => {
+    setShowDate(({ year, month, date }) => {
+      const _date = new Date(year - 10, month, date);
+      return extractDateData(_date);
+    });
+  };
+  const handlePreviousYear = () => {
+    setShowDate(({ year, month, date }) => {
+      const _date = new Date(year - 1, month, date);
+      return extractDateData(_date);
+    });
+  };
+  const handleNextYear = () => {
+    setShowDate(({ year, month, date }) => {
+      const _date = new Date(year + 1, month, date);
+      return extractDateData(_date);
+    });
+  };
+  const handleNextYearFast = () => {
+    setShowDate(({ year, month, date }) => {
+      const _date = new Date(year + 10, month, date);
+      return extractDateData(_date);
+    });
+  };
+  const handleNextMonth = () => {
+    setShowDate(({ year, month, date }) => {
+      const _date = new Date(year, month + 1, date);
+      return extractDateData(_date);
+    });
+  };
+  const handlePreviousMonth = () => {
+    setShowDate(({ year, month, date }) => {
+      const _date = new Date(year, month - 1, date);
+      return extractDateData(_date);
+    });
+  };
+  const handleMonthClick = (_month) => () => {
+    setShowDate(({ year, month, date }) => {
+      const _date = new Date(year, _month, date);
+      return extractDateData(_date);
+    });
+    setView('days');
+  };
+
+  return (
+    <Stack p={1} spacing={1}>
+      <Typography variant="body2">Sélectionnez une date</Typography>
+      {/* <Typography variant="body2">{JSON.stringify(showDate)}</Typography> */}
+
+      <Stack direction="row" spacing={1} justifyContent="center">
+        <DateSwiper
+          value={MONTHS[showDate.month]}
+          onPrevious={handlePreviousMonth}
+          onNext={handleNextMonth}
+          onClick={() => {
+            setView('months');
+          }}
+        />
+        <DateSwiper
+          value={showDate.year}
+          onPreviousFast={handlePreviousYearFast}
+          onPrevious={handlePreviousYear}
+          onNext={handleNextYear}
+          onNextFast={handleNextYearFast}
+          onClick={() => {
+            setView('years');
+          }}
+        />
+      </Stack>
+      {view === 'days' && (
+        <>
+          <Grid
+            container
+            display="grid"
+            gridTemplateColumns="repeat(7, 1fr)"
+            pt={2}
+          >
+            {DAYS_OF_WEEK.map((weekDay) => (
+              <Grid item key={`skeleton-${weekDay}`} textAlign="center">
+                <Typography variant="caption" fontWeight="bold">
+                  {weekDay}
+                </Typography>
+              </Grid>
+            ))}
+            {new Array((showDate.offset > 0 ? showDate.offset : 7) - 1)
+              .fill(0)
+              .map((_, index) => (
+                <Grid item key={`skeleton-${index}`} />
+              ))}
+            {allDays.map((day, index) => (
+              <Grid item key={index}>
+                <PickersDay
+                  day={day}
+                  onDaySelect={(val) => console.log(val)}
+                  outsideCurrentMonth={false}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </>
+      )}
+      {view === 'months' && (
+        <Grid
+          container
+          display="grid"
+          gridTemplateColumns="repeat(3, 1fr)"
+          pt={2}
+        >
+          {MONTHS.map((month, index) => (
+            <Grid item key={`skeleton-${month}`} textAlign="center">
+              <Button onClick={handleMonthClick(index)}>{month}</Button>
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </Stack>
+  );
+}
+
+export default PopperDate;

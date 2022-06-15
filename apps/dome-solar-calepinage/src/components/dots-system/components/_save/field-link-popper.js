@@ -47,8 +47,6 @@ function FieldLinkPopper(props) {
     name,
     type: 'link',
     value: [],
-    variant,
-    multiple,
   });
 
   //* Render template

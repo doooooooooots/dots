@@ -62,11 +62,11 @@ const PROJECT_FIELDS = [
 ];
 
 const Project = {
-  singular: 'person',
+  singular: 'project',
   fields: PROJECT_FIELDS,
   default: {
     query: ['identifier', 'name'],
-    filterAttributes: ['identifier', 'familyName'],
+    filterAttributes: ['identifier', 'name'],
     components: {
       Icon: PeopleAltOutlined,
       Option: SelectItemOption,
