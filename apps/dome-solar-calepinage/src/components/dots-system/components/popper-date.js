@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Button,
   Divider,
@@ -92,20 +92,29 @@ const DateSwiper = (props) => {
   );
 };
 
-function PopperDate() {
-  const [date, setDate] = useState(new Date());
+function isToday(day, today) {
+  return (
+    day.getDate() == today.getDate() &&
+    day.getMonth() == today.getMonth() &&
+    day.getFullYear() == today.getFullYear()
+  );
+}
 
+function PopperDate(props) {
+  const { value, onChange, onSubmit, onCancel } = props;
+  const today = new Date();
+
+  const [date, setDate] = useState(new Date(value ?? ''));
+  const [view, setView] = useState('days');
   const [showDate, setShowDate] = useState(() => {
-    const today = new Date();
     return extractDateData(today);
   });
-
-  const [view, setView] = useState('days');
 
   const allDays = useMemo(() => {
     return getAllDaysInMonth(showDate.year, showDate.month);
   }, [showDate]);
 
+  // Button events
   const handlePreviousYearFast = () => {
     setShowDate(({ year, month, date }) => {
       const _date = new Date(year - 10, month, date);
@@ -150,10 +159,18 @@ function PopperDate() {
     setView('days');
   };
 
+  /**
+   * Suscribe to each changes
+   */
+  useEffect(() => {
+    if (typeof onChange === 'function') {
+      onChange(date);
+    }
+  }, [date, onChange]);
+
   return (
     <Stack p={1} spacing={1}>
       <Typography variant="body2">Sélectionnez une date</Typography>
-      {/* <Typography variant="body2">{JSON.stringify(showDate)}</Typography> */}
 
       <Stack direction="row" spacing={1} justifyContent="center">
         <DateSwiper
@@ -175,6 +192,7 @@ function PopperDate() {
           }}
         />
       </Stack>
+
       {view === 'days' && (
         <>
           <Grid
@@ -199,7 +217,9 @@ function PopperDate() {
               <Grid item key={index}>
                 <PickersDay
                   day={day}
-                  onDaySelect={(val) => console.log(val)}
+                  today={isToday(day, today)}
+                  selected={day.toString() === date.toString()}
+                  onDaySelect={(val) => setDate(val)}
                   outsideCurrentMonth={false}
                 />
               </Grid>
@@ -207,6 +227,7 @@ function PopperDate() {
           </Grid>
         </>
       )}
+
       {view === 'months' && (
         <Grid
           container

@@ -9,17 +9,22 @@ import SelectItemPreview from '../components/list-item/list-item-preview';
 const PROJECT_FIELDS = [
   {
     name: 'identifier',
-    type: 'ref',
+    type: 'text',
     label: 'Ref',
   },
   {
-    name: 'step',
-    type: 'enum',
-    label: 'Step',
-    options: PROJECT_STEP_OPTIONS,
+    name: 'name',
+    type: 'text',
+    label: 'Nom',
   },
   {
-    name: 'emergency',
+    name: 'step',
+    type: 'list',
+    label: 'Step',
+    options: 'project-step',
+  },
+  {
+    name: 'typeEmergency',
     type: 'list',
     label: 'Emergency',
   },
@@ -37,20 +42,23 @@ const PROJECT_FIELDS = [
     name: 'areaField',
     type: 'list',
     label: 'Area field',
+    options: 'area-field',
   },
   {
     name: 'areaSnow',
     type: 'list',
     label: 'Area snow',
+    options: 'area-snow',
   },
   {
     name: 'areaWind',
     type: 'list',
     label: 'Area wind',
+    options: 'area-wind',
   },
   {
     name: 'altitude',
-    type: 'dimension',
+    type: 'number',
     label: 'Altitude',
   },
   {
@@ -82,9 +90,9 @@ const Project = {
           })}
         />
       ),
-      primary: (option) => option.givenName,
-      secondary: (option) => option.familyName,
-      info: (option) => `${option.givenName} ${option.familyName}`,
+      primary: (option) => option.name,
+      secondary: (option) => option.identifier,
+      info: (option) => ``,
     },
   },
   templates: {},

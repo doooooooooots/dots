@@ -3,11 +3,10 @@ import { Button, Stack } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import { useKey } from 'react-use';
-import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import Kbd from '../../design-system/kbd/kbd';
 
-function PopperActions(props) {
-  const { onConfirm, onCancel, variant = 'standard' } = props;
+function Actions(props) {
+  const { onConfirm, onCancel } = props;
 
   const confirmBtn = useRef();
 
@@ -15,7 +14,7 @@ function PopperActions(props) {
   useKey('Escape', onCancel);
 
   return (
-    <Stack direction="row" justifyContent="flex-end">
+    <Stack direction="row" justifyContent="flex-end" alignItems="center">
       <Button
         startIcon={<CloseIcon />}
         onClick={onCancel}
@@ -31,12 +30,10 @@ function PopperActions(props) {
         size="small"
         color="success"
       >
-        <Kbd>
-          <KeyboardReturnIcon fontSize={'inherit'} /> <span>Enter</span>
-        </Kbd>
+        <Kbd shortcut="⮐">Enter</Kbd>
       </Button>
     </Stack>
   );
 }
 
-export default PopperActions;
+export default Actions;

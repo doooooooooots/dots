@@ -24,6 +24,7 @@
     "**/*.ts",
     "**/*.tsx",
     "../../apps/__tmp__/create-details.tsx",
-    "../schemas/src/article.tsx"
+    "../schemas/src/article.tsx",
+    "../../apps/dome-solar-calepinage/src/utils/enum-list.ts"
   ]
 }

@@ -1,53 +1,39 @@
 import { useCallback, useState } from 'react';
-import { isArray, isEmpty } from 'lodash';
+import { last, isArray, isEmpty } from 'lodash';
 
 function useAutocomplete(config: {
   id: string;
   name: string;
   type: string;
   multiple: boolean;
-  value: string | number | null;
+  value: unknown;
 }) {
-  const {
-    id,
-    name,
-    value: _value = null,
-    type = 'string',
-    multiple = false,
-  } = config;
-
-  //* States
-  const [value, setValue] = useState(
-    _value && isArray(_value) ? [..._value] : _value ? [_value] : []
-  );
-  const [pendingValue, setPendingValue] = useState([] as typeof value);
-
-  //* Actions
-  /**
-   * User clicks on trigger or toggle button
-   */
-  const handleOpen = useCallback(
-    (event) => {
-      setPendingValue(value);
-    },
-    [value]
-  );
+  const { name, value = [], multiple = false } = config;
 
   /**
-   * User cancels his selection
+   * Local values
    */
-  const handleCancel = useCallback((_, reason) => {
-    console.log(reason);
+  const [input, setInput] = useState('');
+  const [pendingValue, setPendingValue] = useState(
+    isArray(value) ? [...value] : [value]
+  );
+
+  const handleInputChange = useCallback((event) => {
+    setInput(event.target.value);
+  }, []);
+
+  const handleInputClear = useCallback((event) => {
+    setInput('');
   }, []);
 
   /**
    * Render value for user
    */
   const handleChange = useCallback(
-    (submitFunc) => (event: any, newValue: any, reason: string) => {
+    (event: any, newValue: any, reason: string) => {
       if (
-        event.type === 'keydown' &&
-        event.key === 'Backspace' &&
+        event?.type === 'keydown' &&
+        event?.key === 'Backspace' &&
         reason === 'removeOption'
       ) {
         return;
@@ -58,38 +44,8 @@ function useAutocomplete(config: {
       if (isEmpty(newValue)) _newValue = [];
       else _newValue = multiple ? newValue : [newValue.pop()];
       setPendingValue(_newValue);
-
-      if (typeof submitFunc === 'function') {
-        if (!multiple && !isEmpty(_newValue)) {
-          submitFunc(_newValue.pop());
-        }
-      }
     },
     [multiple]
-  );
-
-  /**
-   * User clicks on an element of the list
-   */
-  const onChange = handleChange(null);
-
-  /**
-   * Render value for user
-   */
-  const handleSubmit = useCallback(
-    (submitFunc) => () => {
-      setValue(pendingValue);
-
-      if (typeof submitFunc === 'function') {
-        if (multiple) submitFunc(pendingValue);
-        else {
-          if (pendingValue && pendingValue.length) submitFunc(pendingValue[0]);
-          else submitFunc(null);
-        }
-      }
-      close();
-    },
-    [close, multiple, pendingValue]
   );
 
   /**
@@ -108,22 +64,24 @@ function useAutocomplete(config: {
     []
   );
 
+  /**
+   * Render value for user
+   */
+  const getValue = useCallback(() => {
+    if (multiple) return pendingValue;
+    if (pendingValue && pendingValue.length) return last(pendingValue);
+    return null;
+  }, [multiple, pendingValue]);
+
   return {
-    id,
-    // pending value
+    id: `autocomplete-${name}`,
+    input,
+    handleInputChange,
+    handleInputClear,
     pendingValue,
-    onChange: onChange,
-    onCancel: handleCancel,
-    onDelete: handleDelete,
-    handleSubmit,
+    getValue,
     handleChange,
-    // user input
-    // local value
-    value,
-    // popper
-    onButtonClick: handleOpen,
-    // utils & config
-    multiple,
+    handleDelete,
   };
 }
 

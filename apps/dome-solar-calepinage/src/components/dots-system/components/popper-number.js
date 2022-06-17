@@ -1,17 +1,9 @@
-import { useCallback, useState } from 'react';
-import {
-  Grid,
-  IconButton,
-  Stack,
-  Button,
-  Divider,
-  Typography,
-} from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Grid, IconButton, Stack, Button, Typography } from '@mui/material';
 import BackspaceIcon from '@mui/icons-material/BackspaceOutlined';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
-import PopperTextField from './popper-textfield';
-import { Box } from '@mui/system';
+import PopperTextField from './popper-input';
 
 const DIGITS = new Array(9).fill(1);
 const DIGIT_WIDTH = 80;
@@ -21,7 +13,7 @@ const GRID_SPACING = 1;
 // REF: https://www.sitepoint.com/react-tutorial-build-calculator-app/
 // REF: https://stackoverflow.com/questions/6479236/calculate-string-value-in-javascript-not-using-eval
 
-const DigitButton = ({ sx, ...other }) => (
+const DigitButton = React.memo(({ sx, ...other }) => (
   <IconButton
     sx={[
       sx,
@@ -44,13 +36,17 @@ const DigitButton = ({ sx, ...other }) => (
     ]}
     {...other}
   />
-);
+));
+DigitButton.displayName = 'DigitButton';
 
 function InputNumber(props) {
-  const { value, onSubmit, onChange, onCancel, children } = props;
+  const { value, onChange, onSubmit, onCancel } = props;
 
-  const [input, setInput] = useState(value);
+  const [input, setInput] = useState(`${value}`);
 
+  /**
+   * User type value in input
+   */
   const handleChange = useCallback((event) => {
     setInput(event.target.value);
   }, []);
@@ -71,7 +67,9 @@ function InputNumber(props) {
    * User clicks on a delete button
    */
   const handleDeleteClick = useCallback(() => {
-    if (input.length) setInput(`${input.slice(0, input.length - 1)}`);
+    if (input.length) {
+      setInput(`${input.slice(0, input.length - 1)}`);
+    }
   }, [input]);
 
   /**
@@ -81,7 +79,23 @@ function InputNumber(props) {
     setInput('');
   }, []);
 
-  const Content = (
+  /**
+   * User clicks on submit button
+   */
+  const handleSubmit = useCallback(() => {
+    onSubmit(input);
+  }, [input, onSubmit]);
+
+  /**
+   * Suscribe to each changes
+   */
+  useEffect(() => {
+    if (typeof onChange === 'function') {
+      onChange(input);
+    }
+  }, [input, onChange]);
+
+  return (
     <Stack p={1} pt={2} spacing={1}>
       <Stack>
         <PopperTextField
@@ -90,7 +104,6 @@ function InputNumber(props) {
           variant="outlined"
           onChange={handleChange}
           onClear={handleClearClick}
-          // type="number"
           autoFocus
           sx={{
             borderRadius: 1,
@@ -119,6 +132,7 @@ function InputNumber(props) {
           sx={{ width: 3 * DIGIT_WIDTH, mr: GRID_SPACING }}
           spacing={GRID_SPACING}
         >
+          {/* Digit buttons */}
           {DIGITS.map((_, index) => (
             <Grid key={index} item xs={4}>
               <DigitButton onClick={handleDigitClick(index + 1)}>
@@ -126,37 +140,47 @@ function InputNumber(props) {
               </DigitButton>
             </Grid>
           ))}
+
+          {/* Double zero button */}
           <Grid item xs={4}>
             <DigitButton onClick={handleDigitClick('00')}>00</DigitButton>
           </Grid>
+          {/* Single zero button */}
           <Grid item xs={4}>
             <DigitButton onClick={handleDigitClick(0)}>{0}</DigitButton>
           </Grid>
+          {/* Decimal button */}
           <Grid item xs={4}>
             <DigitButton onClick={handleDigitClick('.')}>,</DigitButton>
           </Grid>
         </Grid>
+
         <Grid
           container
           columns={1}
           sx={{ width: 1 * DIGIT_WIDTH }}
           spacing={GRID_SPACING}
         >
+          {/* Erase Button */}
           <Grid item xs={1}>
             <DigitButton onClick={handleDeleteClick}>
               <BackspaceIcon fontSize="small" />
             </DigitButton>
           </Grid>
+
+          {/* Clear Button */}
           <Grid item xs={1}>
             <DigitButton onClick={handleClearClick}>
               <RestartAltIcon fontSize="small" />
             </DigitButton>
           </Grid>
+
+          {/* Submit Button */}
           <Grid item xs={1}>
             <Button
               variant="contained"
               color="success"
-              onClick={() => null}
+              onClick={handleSubmit}
               sx={{
                 width: '100%',
                 height: DIGIT_HEIGHT * 2 + GRID_SPACING * 8,
@@ -169,10 +193,6 @@ function InputNumber(props) {
       </Stack>
     </Stack>
   );
-
-  return children({
-    content: Content,
-  });
 }
 
 export default InputNumber;

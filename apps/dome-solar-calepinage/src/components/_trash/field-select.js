@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo } from 'react';
-import { ClickAwayListener, Divider, TextField } from '@mui/material';
+import React from 'react';
+import { ClickAwayListener, Divider } from '@mui/material';
 import { useAutocomplete, bindToggle, bindPopper } from '@dots.cool/hooks';
 import FieldInput from './input';
 import Popper from '../../popper-styled';
@@ -7,7 +7,6 @@ import PopperContainer from '../../design-system/popper/popper-container';
 import Autocomplete from '../../design-system/autocomplete/autocomplete';
 import PopperActions from '../../design-system/popper/popper-actions';
 import PopperInput from '../../design-system/popper/popper-input';
-import { isEmpty } from 'lodash';
 
 function FieldSelect(props) {
   const {

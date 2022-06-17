@@ -24,17 +24,9 @@ const SelectItemOption = (props) => {
     <Stack
       direction="row"
       as="li"
-      p={1}
       borderBottom={1}
       borderColor="divider"
-      sx={{
-        '& .icon--deselect': {
-          visibility: 'hidden',
-        },
-        '&:hover .icon--deselect': {
-          visibility: selected ? 'visible' : 'hidden',
-        },
-      }}
+      alignItems="center"
       {...other}
     >
       {!hideStartIcon && (
@@ -50,7 +42,9 @@ const SelectItemOption = (props) => {
         />
       )}
       {Boolean(Icon) && Icon}
-      <Box
+      <Stack
+        direction="row"
+        alignItems="center"
         sx={{
           flexGrow: 1,
           ml: 1,
@@ -70,11 +64,12 @@ const SelectItemOption = (props) => {
             <Box component="span">{description}</Box>
           </>
         )}
-      </Box>
-
-      <IconButton size="small" className="icon--deselect" onClick={onDelete}>
-        <CloseIcon fontSize="inherit" />
-      </IconButton>
+      </Stack>
+      {selected && (
+        <IconButton size="small" onClick={onDelete}>
+          <CloseIcon fontSize="inherit" />
+        </IconButton>
+      )}
     </Stack>
   );
 

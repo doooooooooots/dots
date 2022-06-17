@@ -8,7 +8,7 @@ import { isEmpty } from 'lodash';
 import FielInput from '../dots-system/components/field-input';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import TabPopperChangeButton from './tab-popper-change-button';
-import FieldGroupContainer from '../dots-system/components/field-container';
+import FieldGroupContainer from '../dots-system/components/container';
 
 const GET_PRODUCTS = gql`
   query GetProducts {

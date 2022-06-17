@@ -4,13 +4,14 @@ import isEqual from 'lodash/isEqual';
 import { setContext } from '@apollo/client/link/context';
 import { merge } from 'lodash';
 import cache from '../cache';
+import { createUploadLink } from 'apollo-upload-client';
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
 let apolloClient;
 
 function createApolloClient() {
-  const httpLink = createHttpLink({
+  const httpLink = createUploadLink({
     uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT,
     credentials: 'include',
   });

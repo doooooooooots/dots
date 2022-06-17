@@ -8,7 +8,7 @@ import { isEmpty } from 'lodash';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import TabPopperChangeButton from './tab-popper-change-button';
 import toast from 'react-hot-toast';
-import FieldGroupContainer from '../dots-system/components/field-container';
+import FieldGroupContainer from '../dots-system/components/container';
 import FielInput from '../dots-system/components/field-input';
 
 const GET_CLADDINGS = gql`

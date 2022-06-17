@@ -19,7 +19,7 @@ import FielInput from '../dots-system/components/field-input';
 import { useCallback } from 'react';
 import TabPopperChangeButton from './tab-popper-change-button';
 import toast from 'react-hot-toast';
-import FieldGroupContainer from '../dots-system/components/field-container';
+import FieldGroupContainer from '../dots-system/components/container';
 import AddIcon from '@mui/icons-material/Add';
 
 const GET_ROOF = gql`

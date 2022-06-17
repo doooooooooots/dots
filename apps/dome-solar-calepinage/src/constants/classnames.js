@@ -8,3 +8,5 @@ export const FOCUS_VISIBLE = '.Mui-focusVisible';
 export const FOCUSED = '.Mui-focused';
 export const REQUIRED = '.Mui-required';
 export const SELECTED = '.Mui-selected';
+
+export const FIELD_INPUT_CLASSNAME = 'btn--trigger';

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 
 function FieldInputValue(props) {
-  const { isOpen, sx = {}, ...other } = props;
-  return (
+  const { isOpen, loading, sx = {}, ...other } = props;
+  return !loading ? (
     <Box
       {...other}
       sx={[
@@ -30,6 +30,10 @@ function FieldInputValue(props) {
         },
       ]}
     />
+  ) : (
+    <Box pl={2}>
+      <CircularProgress color="neutral" size={15} />
+    </Box>
   );
 }
 

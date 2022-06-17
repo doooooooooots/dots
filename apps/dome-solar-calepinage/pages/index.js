@@ -26,7 +26,7 @@ import SelectTags from '../src/components/molecule/tag/select-tag-multiple';
 
 import SelectTag from '../src/components/molecule/tag/select-tag-single';
 import InputWithPopper from '../src/components/design-system/popper-inputs/popper-input-text';
-import SelectPerson from '../src/components/dots-system/person/select-person';
+import SelectPerson from '../src/components/_trash/person/select-person';
 import CustomizedHook from '../src/components/design-system/select-with-autocomplete/select-custom';
 
 const GET_LAST_PROJECTS = gql`

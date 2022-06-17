@@ -1,6 +1,6 @@
 import React from 'react';
 import ButtonBase from '../../atoms/button-base';
-import { useAutocomplete } from '../../design-system/select-with-autocomplete/hooks/use-autocomplete';
+import { useAutocomplete } from '../select-with-autocomplete/hooks/use-autocomplete';
 import TagTooltip from './tooltip';
 
 function TagButton(props) {

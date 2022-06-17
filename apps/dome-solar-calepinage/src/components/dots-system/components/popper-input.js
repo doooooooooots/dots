@@ -1,10 +1,12 @@
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-const PopperTextField = (props) => {
+const PopperInput = (props) => {
   const {
     value,
     onChange,
+    onSubmit,
+    onCancel,
     onClear,
     variant = 'outlined',
     size = 'small',
@@ -43,4 +45,4 @@ const PopperTextField = (props) => {
   );
 };
 
-export default PopperTextField;
+export default PopperInput;

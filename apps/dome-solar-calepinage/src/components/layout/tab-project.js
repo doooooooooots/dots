@@ -10,7 +10,7 @@ import FielInput from '../dots-system/components/field-input';
 import { observer } from 'mobx-react';
 import TabPopperChangeButton from './tab-popper-change-button';
 import toast from 'react-hot-toast';
-import FieldGroupContainer from '../dots-system/components/field-container';
+import FieldGroupContainer from '../dots-system/components/container';
 import FieldLink from '../dots-system/components/field-link';
 import FieldSelect from '../dots-system/components/field-select';
 

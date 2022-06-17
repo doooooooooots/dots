@@ -10,7 +10,6 @@ const InputSelect = (props) => {
   const options = [];
 
   const store = useStore();
-
   const handleChange = (e) => {
     store.setUserData(e.target.name, parseFloat(e.target.value, 10));
   };
@@ -25,8 +24,8 @@ const InputSelect = (props) => {
 
   return (
     <Select
-      labelId={`label-${element.id}`}
       id={element.id}
+      labelId={`label-${element.id}`}
       name={element.id}
       value={store.userDatas[element.id] || 0}
       onChange={handleChange}

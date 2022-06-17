@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Stack } from '@mui/material';
 import FieldLabel from './field-label';
 import FieldInput from './field-input';
@@ -6,7 +6,14 @@ import FieldInput from './field-input';
 const FIELD_HEIGHT = 30;
 
 function Field(props) {
-  const { name, label, type, value, icon, onChange } = props;
+  const { name, label, type, loading, value, icon, onChange, ...other } = props;
+
+  const handleChange = useCallback(
+    (data) => {
+      onChange(name, data);
+    },
+    [name, onChange]
+  );
 
   return (
     <Stack direction="row" alignItems="center">
@@ -22,11 +29,13 @@ function Field(props) {
         }}
       />
       <FieldInput
-        sx={{ height: FIELD_HEIGHT }}
         name={name}
-        type={type}
         value={value}
-        onChange={onChange}
+        type={type}
+        loading={loading}
+        onChange={handleChange}
+        sx={{ height: FIELD_HEIGHT }}
+        {...other}
       />
     </Stack>
   );

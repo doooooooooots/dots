@@ -1,55 +1,18 @@
 import { useLazyQuery } from '@apollo/client';
 import { useAutocomplete } from '@dots.cool/hooks';
-import {
-  Autocomplete,
-  autocompleteClasses,
-  Divider,
-  MenuItem,
-  Select,
-  Stack,
-  styled,
-  Typography,
-} from '@mui/material';
-import { useCallback, useMemo, useState } from 'react';
+import { Autocomplete, Divider, Stack, Typography } from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
 import { useDebounce } from 'react-use';
 import PopperTitle from '../../design-system/popper/popper-title';
 import { useDots } from '../context/dots-context';
-import PopperActions from './popper-actions';
+import PopperActions from './actions';
 import { isEmpty } from 'lodash';
 import { searchManyBuilder } from '@dots.cool/schemas';
 import PopperInput from '../../design-system/popper/popper-input';
 import PopperSelectedList from '../../design-system/select-with-autocomplete/components/popper-selected-list';
-
-const StyledAutocompletePopper = styled('div')(({ theme }) => ({
-  [`& .${autocompleteClasses.paper}`]: {
-    boxShadow: 'none',
-    margin: 0,
-    color: 'inherit',
-    fontSize: 13,
-  },
-  [`& .${autocompleteClasses.listbox}`]: {
-    backgroundColor: theme.palette.mode === 'light' ? '#fff' : '#1c2128',
-    padding: 0,
-    [`& .${autocompleteClasses.option}`]: {
-      minHeight: 'auto',
-      alignItems: 'flex-start',
-      padding: 8,
-      borderBottom: `1px solid  ${
-        theme.palette.mode === 'light' ? ' #eaecef' : '#30363d'
-      }`,
-      '&[aria-selected="true"]': {
-        backgroundColor: 'transparent',
-      },
-      [`&.${autocompleteClasses.focused}, &.${autocompleteClasses.focused}[aria-selected="true"]`]:
-        {
-          backgroundColor: theme.palette.action.hover,
-        },
-    },
-  },
-  [`&.${autocompleteClasses.popperDisablePortal}`]: {
-    position: 'relative',
-  },
-}));
+import makeSortFunc from '../../design-system/autocomplete/utils/makeSortFunc';
+import StyledAutocompletePopper from './styled-autocomplete-popper';
+import PopperLinkTemplateSelect from './popper-link-template-select';
 
 function PopperComponent(props) {
   const { disablePortal, anchorEl, open, ...other } = props;
@@ -61,57 +24,50 @@ function PopperLink(props) {
     // Field input
     title = '',
     name,
-    label,
     value,
-    onSubmit,
-    isOpen = true,
+    onChange,
+    onCancel,
+    // onSubmit,
+
     // Autocomplete
-    entity = 'Person',
+    entity = 'Project',
     renderModel = 'default',
     where = [],
     take = 10,
     skip = 0,
     orderBy = [],
+
     // Config
-    withPreview = true,
+    withPreview,
     withDetails,
-    variant,
-    multiple = true,
+    disableSort,
+    multiple,
   } = props;
 
   const {
+    id,
     // Pending value
     pendingValue,
-    onChange,
-    onCancel,
-    onDelete,
-    handleSubmit,
-    // User input
-    inputValue,
-    onInputChange,
-    onClear,
-    // Local value
-    value: localValue,
-    // Popper
-    popupState,
-    onButtonClick,
+    getValue,
+    handleChange,
+    handleDelete,
+    // Search input
+    input,
+    handleInputChange,
+    handleInputClear,
   } = useAutocomplete({
-    id: `field-select-${name}`,
-    name: 'lol',
-    type: 'link',
-    value: [],
+    name: name,
+    value: value,
     multiple,
   });
 
-  //* Render template
   const [currentTemplate, setCurrentTemplate] = useState(renderModel);
 
+  /**
+   * Get entity settings from context
+   */
   const { [entity]: model } = useDots();
   const { singular, default: defaultModel, templates } = model;
-  const templateList = Object.entries(templates).map(([key, { name }]) => ({
-    value: key,
-    label: name,
-  }));
 
   const { query, filterAttributes, components, getters } = useMemo(() => {
     if (!(currentTemplate in templates)) return defaultModel;
@@ -143,126 +99,97 @@ function PopperLink(props) {
 
   const { Icon, Option, Preview } = components;
 
-  const handleTemplateChange = useCallback(
-    (event) => setCurrentTemplate(event.target.value),
-    []
-  );
-
-  //* FUNC -- Send request
+  /**
+   * Create the query from entity settings
+   */
   const _query = useMemo(
     () => searchManyBuilder(singular)(query, filterAttributes),
     [singular, query, filterAttributes]
   );
-  const [searchFunc, { data, loading, error }] = useLazyQuery(_query, {
-    skip: !isOpen,
-  });
 
-  //* Autocomplete
+  const [searchFunc, { data = {}, loading, error }] = useLazyQuery(_query);
+  const { rows } = data;
+
+  /**
+   *  Get label from entity object
+   *? Labels are not shown but are used when we filter the results
+   */
   const getOptionLabel = useMemo(() => {
     return (option) =>
-      filterAttributes.reduce((acc, key) => `${acc} ${option[key]} `, '');
+      filterAttributes.reduce((acc, key) => `${acc} ${option[key]}`, '');
   }, [filterAttributes]);
 
   // Add selected values to all results
   const options = useMemo(() => {
-    return data?.rows || [];
-  }, [data?.rows]);
+    if (isEmpty(rows)) return [];
+    return disableSort
+      ? rows
+      : [...rows].sort(makeSortFunc({ value: pendingValue, options: rows }));
+  }, [disableSort, pendingValue, rows]);
 
-  //* Effect
+  /**
+   * Get entities when user stop typing
+   */
   useDebounce(
     () => {
-      if (isOpen) {
-        searchFunc({
-          variables: {
-            take: take,
-            skip: skip,
-            input: inputValue,
-            where: [
-              {
-                id: { notIn: [] },
-              },
-              ...where,
-            ],
-            orderBy: orderBy,
-          },
-        });
-      }
+      searchFunc({
+        variables: {
+          take: take,
+          skip: skip,
+          input: input,
+          where: [
+            {
+              id: { notIn: [] },
+            },
+            ...where,
+          ],
+          orderBy: orderBy,
+        },
+      });
     },
     250,
-    [inputValue, isOpen]
+    [input]
   );
+
+  /**
+   * Suscribe to each changes
+   */
+  useEffect(() => {
+    if (typeof onChange === 'function') {
+      onChange(getValue(pendingValue));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getValue, onChange, pendingValue]);
 
   return (
     <Stack direction="row">
       <Stack flex={1} overflow="hidden" width={270}>
         {title && <PopperTitle title={title} loading={loading} />}
         <Autocomplete
+          id={id}
           loading={!title && loading}
           options={options}
           // Value
           value={pendingValue}
-          onChange={onChange}
+          onChange={handleChange}
           // Input
-          inputValue={inputValue}
-          onInputChange={onInputChange}
+          inputValue={input}
+          onInputChange={handleInputChange}
           renderInput={(params) => (
             <Stack ref={params.InputProps.ref}>
               <PopperInput
                 inputProps={params.inputProps}
                 loading={loading}
-                onClear={onClear}
+                onClear={handleInputClear}
                 autoFocus
               />
-              {!isEmpty(templateList) && (
+              {!isEmpty(templates) && (
                 <>
-                  <Stack
-                    direction="row"
-                    justifyContent="flex-end"
-                    px={1}
-                    spacing={1}
-                    sx={{ color: 'neutral.500' }}
-                  >
-                    <Typography variant="caption">Search by:</Typography>
-                    <Select
-                      value={currentTemplate}
-                      onChange={handleTemplateChange}
-                      variant="standard"
-                      sx={{
-                        fontSize: 12,
-                        height: 20,
-                        px: 1,
-                        borderRadius: 1,
-                        '& .MuiSelect-select.MuiSelect-standard.MuiInput-input.MuiInputBase-input':
-                          {
-                            pr: 1,
-                          },
-                        '& .MuiSvgIcon-root': {
-                          fontSize: 16,
-                        },
-                        '&:before, &:after': {
-                          content: 'none',
-                        },
-                        '& fieldset': {
-                          border: 0,
-                        },
-                        '&:hover': {
-                          bgcolor: 'neutral.background',
-                        },
-                        '& .MuiInput-input:focus': {
-                          bgcolor: 'transparent',
-                        },
-                      }}
-                    >
-                      <MenuItem key={value} value={'default'}>
-                        default
-                      </MenuItem>
-                      {templateList.map(({ value, label }) => (
-                        <MenuItem key={value} value={value}>
-                          {label}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </Stack>
+                  <PopperLinkTemplateSelect
+                    options={templates}
+                    value={currentTemplate}
+                    onChange={setCurrentTemplate}
+                  />
                   <Divider />
                 </>
               )}
@@ -273,7 +200,7 @@ function PopperLink(props) {
           )}
           getOptionLabel={getOptionLabel}
           filterOptions={(options) => options}
-          isOptionEqualToValue={(option, value) => option?.id === value?.id}
+          isOptionEqualToValue={(_option, _value) => _option?.id === _value?.id}
           filterSelectedOptions={withPreview}
           onClose={() => null}
           clearOnBlur={false}
@@ -282,8 +209,6 @@ function PopperLink(props) {
           multiple
           open
         />
-        <Divider />
-        <PopperActions onConfirm={() => null} onCancel={onCancel} />
       </Stack>
 
       {withPreview && (
@@ -297,7 +222,7 @@ function PopperLink(props) {
               />
             )}
             pendingValue={pendingValue}
-            onDelete={onDelete}
+            onDelete={handleDelete}
           />
         </Stack>
       )}
@@ -311,10 +236,10 @@ function PopperLink(props) {
           spacing={1}
           p={2}
         >
-          {Object.entries(pendingValue[0]).map(([key, value]) => (
+          {Object.entries(pendingValue[0]).map(([key, _value]) => (
             <Stack key={key} borderBottom={1} borderColor="divider">
               <Typography variant="caption">{key}</Typography>
-              <Typography variant="body2">{value}</Typography>
+              <Typography variant="body2">{_value}</Typography>
             </Stack>
           ))}
         </Stack>

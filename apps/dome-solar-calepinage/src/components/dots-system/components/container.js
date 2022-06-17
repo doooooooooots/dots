@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stack } from '@mui/material';
 
-function FieldContainer(props) {
+function Container(props) {
   const { children } = props;
   return (
     <Stack
@@ -17,4 +17,4 @@ function FieldContainer(props) {
   );
 }
 
-export default FieldContainer;
+export default Container;

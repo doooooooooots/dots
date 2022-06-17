@@ -9,7 +9,7 @@ import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import FielInput from '../dots-system/components/field-input';
 import TabPopperChangeButton from './tab-popper-change-button';
 import toast from 'react-hot-toast';
-import FieldGroupContainer from '../dots-system/components/field-container';
+import FieldGroupContainer from '../dots-system/components/container';
 
 const GET_SOLAR_MODULES = gql`
   query GetSolarModules($search: String, $take: Int) {

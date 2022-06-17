@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Stack } from '@mui/material';
-import PopperTextField from './popper-textfield';
-import PopperActions from './popper-actions';
+import PopperTextField from './popper-input';
+import PopperActions from './actions';
 
 function PopperText(props) {
-  const { value, onSubmit, onChange, onCancel, children } = props;
+  const { value, onChange, onSubmit, onCancel } = props;
   const [input, setInput] = useState(value);
 
   const handleChange = useCallback((event) => {
@@ -18,6 +18,15 @@ function PopperText(props) {
     setInput('');
   }, []);
 
+  /**
+   * Suscribe to each changes
+   */
+  useEffect(() => {
+    if (typeof onChange === 'function') {
+      onChange(input);
+    }
+  }, [input, onChange]);
+
   return (
     <Stack direction="column" p={0.5} spacing={0.5}>
       <PopperTextField
@@ -26,11 +35,6 @@ function PopperText(props) {
         variant="outlined"
         onChange={handleChange}
         onClear={handleClearClick}
-      />
-      <PopperActions
-        variant="icons"
-        onConfirm={() => null}
-        onCancel={() => null}
       />
     </Stack>
   );

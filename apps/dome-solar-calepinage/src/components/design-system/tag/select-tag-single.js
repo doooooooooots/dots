@@ -1,22 +1,18 @@
-import { isEmpty } from 'lodash';
-import ColorDotGroup from '../../design-system/icons/color-dot/color-dot-group';
-import ColorDot from '../../design-system/icons/color-dot/color-dot';
-import TagIcon from './icon';
-import SelectItemOption from '../components/list-item/list-item-option';
 import { Stack } from '@mui/material';
+import DiscountOutlinedIcon from '@mui/icons-material/DiscountOutlined';
+import { isEmpty } from 'lodash';
+import ColorDot from '../icons/color-dot/color-dot';
+import TagIcon from './icon';
+import SelectItemOption from '../../dots-system/components/list-item/list-item-option';
 import ItemTag from './item';
 import { labels } from './labels';
 import withDefaultValues from '../../../hoc/with-default-values';
-import SelectWithAutocomplete from '../../design-system/select-with-autocomplete/select-with-autocomplete';
-import DiscountOutlinedIcon from '@mui/icons-material/DiscountOutlined';
+import SelectWithAutocomplete from '../select-with-autocomplete/select-with-autocomplete';
 
 const SelectTag = withDefaultValues(SelectWithAutocomplete, {
-  title: 'Appliquer des tags au projet',
-  multiple: true,
+  title: 'Appliquer un tag',
   placeholder: 'Chercher un tag',
   startIcon: DiscountOutlinedIcon,
-  withCount: true,
-  withPreview: false,
   options: labels,
   getOptionLabel: (option) => option.name,
   renderOption: (props, option, { selected }) => (
@@ -31,22 +27,16 @@ const SelectTag = withDefaultValues(SelectWithAutocomplete, {
   ),
   renderButtonText: (value) =>
     isEmpty(value) ? (
-      'Tags'
+      'Tag'
     ) : (
-      <ColorDotGroup>
-        {value.map((label) => (
-          <ColorDot key={label.name} color={label.color} borderSize={1} />
-        ))}
-      </ColorDotGroup>
+      <ColorDot key={value.name} color={value.color} borderSize={1} />
     ),
   renderButtonTooltip: (value) =>
     isEmpty(value) ? (
       'Add a tag'
     ) : (
       <Stack py="4px" spacing={'3px'}>
-        {value.map((label) => (
-          <ItemTag key={label.name} name={label.name} color={label.color} />
-        ))}
+        <ItemTag key={value.name} name={value.name} color={value.color} />
       </Stack>
     ),
 });

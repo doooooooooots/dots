@@ -3,9 +3,9 @@ import { Button, Grid, Stack, Container } from '@mui/material';
 
 import { Box } from '@mui/system';
 import Sticky from 'react-stickynode';
-import BasicTimeline from '../dots-system/project/project-sidebar';
-import Project1BasicInfos from '../dots-system/project/project-1-basic-infos';
-import ProjectTiming from '../dots-system/project/project-2-timing';
+import BasicTimeline from '../_trash/project/project-sidebar';
+import Project1BasicInfos from '../_trash/project/project-1-basic-infos';
+import ProjectTiming from '../_trash/project/project-2-timing';
 
 export default function ProjectFormCreate() {
   const [store, setStore] = React.useState({});
