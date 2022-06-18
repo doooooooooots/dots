@@ -1,7 +1,7 @@
 import PeopleAltOutlined from '@mui/icons-material/PeopleAltOutlined';
 import { Avatar } from '@mui/material';
 import stringAvatar from '../../../../src/utils/string-to-avatar';
-import SelectItemOption from '../components/list-item/list-item-option';
+import ListItemDefault from '../components/list-item-default';
 import SelectItemPreview from '../components/list-item/list-item-preview';
 import entity from './create-entity';
 
@@ -25,7 +25,7 @@ const Person = entity({
     filterAttributes: ['givenName', 'familyName'],
     components: {
       Icon: PeopleAltOutlined,
-      Option: SelectItemOption,
+      Option: ListItemDefault,
       Preview: SelectItemPreview,
     },
     getters: {

@@ -12,16 +12,15 @@ import Reaction from './reaction';
 
 function enums(enumLists) {
   return Object.entries(enumLists).reduce(
-    (acc, [EnumName, { type, values, colors = {}, labels }]) => ({
+    (acc, [EnumName, { values, colors = {}, ...other }]) => ({
       ...acc,
       [EnumName]: {
-        type,
         values,
         colors,
-        labels,
         tokens: Object.keys(values).map(
           (key) => `enum.${toCamelCase(EnumName)}.${toCamelCase(key)}`
         ),
+        ...other,
       },
     }),
     {}

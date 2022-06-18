@@ -1,8 +1,8 @@
 import React from 'react';
 
-function PopperTag(props) {
+function InputTag(props) {
   const { value, onChange, onSubmit, onCancel } = props;
-  return <div>PopperTag</div>;
+  return <div>InputTag</div>;
 }
 
-export default PopperTag;
+export default InputTag;

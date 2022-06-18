@@ -4,10 +4,10 @@ import Field from '../src/components/dots-system/components/field';
 import FieldContainer from '../src/components/dots-system/components/container';
 import {
   Alert,
+  Box,
   Button,
   Divider,
   IconButton,
-  Input,
   Stack,
   Typography,
 } from '@mui/material';
@@ -17,7 +17,9 @@ import { useDots } from '../src/components/dots-system/context/dots-context';
 import ShareIcon from '@mui/icons-material/Share';
 import InfoIcon from '@mui/icons-material/InfoOutlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import UploadFile from '../src/components/upload';
+import ButtonEnum from '../src/components/dots-system/components/button-enum';
+import ButtonLink from '../src/components/dots-system/components/button-link';
+import ButtonAutomation from '../src/components/dots-system/components/button-automation';
 
 const GET_LAST_PROJECT = gql`
   query GetLastProject($take: Int, $skip: Int = 0) {
@@ -108,7 +110,6 @@ function Test() {
   return (
     <Container sx={{ pt: 6 }}>
       {loading && 'Loading...'}
-
       {error && (
         <Alert severity="error">
           <pre>
@@ -116,9 +117,6 @@ function Test() {
           </pre>
         </Alert>
       )}
-
-      <UploadFile />
-
       {data?.projects && (
         <FieldContainer>
           <Stack
@@ -170,9 +168,12 @@ function Test() {
           ))}
         </FieldContainer>
       )}
-
       <Divider sx={{ my: 5 }} />
-
+      <Stack direction="row" spacing={1}>
+        <ButtonEnum />
+        <ButtonLink />
+        <ButtonAutomation />
+      </Stack>
       <FieldContainer>
         <Field
           type="number"
@@ -195,7 +196,7 @@ function Test() {
           onChange={handleChange}
         />
         <Field
-          type="dimension"
+          type="checkbox"
           value="TODO"
           label="Dimension value"
           onChange={handleChange}

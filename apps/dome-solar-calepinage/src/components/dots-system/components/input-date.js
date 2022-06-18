@@ -100,7 +100,7 @@ function isToday(day, today) {
   );
 }
 
-function PopperDate(props) {
+function InputDate(props) {
   const { value, onChange, onSubmit, onCancel } = props;
   const today = new Date();
 
@@ -246,4 +246,4 @@ function PopperDate(props) {
   );
 }
 
-export default PopperDate;
+export default InputDate;

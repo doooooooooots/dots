@@ -5,21 +5,20 @@ import { useEffect, useMemo, useState } from 'react';
 import { useDebounce } from 'react-use';
 import PopperTitle from '../../design-system/popper/popper-title';
 import { useDots } from '../context/dots-context';
-import PopperActions from './actions';
 import { isEmpty } from 'lodash';
 import { searchManyBuilder } from '@dots.cool/schemas';
 import PopperInput from '../../design-system/popper/popper-input';
 import PopperSelectedList from '../../design-system/select-with-autocomplete/components/popper-selected-list';
 import makeSortFunc from '../../design-system/autocomplete/utils/makeSortFunc';
 import StyledAutocompletePopper from './styled-autocomplete-popper';
-import PopperLinkTemplateSelect from './popper-link-template-select';
+import PopperLinkTemplateSelect from './select-template';
 
 function PopperComponent(props) {
   const { disablePortal, anchorEl, open, ...other } = props;
   return <StyledAutocompletePopper {...other} />;
 }
 
-function PopperLink(props) {
+function InputLink(props) {
   const {
     // Field input
     title = '',
@@ -248,4 +247,4 @@ function PopperLink(props) {
   );
 }
 
-export default PopperLink;
+export default InputLink;

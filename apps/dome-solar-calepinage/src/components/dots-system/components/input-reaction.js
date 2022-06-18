@@ -1,25 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { MenuItem, Stack } from '@mui/material';
+import Reaction from '../enums/reaction';
 
-const ICONS = {
-  '+1': '👍',
-  '-1': '👎',
-  smile: '😁',
-  tada: '🎉',
-  thinking_face: '🤔',
-  heart: '❤️',
-  rocket: '🚀',
-  eyes: '👀',
-  fire: '🔥',
-  brain: '🧠',
-  creative: '🎨',
-  checked: '✅',
-  error: '❌',
-};
-
-function PopperReaction(props) {
+function InputReaction(props) {
   const { value, onChange, onSubmit, onCancel } = props;
   const [input, setInput] = useState(value);
+
+  const options = Reaction.getOptions();
 
   const handleChange = useCallback((key) => {
     setInput();
@@ -36,18 +23,18 @@ function PopperReaction(props) {
 
   return (
     <Stack direction="row" p={0.5} spacing={0.5}>
-      {Object.entries(ICONS).map(([key, emoji]) => (
+      {options.map(({ key, value, label }) => (
         <MenuItem
           key={key}
-          value={key}
+          value={value}
           onClick={() => handleChange(key)}
           sx={{ px: 1 }}
         >
-          {emoji}
+          {label}
         </MenuItem>
       ))}
     </Stack>
   );
 }
 
-export default PopperReaction;
+export default InputReaction;

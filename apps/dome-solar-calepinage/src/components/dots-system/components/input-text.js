@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Stack } from '@mui/material';
-import PopperTextField from './popper-input';
-import PopperActions from './actions';
+import PopperTextField from './styled-input';
 
-function PopperText(props) {
+function InputText(props) {
   const { value, onChange, onSubmit, onCancel } = props;
   const [input, setInput] = useState(value);
 
@@ -40,4 +39,4 @@ function PopperText(props) {
   );
 }
 
-export default PopperText;
+export default InputText;

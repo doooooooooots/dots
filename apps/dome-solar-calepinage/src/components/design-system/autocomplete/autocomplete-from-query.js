@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import { useQuery } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import PopperInput from '../popper/popper-input';
-import SelectItemOption from '../../dots-system/components/list-item/list-item-option';
+import ListItemDefault from '../../dots-system/components/list-item-default';
 import AutocompletePopper from './autocomplete-popper';
 
 export default function AutocompleteFromQuery(props) {
@@ -60,7 +60,7 @@ export default function AutocompleteFromQuery(props) {
         renderTags={() => null}
         noOptionsText="No labels"
         renderOption={(props, option, { selected }) => (
-          <SelectItemOption
+          <ListItemDefault
             {...props}
             {...renderOptionProps(option, selected)}
           />

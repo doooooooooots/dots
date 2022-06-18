@@ -120,12 +120,13 @@ const common = {
 const text = {
   primary: grey[800],
   secondary: grey[600],
-  inverse: grey[200],
+  inverse: grey[100],
   disabled: grey[300],
 };
 const background = {
   default: common.white,
   paper: common.white,
+  dark: grey[800],
 };
 
 const divider = grey[75];

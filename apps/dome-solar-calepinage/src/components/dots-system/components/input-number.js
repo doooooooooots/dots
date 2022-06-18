@@ -3,7 +3,7 @@ import { Grid, IconButton, Stack, Button, Typography } from '@mui/material';
 import BackspaceIcon from '@mui/icons-material/BackspaceOutlined';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
-import PopperTextField from './popper-input';
+import PopperTextField from './styled-input';
 
 const DIGITS = new Array(9).fill(1);
 const DIGIT_WIDTH = 80;

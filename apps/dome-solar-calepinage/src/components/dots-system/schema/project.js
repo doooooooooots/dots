@@ -1,8 +1,7 @@
 import PeopleAltOutlined from '@mui/icons-material/PeopleAltOutlined';
 import { Avatar } from '@mui/material';
 import stringAvatar from '../../../utils/string-to-avatar';
-import { PROJECT_STEP_OPTIONS } from '../../../constants/constants';
-import SelectItemOption from '../components/list-item/list-item-option';
+import ListItemDefault from '../components/list-item-default';
 import SelectItemPreview from '../components/list-item/list-item-preview';
 
 // TODO: Export from dots data schema
@@ -77,7 +76,7 @@ const Project = {
     filterAttributes: ['identifier', 'name'],
     components: {
       Icon: PeopleAltOutlined,
-      Option: SelectItemOption,
+      Option: ListItemDefault,
       Preview: SelectItemPreview,
     },
     getters: {

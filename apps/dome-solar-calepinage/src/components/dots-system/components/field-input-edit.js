@@ -5,19 +5,22 @@ import {
   ClickAwayListener,
   Divider,
 } from '@mui/material';
-import InputNumber from './popper-number';
 import { Box } from '@mui/system';
-import PopperText from './popper-text';
-import PopperDate from './popper-date';
-import PopperLink from './popper-link';
-import PopperSelect from './popper-select';
-import PopperDimension from './popper-dimension';
-import PopperTag from './popper-tag';
-import PopperReaction from './popper-reaction';
+
+// [ ](Adrien): use dynamic import
+import InputNumber from './input-number';
+import InputText from './input-text';
+import InputDate from './input-date';
+import InputLink from './input-link';
+import InputSelect from './input-enum';
+import InputDimension from './input-dimension';
+import InputTag from './input-tag';
+import InputReaction from './input-reaction';
+import InputCheckbox from './input-checkbox';
 
 import withSmartPopper from './hoc/with-smart-popper';
 import Actions from './actions';
-import { useWhyDidYouUpdate } from '@dots.cool/hooks';
+import InputFile from './input-file';
 
 function FieldInputEdit(props) {
   const {
@@ -30,8 +33,7 @@ function FieldInputEdit(props) {
     ...other
   } = props;
 
-  useWhyDidYouUpdate('InputEdit', props);
-
+  // [ ](Adrien): use dynamic import
   let PopperContent;
   switch (type) {
     case 'number':
@@ -39,29 +41,37 @@ function FieldInputEdit(props) {
       break;
     case 'text':
     default:
-      PopperContent = PopperText;
+      PopperContent = InputText;
       break;
     case 'date':
-      PopperContent = PopperDate;
+      PopperContent = InputDate;
       break;
     case 'link':
-      PopperContent = PopperLink;
+      PopperContent = InputLink;
       break;
     case 'dimension':
-      PopperContent = PopperDimension;
+      PopperContent = InputDimension;
       break;
     case 'list':
-      PopperContent = PopperSelect;
+      PopperContent = InputSelect;
       break;
     case 'tag':
-      PopperContent = PopperTag;
+      PopperContent = InputTag;
+      break;
+    case 'checkbox':
+      PopperContent = InputCheckbox;
       break;
     case 'reaction':
-      PopperContent = PopperReaction;
+      PopperContent = InputReaction;
+      break;
+    case 'file':
+      PopperContent = InputFile;
       break;
   }
 
-  const SmartContent = withSmartPopper(PopperContent);
+  /**
+   * When user validates new data
+   */
   const handleChange = useCallback(
     (data) => {
       // [ ](Adrien): Create compare function
@@ -74,6 +84,20 @@ function FieldInputEdit(props) {
     },
     [onChange, onClose, value]
   );
+
+  /**
+   * When user click outside of popper
+   * ? Click away needs to be outside the render component
+   */
+
+  /**
+   *  1. We Create a sharable pending state
+   */
+  const SmartContent = withSmartPopper(PopperContent);
+
+  /**
+   *  2. We a function which takes the submit func from children
+   */
   const handleClickAway = useCallback(
     (action) =>
       ({ target }) => {

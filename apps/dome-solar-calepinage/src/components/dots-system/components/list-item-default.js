@@ -4,9 +4,9 @@ import { useTheme } from '@mui/material/styles';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 
-const SelectItemOption = (props) => {
+const ListItemDefault = (props) => {
   const {
-    title,
+    label,
     Icon,
     description,
     selected,
@@ -29,6 +29,7 @@ const SelectItemOption = (props) => {
       alignItems="center"
       {...other}
     >
+      {/* Selection icon */}
       {!hideStartIcon && (
         <Box
           component={DoneIcon}
@@ -41,30 +42,38 @@ const SelectItemOption = (props) => {
           }}
         />
       )}
+
+      {/* Entity icon */}
       {Boolean(Icon) && Icon}
+
+      {/* Content */}
       <Stack
-        direction="row"
-        alignItems="center"
         sx={{
           flexGrow: 1,
           ml: 1,
-          whiteSpace: 'nowrap',
           overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          width: '100%',
           '& span': {
             color: theme.palette.text.secondary,
           },
         }}
       >
-        {title}
+        <Typography
+          variant="body2"
+          sx={{
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            width: '100%',
+          }}
+        >
+          {label}
+        </Typography>
         {description && (
-          <>
-            <br />
-            <Box component="span">{description}</Box>
-          </>
+          <Typography variant="caption">{description}</Typography>
         )}
       </Stack>
+
+      {/* Close / delete icon */}
       {selected && (
         <IconButton size="small" onClick={onDelete}>
           <CloseIcon fontSize="inherit" />
@@ -93,12 +102,12 @@ const SelectItemOption = (props) => {
   return RenderComponent;
 };
 
-SelectItemOption.bindProps = (getters, option, state) => ({
+ListItemDefault.bindProps = (getters, option, state) => ({
   Icon: getters.avatar(option),
-  title: getters.primary(option),
+  label: getters.primary(option),
   description: getters.secondary(option),
   tooltip: getters.info(option),
   selected: state.selected,
 });
 
-export default SelectItemOption;
+export default ListItemDefault;
