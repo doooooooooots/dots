@@ -3,21 +3,16 @@ import { Box, CircularProgress } from '@mui/material';
 import FieldInputValueBase from './field-input-value-base';
 
 function FieldInputValueDefault(props) {
-  const { loading, type, value, sx = {} } = props;
-
-  let Component;
-  switch (type) {
-    case 'date':
-      Component = Box;
-      break;
-    default:
-      Component = FieldInputValueBase;
-  }
+  const { loading, type, value, sx = {}, ...other } = props;
 
   return !loading ? (
-    <Component {...Component.bindProps({ value })} sx={sx}>
+    <FieldInputValueBase
+      {...FieldInputValueBase.bindProps({ value })}
+      sx={sx}
+      {...other}
+    >
       {value}
-    </Component>
+    </FieldInputValueBase>
   ) : (
     <Box pl={2}>
       <CircularProgress color="neutral" size={15} />

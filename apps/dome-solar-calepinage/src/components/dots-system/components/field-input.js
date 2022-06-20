@@ -10,6 +10,7 @@ import FieldInputValueDefault from './field-input-value-default';
 import FieldInputValueEnum from './field-input-value-enum';
 import FieldInputValueRelationShip from './field-input-value-relationship';
 import { FIELD_INPUT_CLASSNAME } from '../../../constants/classnames';
+import FieldInputValueDate from './field-input-value-date';
 
 function FieldInput(props) {
   const {
@@ -38,6 +39,9 @@ function FieldInput(props) {
       break;
     case 'select':
       Value = FieldInputValueEnum;
+      break;
+    case 'date':
+      Value = FieldInputValueDate;
       break;
     default:
       Value = FieldInputValueDefault;
