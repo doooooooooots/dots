@@ -99,7 +99,8 @@ const PageCreateLayout = () => {
 const LayoutCreate = observer(PageCreateLayout);
 
 LayoutCreate.getLayout = function getLayout(page) {
-  return <AuthGuard>{page}</AuthGuard>;
+  return page;
+  // return <AuthGuard>{page}</AuthGuard>;
 };
 
 export default LayoutCreate;

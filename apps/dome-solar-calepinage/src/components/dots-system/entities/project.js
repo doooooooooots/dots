@@ -1,5 +1,6 @@
 import PeopleAltOutlined from '@mui/icons-material/PeopleAltOutlined';
 import { Avatar } from '@mui/material';
+import moment from 'moment';
 import stringAvatar from '../../../utils/string-to-avatar';
 import ListItemDefault from '../components/list-item-default';
 import SelectItemPreview from '../components/list-item-preview';
@@ -59,12 +60,19 @@ const PROJECT_FIELDS = [
   },
   {
     name: 'altitude',
-    type: 'number',
+    type: 'dimension',
     label: 'Altitude',
   },
   {
     name: 'hasCommercial',
     type: 'relationship',
+    label: 'Commercial',
+    options: 'Person',
+    multiple: true,
+  },
+  {
+    name: 'name',
+    type: 'file',
     label: 'Commercial',
     options: 'Person',
     multiple: true,
@@ -97,7 +105,17 @@ const Project = entity({
       info: (option) => ``,
     },
   },
-  templates: {},
+  templates: {
+    byDate: {
+      name: 'By date',
+      query: ['identifier', 'name', 'dateReception'],
+      filterAttributes: ['identifier'],
+      getters: {
+        primary: (option) =>
+          `Recu le ${moment(option.dateReception).format('YYYY-MM-DD')}`,
+      },
+    },
+  },
 });
 
 export default Project;

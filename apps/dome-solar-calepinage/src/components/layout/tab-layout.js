@@ -23,7 +23,7 @@ import toast from 'react-hot-toast';
 import FieldGroupContainer from '../dots-system/components/container';
 import AddIcon from '@mui/icons-material/Add';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import FieldSelect from '../dots-system/components/field-select';
+import FieldSelect from '../_trash/field-select';
 
 const GET_LAYOUTS = gql`
   query GetLayouts($id: ID!) {

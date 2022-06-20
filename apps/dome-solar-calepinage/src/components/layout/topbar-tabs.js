@@ -26,7 +26,6 @@ import TabLayout from './tab-layout';
 import TabRoof from './tab-roof';
 
 // Components
-import PopperGrow from '../../../design-system/popper-grow';
 
 // Hooks
 import { useAuth } from '../../hooks/use-auth';
@@ -39,6 +38,7 @@ import { observer } from 'mobx-react-lite';
 import { toast } from 'react-hot-toast';
 import { useKey } from 'react-use';
 import Kbd from '../design-system/kbd/kbd';
+import PopperGrow from '../design-system/popper-grow';
 
 const id = 'transition-popper';
 
@@ -118,6 +118,7 @@ function TopBar() {
 
   return (
     <TabContext value={value}>
+      {/*//* MenuBar */}
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -217,7 +218,7 @@ function TopBar() {
             endIcon={<CloseIcon fontSize="inherit" />}
             sx={{ py: 0.25, px: 2 }}
           >
-            Fermer
+            Modifier
           </Button>
         </Stack>
 

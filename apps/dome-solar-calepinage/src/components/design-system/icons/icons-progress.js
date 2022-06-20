@@ -18,7 +18,7 @@ import Progress from '../../dots-system/enums/progress';
 
 const { values } = Progress;
 
-const ProgressIcon = ({ stage, color = 'primary' }) => {
+const ProgressIcon = ({ stage, color = 'primary', size }) => {
   let Icon = null;
   switch (stage) {
     case values.NOT_STARTED:
@@ -73,7 +73,7 @@ const ProgressIcon = ({ stage, color = 'primary' }) => {
       return null;
   }
 
-  return <Icon sx={{ color }} />;
+  return <Icon sx={{ color }} fontSize={size} />;
 };
 
 ProgressIcon.bindProps = ({ value, color }) => ({

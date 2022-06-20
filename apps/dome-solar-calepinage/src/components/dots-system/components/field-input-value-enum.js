@@ -1,6 +1,4 @@
 import React from 'react';
-import { Box, CircularProgress } from '@mui/material';
-import FieldInputValueBase from './field-input-value-base';
 import useEnum from '../../../hooks/use-enums';
 import ErrorPage from '../../design-system/screens/error-page';
 
@@ -8,12 +6,13 @@ import ErrorPage from '../../design-system/screens/error-page';
 import { ScaleBox } from './list-item-scale';
 import { SoftLabel } from './list-item-label';
 import { ChipWithStatus } from './list-item-chip-with-status';
-import EmergencyIcon from '../../design-system/icons/icons-emergency';
-import ProgressIcon from '../../design-system/icons/icons-progress';
 import { Category } from './list-item-category';
+import { ProgressValue } from './list-item-progress';
+import EmergencyIcon from '../../design-system/icons/icons-emergency';
+import { CircularProgress } from '@mui/material';
 
 function FieldInputValueEnum(props) {
-  const { loading, value, options: enumName, ...other } = props;
+  const { value, options: enumName } = props;
   const { data = {}, loading: loadingData, error } = useEnum(enumName);
   const { options, min, max, length, type } = data;
 
@@ -27,7 +26,7 @@ function FieldInputValueEnum(props) {
       Component = ScaleBox;
       break;
     case 'progress':
-      Component = ProgressIcon;
+      Component = ProgressValue;
       break;
     case 'emergency':
       Component = EmergencyIcon;
@@ -47,14 +46,12 @@ function FieldInputValueEnum(props) {
     return <ErrorPage />;
   }
 
-  return !loading && !loadingData ? (
-    <FieldInputValueBase {...other}>
-      <Component {...Component.bindProps({ ...option, length, min, max })} />
-    </FieldInputValueBase>
-  ) : (
-    <Box pl={2}>
-      <CircularProgress color="neutral" size={15} />
-    </Box>
+  if (loadingData) {
+    return <CircularProgress color="neutral" size={15} />;
+  }
+
+  return (
+    <Component {...Component.bindProps({ ...option, length, min, max })} />
   );
 }
 

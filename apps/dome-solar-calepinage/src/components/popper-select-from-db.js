@@ -12,9 +12,9 @@ import {
   ListItemText,
   Stack,
   TextField,
+  ProgressCircular,
   Typography,
 } from '@mui/material';
-import ProgressCircular from '../../design-system/progress-circular';
 import { isEmpty } from 'lodash';
 import { useStore } from '../contexts/useStore';
 import { useCallback, useState } from 'react';

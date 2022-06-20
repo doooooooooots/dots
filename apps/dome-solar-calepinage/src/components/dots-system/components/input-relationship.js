@@ -8,6 +8,7 @@ import PopperSelectedList from '../../design-system/select-with-autocomplete/com
 import makeSortFunc from '../../design-system/autocomplete/utils/makeSortFunc';
 import StyledAutocompletePopper from './styled-autocomplete-popper';
 import PopperLinkTemplateSelect from './select-template';
+import Actions from './actions';
 
 function PopperComponent(props) {
   const { disablePortal, anchorEl, open, ...other } = props;
@@ -22,6 +23,7 @@ function InputRelationship(props) {
     value,
     options,
     onChange,
+    getValue = (datas) => datas,
     loading,
 
     // Templates
@@ -46,6 +48,10 @@ function InputRelationship(props) {
     withDetails,
     disableSort,
     multiple,
+
+    showActions,
+    onSubmit,
+    onCancel,
   } = props;
 
   console.log(currentTemplate);
@@ -68,99 +74,101 @@ function InputRelationship(props) {
    * Suscribe to each changes
    */
   useEffect(() => {
-    const getValue = (value, multiple) => {
-      if (isEmpty(value)) return { set: [] };
-      if (multiple)
-        return {
-          set: value.map(({ id }) => ({
-            id,
-          })),
-        };
-      return { set: { id: last(value)?.id } };
-    };
-
     if (typeof onChange === 'function') {
-      onChange(getValue(pendingValue, multiple));
+      onChange(pendingValue);
     }
   }, [onChange, pendingValue, multiple]);
 
   return (
-    <Stack direction="row">
-      <Stack flex={1} overflow="hidden" width={270}>
-        {title && <PopperTitle title={title} loading={loading} />}
-        <Autocomplete
-          id={id}
-          loading={!title && loading}
-          options={_options}
-          // Value
-          value={pendingValue}
-          onChange={handleChange}
-          // Input
-          inputValue={input || ''}
-          onInputChange={onInputChange}
-          renderInput={(params) => (
-            <Stack ref={params.InputProps.ref}>
-              <PopperInput
-                inputProps={params.inputProps}
-                loading={loading}
-                onClear={onInputClear}
-                autoFocus
-              />
-              {!isEmpty(templates) && (
-                <>
-                  <PopperLinkTemplateSelect
-                    options={templates}
-                    value={currentTemplate}
-                    onChange={onTemplateChange}
-                  />
-                  <Divider />
-                </>
-              )}
-            </Stack>
-          )}
-          renderOption={renderOption}
-          getOptionLabel={getOptionLabel}
-          filterOptions={(options) => options}
-          isOptionEqualToValue={(_option, _value) => _option?.id === _value?.id}
-          filterSelectedOptions={withPreview}
-          onClose={() => null}
-          clearOnBlur={false}
-          PopperComponent={PopperComponent}
-          disableCloseOnSelect
-          multiple
-          open
-        />
-      </Stack>
-
-      {withPreview && (
-        <Stack width={270} borderLeft={1} borderColor="divider">
-          <PopperSelectedList
-            filterAttributes={filterSelectedAttributes}
-            renderOption={renderSelectedOption}
-            pendingValue={pendingValue}
-            onDelete={handleDelete}
+    <>
+      <Stack direction="row">
+        <Stack flex={1} overflow="hidden" width={270}>
+          {title && <PopperTitle title={title} loading={loading} />}
+          <Autocomplete
+            id={id}
+            loading={!title && loading}
+            options={_options}
+            // Value
+            value={pendingValue}
+            onChange={handleChange}
+            // Input
+            inputValue={input || ''}
+            onInputChange={onInputChange}
+            renderInput={(params) => (
+              <Stack ref={params.InputProps.ref}>
+                <PopperInput
+                  inputProps={params.inputProps}
+                  loading={loading}
+                  onClear={onInputClear}
+                  autoFocus
+                />
+                {!isEmpty(templates) && (
+                  <>
+                    <PopperLinkTemplateSelect
+                      options={templates}
+                      value={currentTemplate}
+                      onChange={onTemplateChange}
+                    />
+                    <Divider />
+                  </>
+                )}
+              </Stack>
+            )}
+            renderOption={renderOption}
+            getOptionLabel={getOptionLabel}
+            filterOptions={(options) => options}
+            isOptionEqualToValue={(_option, _value) =>
+              _option?.id === _value?.id
+            }
+            filterSelectedOptions={withPreview}
+            onClose={() => null}
+            clearOnBlur={false}
+            PopperComponent={PopperComponent}
+            disableCloseOnSelect
+            multiple
+            open
           />
         </Stack>
-      )}
 
-      {/* [ ](Adrien): Implements logic */}
-      {withDetails && !isEmpty(pendingValue) && (
-        <Stack
-          width={270}
-          borderLeft={1}
-          borderColor="divider"
-          spacing={1}
-          p={2}
-        >
-          {Object.entries(pendingValue[0]).map(([key, _value]) => (
-            <Stack key={key} borderBottom={1} borderColor="divider">
-              <Typography variant="caption">{key}</Typography>
-              <Typography variant="body2">{_value}</Typography>
-            </Stack>
-          ))}
-        </Stack>
+        {withPreview && (
+          <Stack width={270} borderLeft={1} borderColor="divider">
+            <PopperSelectedList
+              filterAttributes={filterSelectedAttributes}
+              renderOption={renderSelectedOption}
+              pendingValue={pendingValue}
+              onDelete={handleDelete}
+            />
+          </Stack>
+        )}
+
+        {/* [ ](Adrien): Implements logic */}
+        {withDetails && !isEmpty(pendingValue) && (
+          <Stack
+            width={270}
+            borderLeft={1}
+            borderColor="divider"
+            spacing={1}
+            p={2}
+          >
+            {Object.entries(pendingValue[0]).map(([key, _value]) => (
+              <Stack key={key} borderBottom={1} borderColor="divider">
+                <Typography variant="caption">{key}</Typography>
+                <Typography variant="body2">{_value}</Typography>
+              </Stack>
+            ))}
+          </Stack>
+        )}
+      </Stack>
+      {showActions && (
+        <>
+          <Divider />
+          <Actions
+            onConfirm={() => onSubmit(pendingValue)}
+            onCancel={onCancel}
+          />
+        </>
       )}
-    </Stack>
+    </>
   );
 }
 

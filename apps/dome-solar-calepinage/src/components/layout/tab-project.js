@@ -11,10 +11,12 @@ import { observer } from 'mobx-react';
 import TabPopperChangeButton from './tab-popper-change-button';
 import toast from 'react-hot-toast';
 import FieldGroupContainer from '../dots-system/components/container';
-import FieldLink from '../dots-system/components/field-link';
-import FieldSelect from '../dots-system/components/field-select';
+import FieldSelect from '../_trash/field-select';
 
 import { useDots } from '../dots-system/context/dots-context';
+import { Divider, Typography } from '@mui/material';
+import InputRelationWithFetch from '../dots-system/components/input-relationship-with-fetch';
+import Actions from '../dots-system/components/actions';
 
 const GET_PROJECTS = gql`
   query GetProjects {
@@ -53,9 +55,10 @@ const UPDATE_PROJECT = gql`
 const TabProject = (props) => {
   const { onChange } = props;
   const { getRelatedData, updateRelatedData } = useStore();
-  const { Project } = useDots();
 
   const project = getRelatedData('project');
+
+  const { Project } = useDots();
 
   const router = useRouter();
   const { id } = router.query;
@@ -102,59 +105,12 @@ const TabProject = (props) => {
 
   return (
     <>
-      {isEmpty(project) ? (
-        <PopperSelectFromDb
-          name={PAGE_PROJECT}
-          query={GET_PROJECTS}
-          variables={{ id }}
-          icon={<People />}
-          skip={!id}
-          onClick={handleChoiceClick}
-          getRowDatas={(row) => ({
-            id: row.id,
-            name: row.name,
-          })}
-          canAdd
-        />
-      ) : (
-        <>
-          <FieldGroupContainer>
-            {Project.fields.map((field) => {
-              if (field.type === 'link')
-                return (
-                  <FieldLink
-                    key={field.name}
-                    {...field}
-                    value={project[field.name]}
-                    withPreview
-                    readOnly
-                    multiple
-                  />
-                );
-
-              if (field.type === 'enum')
-                return (
-                  <FieldSelect
-                    key={field.name}
-                    {...field}
-                    onConfirm={(data) => console.log(data)}
-                    multiple
-                  />
-                );
-
-              return (
-                <FielInput
-                  key={field.name}
-                  {...field}
-                  value={project[field.name]}
-                  onConfirm={handleChangeConfirm(field.name)}
-                />
-              );
-            })}
-          </FieldGroupContainer>
-          <TabPopperChangeButton name="project" />
-        </>
-      )}
+      <InputRelationWithFetch
+        onSubmit={(data) => console.log(data)}
+        options={'Project'}
+        showActions
+      />
+      <Divider />
     </>
   );
 };

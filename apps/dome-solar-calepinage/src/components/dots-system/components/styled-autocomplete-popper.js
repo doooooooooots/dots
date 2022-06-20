@@ -12,6 +12,7 @@ const StyledAutocompletePopper = styled('div')(({ theme }) => ({
   [`& .${autocompleteClasses.listbox}`]: {
     backgroundColor: theme.palette.mode === 'light' ? '#fff' : '#1c2128',
     padding: 0,
+    maxHeight: '35vh',
     [`& .${autocompleteClasses.option}`]: {
       minHeight: 'auto',
       alignItems: 'center',

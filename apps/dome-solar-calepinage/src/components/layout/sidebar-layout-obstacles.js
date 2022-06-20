@@ -22,11 +22,11 @@ import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/EditOutlined';
 import { observer } from 'mobx-react';
 import { useStore } from '../../contexts/useStore';
-import List from '../../../design-system/list';
 import FenceIcon from '@mui/icons-material/Fence';
 import { toast } from 'react-hot-toast';
 import { gql, useMutation } from '@apollo/client';
 import SidebarLayoutInfobox from './sidebar-layout-infobox';
+import List from '../design-system/list';
 
 const UPDATE_ROOF = gql`
   mutation UpdateRoof($where: RoofWhereUniqueInput!, $data: RoofUpdateInput!) {

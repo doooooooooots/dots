@@ -9,8 +9,10 @@ import FieldInputEdit from './field-input-edit';
 import FieldInputValueDefault from './field-input-value-default';
 import FieldInputValueEnum from './field-input-value-enum';
 import FieldInputValueRelationShip from './field-input-value-relationship';
-import { FIELD_INPUT_CLASSNAME } from '../../../constants/classnames';
 import FieldInputValueDate from './field-input-value-date';
+import FieldInputValueDimension from './field-input-value-dimension';
+import { Box, CircularProgress } from '@mui/material';
+import FieldInputValueBase from './field-input-value-base';
 
 function FieldInput(props) {
   const {
@@ -43,6 +45,9 @@ function FieldInput(props) {
     case 'date':
       Value = FieldInputValueDate;
       break;
+    case 'dimension':
+      Value = FieldInputValueDimension;
+      break;
     default:
       Value = FieldInputValueDefault;
       break;
@@ -50,16 +55,19 @@ function FieldInput(props) {
 
   return (
     <>
-      <Value
-        {...bindToggle(popupState)}
-        type={type}
-        value={value}
-        className={FIELD_INPUT_CLASSNAME}
-        isOpen={!readOnly && isOpen}
-        options={options}
-        loading={loading}
-        sx={sx}
-      />
+      {!loading ? (
+        <FieldInputValueBase
+          {...bindToggle(popupState)}
+          isOpen={!readOnly && isOpen}
+          sx={sx}
+        >
+          <Value type={type} value={value} options={options} />
+        </FieldInputValueBase>
+      ) : (
+        <Box pl={2}>
+          <CircularProgress color="neutral" size={15} />
+        </Box>
+      )}
 
       {!readOnly && anchorEl && (
         <PopperStyled {...bindPopper(popupState)} placement="bottom-start">
