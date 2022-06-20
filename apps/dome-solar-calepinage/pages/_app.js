@@ -18,9 +18,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Toaster } from 'react-hot-toast';
 import { DotsProvider } from '../src/components/dots-system/context/dots-context';
-import createSchema from '../src/components/dots-system/schema/create-schema';
-import Person from '../src/components/dots-system/schema/person';
-import Project from '../src/components/dots-system/schema/project';
+import createSchema from '../src/components/dots-system/utils/schema';
+import Person from '../src/components/dots-system/entities/person';
+import Project from '../src/components/dots-system/entities/project';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();

@@ -4,7 +4,6 @@ import Field from '../src/components/dots-system/components/field';
 import FieldContainer from '../src/components/dots-system/components/container';
 import {
   Alert,
-  Box,
   Button,
   Divider,
   IconButton,
@@ -36,6 +35,11 @@ const GET_LAST_PROJECT = gql`
       areaWind
       areaSea
       areaSnow
+      hasCommercial {
+        id
+        givenName
+        familyName
+      }
     }
   }
 `;
@@ -59,14 +63,19 @@ const UPDATE_PROJECT = gql`
       areaWind
       areaSea
       areaSnow
+      hasCommercial {
+        id
+        givenName
+        familyName
+      }
     }
   }
 `;
 
 function Test() {
-  const {
-    Project: { fields },
-  } = useDots();
+  const { Project } = useDots();
+  const { fields } = Project;
+
   const [loadingSave, setLoadingSave] = useState(false);
 
   /**
@@ -154,22 +163,32 @@ function Test() {
             </Stack>
           </Stack>
 
-          {fields.map(({ name, type, label, ...other }) => (
-            <Field
-              key={name}
-              type={type}
-              name={name}
-              value={data.projects[0][name]}
-              label={label}
-              loading={loadingSave === { name }}
-              onChange={handleChangeConfirm}
-              {...other}
-            />
-          ))}
+          {fields.map(({ name, type, label, options, multiple }) => {
+            const fieldProps = {
+              type: type,
+              name: name,
+              label: label,
+            };
+
+            if (type === 'select' || type === 'relationship') {
+              fieldProps.options = options;
+              fieldProps.multiple = multiple;
+            }
+
+            return (
+              <Field
+                key={name}
+                value={data.projects[0][name]}
+                loading={loadingSave === name}
+                onChange={handleChangeConfirm}
+                {...fieldProps}
+              />
+            );
+          })}
         </FieldContainer>
       )}
-      <Divider sx={{ my: 5 }} />
-      <Stack direction="row" spacing={1}>
+      {/* <Divider sx={{ my: 5 }} /> */}
+      {/* <Stack direction="row" spacing={1}>
         <ButtonEnum />
         <ButtonLink />
         <ButtonAutomation />
@@ -207,7 +226,7 @@ function Test() {
           label="Tag value"
           onChange={handleChange}
         />
-      </FieldContainer>
+      </FieldContainer> */}
     </Container>
   );
 }

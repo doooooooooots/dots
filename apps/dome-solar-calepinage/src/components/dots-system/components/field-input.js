@@ -6,12 +6,23 @@ import {
   usePopupState,
 } from 'material-ui-popup-state/hooks';
 import FieldInputEdit from './field-input-edit';
-import FieldInputValue from './field-input-value';
+import FieldInputValueDefault from './field-input-value-default';
+import FieldInputValueEnum from './field-input-value-enum';
+import FieldInputValueRelationShip from './field-input-value-relationship';
 import { FIELD_INPUT_CLASSNAME } from '../../../constants/classnames';
-import { isObject } from 'lodash';
 
 function FieldInput(props) {
-  const { name, type, loading, value, onChange, sx, ...other } = props;
+  const {
+    name,
+    type,
+    loading,
+    value,
+    onChange,
+    options,
+    readOnly,
+    sx,
+    ...other
+  } = props;
 
   const popupState = usePopupState({
     variant: 'popper',
@@ -19,31 +30,49 @@ function FieldInput(props) {
   });
   const { isOpen, close, anchorEl } = popupState;
 
+  let Value;
+
+  switch (type) {
+    case 'relationship':
+      Value = FieldInputValueRelationShip;
+      break;
+    case 'select':
+      Value = FieldInputValueEnum;
+      break;
+    default:
+      Value = FieldInputValueDefault;
+      break;
+  }
+
   return (
     <>
-      <FieldInputValue
+      <Value
         {...bindToggle(popupState)}
+        type={type}
+        value={value}
         className={FIELD_INPUT_CLASSNAME}
-        isOpen={isOpen}
+        isOpen={!readOnly && isOpen}
+        options={options}
         loading={loading}
         sx={sx}
-      >
-        {isObject(value) ? value.id : value}
-      </FieldInputValue>
+      />
 
-      <PopperStyled {...bindPopper(popupState)} placement="bottom-start">
-        {isOpen && (
-          <FieldInputEdit
-            id={`${name}-popper-input`}
-            anchorEl={anchorEl}
-            type={type}
-            value={value}
-            onChange={onChange}
-            onClose={close}
-            {...other}
-          />
-        )}
-      </PopperStyled>
+      {!readOnly && anchorEl && (
+        <PopperStyled {...bindPopper(popupState)} placement="bottom-start">
+          {isOpen && (
+            <FieldInputEdit
+              id={`${name}-popper-input`}
+              anchorEl={anchorEl}
+              type={type}
+              value={value}
+              options={options}
+              onChange={onChange}
+              onClose={close}
+              {...other}
+            />
+          )}
+        </PopperStyled>
+      )}
     </>
   );
 }

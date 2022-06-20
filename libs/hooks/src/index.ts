@@ -7,7 +7,8 @@ export { default as SettingsProvider } from './settings-provider';
 export { default as useAsync } from './use-async';
 
 export { default as useDatagrid } from './use-datagrid';
-export { default as useInput } from './use-input';
+export { default as useInputText } from './use-input-text';
+export { default as useInputSelect } from './use-input-select';
 export { default as useDialog } from './use-dialog';
 export { default as useEventListener } from './use-event-listener';
 export { default as useMounted } from './use-mounted';
@@ -18,3 +19,4 @@ export { default as useToggle } from './use-toggle';
 export { default as useWarnBeforeQuitting } from './use-warn-before-quitting';
 export { default as useWhyDidYouUpdate } from './use-why-did-you-update';
 export { default as useConfirmDialog } from './use-confirm-dialog';
+export { default as useFetch } from './use-fetch';

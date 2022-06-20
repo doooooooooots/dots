@@ -1,30 +1,29 @@
 import { useCallback, useState } from 'react';
-import { last, isArray, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 
-function useAutocomplete(config: {
+interface ConfigType<T> {
   id: string;
   name: string;
   type: string;
   multiple: boolean;
-  value: unknown;
-}) {
-  const { name, value = [], multiple = false } = config;
+  value: T[];
+}
+
+type OptionType = {
+  id?: string;
+  key: string;
+  value: number;
+  label: string;
+  index: number;
+};
+
+function useAutocomplete(config: ConfigType<OptionType>) {
+  const { name, value, multiple = false } = config;
 
   /**
    * Local values
    */
-  const [input, setInput] = useState('');
-  const [pendingValue, setPendingValue] = useState(
-    isArray(value) ? [...value] : [value]
-  );
-
-  const handleInputChange = useCallback((event) => {
-    setInput(event.target.value);
-  }, []);
-
-  const handleInputClear = useCallback((event) => {
-    setInput('');
-  }, []);
+  const [pendingValue, setPendingValue] = useState<OptionType[]>(value);
 
   /**
    * Render value for user
@@ -52,34 +51,23 @@ function useAutocomplete(config: {
    * User clicks on delete in selected element list
    */
   const handleDelete = useCallback(
-    (id) => () => {
+    (key) => () => {
       setPendingValue((current) => {
         const _current = [...current];
-        const elem = _current.find((item) => item.id === id);
-        const index = _current.indexOf(elem);
-        _current.splice(index, 1);
+        const elem = _current.find((item) => item.key || item.id === key);
+        if (elem) {
+          const index = _current.indexOf(elem);
+          _current.splice(index, 1);
+        }
         return _current;
       });
     },
     []
   );
 
-  /**
-   * Render value for user
-   */
-  const getValue = useCallback(() => {
-    if (multiple) return pendingValue;
-    if (pendingValue && pendingValue.length) return last(pendingValue);
-    return null;
-  }, [multiple, pendingValue]);
-
   return {
     id: `autocomplete-${name}`,
-    input,
-    handleInputChange,
-    handleInputClear,
     pendingValue,
-    getValue,
     handleChange,
     handleDelete,
   };

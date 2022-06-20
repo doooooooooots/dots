@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -11,8 +11,8 @@ import { Box } from '@mui/system';
 import InputNumber from './input-number';
 import InputText from './input-text';
 import InputDate from './input-date';
-import InputLink from './input-link';
-import InputSelect from './input-enum';
+import InputRelationshipWithFetch from './input-relationship-with-fetch';
+import InputEnumWithFetch from './input-enum-with-fetch';
 import InputDimension from './input-dimension';
 import InputTag from './input-tag';
 import InputReaction from './input-reaction';
@@ -46,14 +46,14 @@ function FieldInputEdit(props) {
     case 'date':
       PopperContent = InputDate;
       break;
-    case 'link':
-      PopperContent = InputLink;
+    case 'relationship':
+      PopperContent = InputRelationshipWithFetch;
       break;
     case 'dimension':
       PopperContent = InputDimension;
       break;
-    case 'list':
-      PopperContent = InputSelect;
+    case 'select':
+      PopperContent = InputEnumWithFetch;
       break;
     case 'tag':
       PopperContent = InputTag;
@@ -70,30 +70,14 @@ function FieldInputEdit(props) {
   }
 
   /**
-   * When user validates new data
-   */
-  const handleChange = useCallback(
-    (data) => {
-      // [ ](Adrien): Create compare function
-      if (value !== data) {
-        if (typeof onChange === 'function') {
-          onChange(data);
-        }
-      }
-      onClose();
-    },
-    [onChange, onClose, value]
-  );
-
-  /**
    * When user click outside of popper
    * ? Click away needs to be outside the render component
+   * 1. We Create a sharable pending state
    */
-
-  /**
-   *  1. We Create a sharable pending state
-   */
-  const SmartContent = withSmartPopper(PopperContent);
+  const SmartContent = useMemo(
+    () => withSmartPopper(PopperContent),
+    [PopperContent]
+  );
 
   /**
    *  2. We a function which takes the submit func from children
@@ -116,7 +100,7 @@ function FieldInputEdit(props) {
     <>
       <SmartContent
         value={value}
-        onChange={handleChange}
+        onChange={onChange}
         onCancel={onClose}
         onClose={onClose}
         {...other}
@@ -124,7 +108,7 @@ function FieldInputEdit(props) {
         {({ submit, cancel, content }) => (
           <>
             <ClickAwayListener
-              onClickAway={handleClickAway(submit)}
+              onClickAway={handleClickAway(cancel)}
               mouseEvent={'onMouseDown'}
             >
               <Box>

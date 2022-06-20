@@ -1,7 +1,7 @@
-import enumList from '../../../utils/enum-list';
+import enumList from '../utils/enum-list';
 
 const ProjectStep = enumList({
-  type: 'linked',
+  type: 'chip',
   values: {
     PRE_STUDY_TODO: 1,
     PRE_STUDY_DONE: 2,

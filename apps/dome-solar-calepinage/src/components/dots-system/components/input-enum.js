@@ -1,19 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useAutocomplete, useWhyDidYouUpdate } from '@dots.cool/hooks';
-import {
-  Autocomplete,
-  CircularProgress,
-  Stack,
-  Typography,
-} from '@mui/material';
+import React, { useEffect, useMemo } from 'react';
+import { useAutocomplete, useInputText } from '@dots.cool/hooks';
+import { Alert, Autocomplete, Stack } from '@mui/material';
 import PopperInput from '../../design-system/popper/popper-input';
 import StyledAutocompletePopper from './styled-autocomplete-popper';
 import PopperTitle from '../../design-system/popper/popper-title';
 import ListItemDefault from './list-item-default';
 import { matchSorter } from 'match-sorter';
-import { isEmpty, round } from 'lodash';
+import { isEmpty } from 'lodash';
 import makeSortFunc from '../../design-system/autocomplete/utils/makeSortFunc';
-import { Box } from '@mui/system';
 
 const filterOptions = (options, { inputValue }) =>
   matchSorter(options, inputValue);
@@ -36,86 +30,53 @@ function InputEnum(props) {
     name,
     loading,
     value,
+    getValue,
     options,
     onChange,
-    onSubmit,
-    onCancel,
     withPreview,
     disableSort,
-    multiple,
   } = props;
 
-  const [isReady, setIsReady] = useState(false);
-  useWhyDidYouUpdate('Popper', props);
-
-  const {
-    id,
-    // Pending value
-    pendingValue,
-    getValue,
-    handleChange,
-    // Search input
-    input,
-    handleInputChange,
-    handleInputClear,
-  } = useAutocomplete({
+  const { id, pendingValue, handleChange } = useAutocomplete({
     name: name,
     value: value,
-    multiple,
+    multiple: false,
   });
 
-  const [optionList, setOptionList] = useState([]);
+  const { input, onChange: onInputChange, onClear } = useInputText('');
+
+  /**
+   * Override default component by enum's one
+   */
+  let Component = ListItemDefault;
 
   /**
    * Add selected values to all results
    */
   const _options = useMemo(() => {
-    if (isEmpty(optionList)) return [];
-    return disableSort
-      ? optionList
-      : [...optionList].sort(
-          makeSortFunc({ value: pendingValue, options: optionList })
-        );
-  }, [disableSort, pendingValue, optionList]);
+    if (isEmpty(pendingValue)) return options;
 
-  /**
-   * On Mount, fetch options
-   */
-  useEffect(() => {
-    const getOptionList = async () => {
-      const res = await fetch(`/api/constants/${options}/options`);
-      const list = await res.json();
-      setOptionList(list);
-      if (value) {
-        handleChange(
-          null,
-          list.filter((item) => item.value === value)
-        );
-      }
-      setIsReady(true);
-    };
-    getOptionList();
-    return () => {
-      setIsReady(false);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    return disableSort
+      ? options
+      : [...options].sort(makeSortFunc({ value: pendingValue, options }));
+  }, [options, disableSort, pendingValue]);
 
   /**
    * Suscribe to each changes
    */
   useEffect(() => {
     if (typeof onChange === 'function') {
-      onChange(getValue(pendingValue)?.value);
+      onChange(getValue(pendingValue));
     }
   }, [getValue, onChange, pendingValue]);
 
-  if (!isReady)
+  if (isEmpty(options)) {
     return (
-      <Stack direction="row" justifyContent="center" p={2}>
-        <CircularProgress color="neutral" />
-      </Stack>
+      <Alert severity="info">
+        Il semble que la liste ne possède pas de valeur
+      </Alert>
     );
+  }
 
   return (
     <Stack direction="row">
@@ -127,36 +88,37 @@ function InputEnum(props) {
           value={pendingValue}
           onChange={handleChange}
           inputValue={input}
-          onInputChange={handleInputChange}
+          onInputChange={onInputChange}
           renderInput={(params) => (
-            <Stack ref={params.InputProps.ref}>
-              <PopperInput
-                loading={loading}
-                onClear={handleInputClear}
-                inputProps={params.inputProps}
-                sx={[optionList.length < 10 && { opacity: 0, height: 0 }]}
-                autoFocus
-              />
-            </Stack>
+            <PopperInput
+              ref={params.InputProps.ref}
+              loading={loading}
+              onClear={onClear}
+              inputProps={params.inputProps}
+              sx={[options.length < 10 && { opacity: 0, height: 0 }]}
+              autoFocus
+            />
           )}
           options={_options}
           PopperComponent={PopperComponent}
           filterOptions={input ? filterOptions : () => _options}
-          getOptionLabel={(option) => option?.label}
+          getOptionLabel={(option) =>
+            options.find((item) => item.value === option.value)?.label
+          }
           renderOption={(
             props,
             { label, index, value, color },
             { selected }
           ) => (
-            <ListItemDefault
+            <Component
               {...props}
               label={label}
               index={index}
               value={value}
               color={color}
-              max={optionList.length}
+              max={options.length}
               selected={selected}
-              hideStartIcon={!multiple && !selected}
+              hideStartIcon={!selected}
             />
           )}
           isOptionEqualToValue={(option, value) => option.value === value.value}

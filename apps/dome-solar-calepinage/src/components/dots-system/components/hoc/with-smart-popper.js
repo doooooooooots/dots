@@ -1,19 +1,24 @@
-import { useWhyDidYouUpdate } from '@dots.cool/hooks';
 import { useCallback, useState } from 'react';
 
 const withSmartPopper = (Component) => (props) => {
   const { value, onChange, onCancel, onClose, children, ...other } = props;
-  useWhyDidYouUpdate('SmartPopper', props);
 
+  // Pending Value
   const [input, setInput] = useState(value);
 
+  // Update pending value onChange events
   const handleChange = useCallback((data) => {
     setInput(data);
   }, []);
 
+  // Update sumbit function when input changes
   const handleSubmit = useCallback(() => {
-    onChange(input);
-  }, [input, onChange]);
+    // [ ](Adrien): Improve compare method
+    if (value !== input) {
+      onChange(input);
+    }
+    onClose();
+  }, [input, onChange, onClose, value]);
 
   const Content = (
     <Component

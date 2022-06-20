@@ -1,4 +1,4 @@
-import enumList from '../../../utils/enum-list';
+import enumList from '../utils/enum-list';
 
 const Status = enumList({
   type: 'category',

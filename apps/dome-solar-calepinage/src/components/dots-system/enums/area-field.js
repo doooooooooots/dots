@@ -1,4 +1,4 @@
-import enumList from '../../../utils/enum-list';
+import enumList from '../utils/enum-list';
 
 const AreaField = enumList({
   type: 'category',
@@ -8,6 +8,13 @@ const AreaField = enumList({
     CAMPAIGN: 3,
     URBAN: 4,
     URBAN_LIGHT: 5,
+  },
+  colors: {
+    SEA: 'tags.6',
+    OPEN_COUNTRY: 'tags.1',
+    CAMPAIGN: 'tags.3',
+    URBAN: 'tags.8',
+    URBAN_LIGHT: 'neutral.200',
   },
   labels: {
     fr: {

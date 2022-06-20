@@ -39,6 +39,8 @@ const DigitButton = React.memo(({ sx, ...other }) => (
 ));
 DigitButton.displayName = 'DigitButton';
 
+const getValue = (value) => parseInt(value, 10);
+
 function InputNumber(props) {
   const { value, onChange, onSubmit, onCancel } = props;
 
@@ -83,7 +85,7 @@ function InputNumber(props) {
    * User clicks on submit button
    */
   const handleSubmit = useCallback(() => {
-    onSubmit(input);
+    onSubmit(getValue(input));
   }, [input, onSubmit]);
 
   /**
@@ -91,7 +93,7 @@ function InputNumber(props) {
    */
   useEffect(() => {
     if (typeof onChange === 'function') {
-      onChange(input);
+      onChange(getValue(input));
     }
   }, [input, onChange]);
 

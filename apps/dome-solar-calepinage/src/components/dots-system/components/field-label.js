@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stack, Typography } from '@mui/material';
-import { isEmpty, isArray } from 'lodash';
+import { isArray } from 'lodash';
 
 // Icons
 // [ ](Adrien): use dynamic imports
@@ -12,37 +12,33 @@ import ListOutlinedIcon from '@mui/icons-material/ListOutlined';
 import LinkIcon from '@mui/icons-material/Link';
 import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
 
+const getIconComponent = (type) => {
+  switch (type) {
+    case 'select':
+      return ListOutlinedIcon;
+    case 'dimension':
+      return PermDataSettingOutlinedIcon;
+    case 'number':
+      return Filter1OutlinedIcon;
+    case 'text':
+      return AbcIcon;
+    case 'date':
+      return CalendarTodayOutlinedIcon;
+    case 'relationship':
+      return LinkIcon;
+    case 'tag':
+      return SellOutlinedIcon;
+    default:
+      return null;
+  }
+};
+
 function FieldLabel(props) {
-  const { icon, type, label, sx = {} } = props;
+  const { type, label, sx = {} } = props;
 
   let _sx = isArray(sx) ? sx : [sx];
 
-  let Icon = icon;
-  if (!Icon) {
-    switch (type) {
-      case 'list':
-        Icon = ListOutlinedIcon;
-        break;
-      case 'dimension':
-        Icon = PermDataSettingOutlinedIcon;
-        break;
-      case 'number':
-        Icon = Filter1OutlinedIcon;
-        break;
-      case 'text':
-        Icon = AbcIcon;
-        break;
-      case 'date':
-        Icon = CalendarTodayOutlinedIcon;
-        break;
-      case 'link':
-        Icon = LinkIcon;
-        break;
-      case 'tag':
-        Icon = SellOutlinedIcon;
-        break;
-    }
-  }
+  const Icon = getIconComponent(type);
 
   return (
     <Stack
@@ -60,7 +56,7 @@ function FieldLabel(props) {
         ..._sx,
       ]}
     >
-      {!isEmpty(Icon) && <Icon />}
+      {Icon && <Icon type={type} />}
       <Typography
         variant="body2"
         sx={{

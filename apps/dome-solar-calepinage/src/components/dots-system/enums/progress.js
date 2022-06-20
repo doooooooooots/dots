@@ -1,7 +1,7 @@
-import enumList from '../../../utils/enum-list';
+import enumList from '../utils/enum-list';
 
 const Progress = enumList({
-  type: 'linked',
+  type: 'progress',
   values: {
     INBOX: 100,
     NOT_STARTED: 110,
@@ -12,11 +12,11 @@ const Progress = enumList({
     REVIEWED: 220,
     PENDING: 300,
     MISSING_INFORMATION: 310,
-    NEED_FIXING: 310,
+    NEED_FIXING: 320,
     DONE: 500,
     ERROR: 400,
     REJECTED: 410,
-    LATE: 410,
+    LATE: 420,
     CANCELED: 600,
     CLOSED: 610,
   },

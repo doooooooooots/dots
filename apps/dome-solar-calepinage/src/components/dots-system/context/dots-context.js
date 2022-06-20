@@ -1,4 +1,10 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useRef } from 'react';
+
+// [ ](Adrien): Manage cache system :
+// - init with local storage
+// - fetch keys to delete
+// - delete keys to update from cache
+// - when unmount save cache in local storage
 
 export const DotsContext = createContext({});
 

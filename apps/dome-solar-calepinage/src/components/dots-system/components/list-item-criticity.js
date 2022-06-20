@@ -7,7 +7,7 @@ import React from 'react';
 /**
  * Criticity VALUE
  */
-const CriticityValue = (props, ref) => {
+const ListItemCriticity = (props, ref) => {
   const { value, label, index, max, ...other } = props;
   return (
     <StyledItem {...other} ref={ref}>
@@ -17,4 +17,4 @@ const CriticityValue = (props, ref) => {
   );
 };
 
-React.forwardRef(CriticityValue);
+export default React.forwardRef(ListItemCriticity);

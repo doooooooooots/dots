@@ -3,6 +3,7 @@ import { Box } from '@mui/system';
 import SignalCellularAlt1BarOutlinedIcon from '@mui/icons-material/SignalCellularAlt1BarOutlined';
 import SignalCellularAlt2BarOutlinedIcon from '@mui/icons-material/SignalCellularAlt2BarOutlined';
 import SignalCellularAltOutlinedIcon from '@mui/icons-material/SignalCellularAltOutlined';
+import { round } from 'lodash';
 
 /**
  * EMERGENCY ICON
@@ -44,5 +45,9 @@ const EmergencyIcon = ({ severity, size = 'medium' }) => {
     </Box>
   );
 };
+
+EmergencyIcon.bindProps = ({ index, length }) => ({
+  severity: round((4 * index) / length),
+});
 
 export default EmergencyIcon;

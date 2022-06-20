@@ -6,8 +6,8 @@ import ProgressIcon from '../../design-system/icons/icons-progress';
 /**
  * PROGRESS
  */
-const ProgressValue = (props, ref) => {
-  const { value, label, index, max, color, ...other } = props;
+const ListItemProgress = (props, ref) => {
+  const { value, label, index, max, color = 'neutral', ...other } = props;
   return (
     <StyledItem {...other} ref={ref}>
       <ProgressIcon stage={value} color={`${color}.main`} />
@@ -16,4 +16,4 @@ const ProgressValue = (props, ref) => {
   );
 };
 
-React.forwardRef(ProgressValue);
+export default React.forwardRef(ListItemProgress);

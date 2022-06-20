@@ -6,3 +6,4 @@ export * from './filter';
 export * from './tabs';
 export * from './dialog';
 export * from './pages';
+export { default as Editor } from './editor';

@@ -15,6 +15,7 @@ const ListItemDefault = (props) => {
     followCursor,
     hideStartIcon,
     onDelete,
+    color,
     ...other
   } = props;
 
@@ -69,7 +70,17 @@ const ListItemDefault = (props) => {
           {label}
         </Typography>
         {description && (
-          <Typography variant="caption">{description}</Typography>
+          <Typography
+            variant="caption"
+            sx={{
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              width: '100%',
+            }}
+          >
+            {description}
+          </Typography>
         )}
       </Stack>
 

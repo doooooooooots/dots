@@ -6,7 +6,8 @@ import FieldInput from './field-input';
 const FIELD_HEIGHT = 30;
 
 function Field(props) {
-  const { name, label, type, loading, value, icon, onChange, ...other } = props;
+  const { name, label, type, value, options, loading, onChange, sx, ...other } =
+    props;
 
   const handleChange = useCallback(
     (data) => {
@@ -16,10 +17,9 @@ function Field(props) {
   );
 
   return (
-    <Stack direction="row" alignItems="center">
+    <Stack sx={sx} direction="row" alignItems="center">
       <FieldLabel
         type={type}
-        icon={icon}
         label={label}
         sx={{
           height: FIELD_HEIGHT,
@@ -32,6 +32,7 @@ function Field(props) {
         name={name}
         value={value}
         type={type}
+        options={options}
         loading={loading}
         onChange={handleChange}
         sx={{ height: FIELD_HEIGHT }}
