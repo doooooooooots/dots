@@ -12,15 +12,14 @@ import updateOneBuilder from '../update-one-builder';
 import updateManyBuilder from '../update-many-builder';
 // AGGREGATES
 import countBuilder from '../count-builder';
+import pluralize = require('pluralize');
 
 // Types
 import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
 import { GraphQlApiType } from './create-schema.d';
 
-const createGraphQlApi = (
-  singular: string,
-  plurial: string
-): GraphQlApiType => {
+const createGraphQlApi = (singular: string): GraphQlApiType => {
+  const plurial = pluralize(singular);
   return {
     [GRAPHQL_ACTIONS.FindOne]: findOneBuilder(singular),
     [GRAPHQL_ACTIONS.CreateOne]: createOneBuilder(singular),

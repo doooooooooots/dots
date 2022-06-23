@@ -1,6 +1,6 @@
 import React from 'react';
 import { Divider, Stack, Typography } from '@mui/material';
-import { isArray } from 'lodash';
+import { isArray, isNumber, isString } from 'lodash';
 import { Box } from '@mui/system';
 
 function Tag({
@@ -15,6 +15,14 @@ function Tag({
 }) {
   const _sx = isArray(sx) ? sx : [sx];
 
+  let fontSize = 16;
+  if (isString(startIcon) || isNumber(startIcon)) {
+    fontSize = 12;
+    if (/\p{Extended_Pictographic}/u.test(startIcon)) {
+      fontSize = 10;
+    }
+  }
+
   return (
     <Stack
       direction="row"
@@ -24,7 +32,6 @@ function Tag({
         {
           px: 1,
           color: 'text.secondary',
-          fontSize: 12,
         },
         withBorder && {
           border: 1,
@@ -41,7 +48,7 @@ function Tag({
             display="flex"
             alignItems="center"
             component="span"
-            fontSize={typeof startIcon === 'string' ? 9 : 16}
+            fontSize={fontSize}
             borderRight={1}
             borderColor="divider"
             pr={1}
@@ -56,10 +63,10 @@ function Tag({
       <Typography
         variant={variant}
         sx={{
+          maxWidth: 230,
           overflow: 'hidden',
           whiteSpace: 'nowrap',
           textOverflow: 'ellipsis',
-          maxWidth: 230,
           textTransform: 'uppercase',
         }}
       >

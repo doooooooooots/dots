@@ -1,7 +1,7 @@
 import * as columns from '../../columns';
 import * as forms from '@dots.cool/form-builder';
 import * as yup from 'yup';
-import { isArray, get } from 'lodash';
+import { isArray } from 'lodash';
 import { FIELD_TYPES, GRAPHQL_REQUESTS } from '@dots.cool/tokens';
 
 const CREATE_ONE = GRAPHQL_REQUESTS.CreateOne;

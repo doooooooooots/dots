@@ -24,4 +24,8 @@ function FieldInputValueDate(props) {
   );
 }
 
+FieldInputValueDate.bindProp = ({ value }) => ({
+  value,
+});
+
 export default FieldInputValueDate;

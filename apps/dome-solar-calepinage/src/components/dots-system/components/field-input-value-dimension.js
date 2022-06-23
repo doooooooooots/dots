@@ -3,7 +3,11 @@ import Tag from './tag';
 
 function FieldInputValueDimension(props) {
   const { value } = props;
-  return <Tag endIcon="m">{value}</Tag>;
+  return <Tag startIcon="m">{value}</Tag>;
 }
+
+FieldInputValueDimension.bindProp = ({ value }) => ({
+  value,
+});
 
 export default FieldInputValueDimension;

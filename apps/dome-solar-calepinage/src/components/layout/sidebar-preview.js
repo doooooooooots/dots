@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { Stack, Button, Divider } from '@mui/material';
-import SaveIcon from '@mui/icons-material/SaveOutlined';
 import { useStore } from '../../contexts/useStore';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackOutlined';
+import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined';
 
 function SidePreview() {
   const { setCurrentPage } = useStore();
@@ -28,26 +28,13 @@ function SidePreview() {
       <Divider />
       <Stack p={2} spacing={2}>
         <Button
-          startIcon={<SaveIcon />}
+          endIcon={<ArrowForwardOutlinedIcon />}
           onClick={handleSavePdf}
           variant="contained"
           size="small"
         >
-          Enregistrer
+          Créer le pdf
         </Button>
-
-        {/* <Button
-          component={Link}
-          color="primary"
-          variant="contained"
-          size="small"
-          download={`${store?.related?.project?.guid}-${toKebabCase(
-            store?.related?.project?.name
-          )}-${moment().format('YYYY-DD-MM')}.pdf`}
-          href={instance?.url}
-        >
-          {instance.loading ? 'Chargement...' : 'Sauvegarder'}
-        </Button> */}
       </Stack>
     </>
   );

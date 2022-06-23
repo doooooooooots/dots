@@ -84,7 +84,7 @@ function FieldInputEdit(props) {
    */
   const handleClickAway = useCallback(
     (action) =>
-      ({ target }) => {
+      ({ target, currentTarget }) => {
         if (target !== anchorEl) {
           if (typeof action === 'function') {
             action();

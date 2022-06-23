@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { isEmpty } from 'lodash';
+import { isArray, isEmpty } from 'lodash';
 
 interface ConfigType<T> {
   id: string;
@@ -23,7 +23,9 @@ function useAutocomplete(config: ConfigType<OptionType>) {
   /**
    * Local values
    */
-  const [pendingValue, setPendingValue] = useState<OptionType[]>(value);
+  const [pendingValue, setPendingValue] = useState<OptionType[]>(
+    isArray(value) ? value : [value]
+  );
 
   /**
    * Render value for user

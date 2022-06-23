@@ -6,10 +6,12 @@ import { searchManyBuilder } from '@dots.cool/schemas';
 import { useInputText, useInputSelect } from '@dots.cool/hooks';
 import InputRelationship from './input-relationship';
 import ErrorPage from '../../design-system/screens/error-page';
+import { ucFirst } from '@dots.cool/utils';
 
 function InputRelationWithFetch(props) {
   const {
     // Field input
+    placeholder,
     name,
     value,
     multiple,
@@ -34,7 +36,8 @@ function InputRelationWithFetch(props) {
   /**
    * Get entity settings from context
    */
-  const { [options]: model } = useDots();
+  const ucOptions = ucFirst(options);
+  const { [ucOptions]: model } = useDots();
   const { singular, default: defaultModel, templates } = model;
 
   const { query, filterAttributes, components, getters } = useMemo(() => {
@@ -112,13 +115,14 @@ function InputRelationWithFetch(props) {
   );
 
   if (error) {
-    return <ErrorPage />;
+    return <ErrorPage message={error.message} />;
   }
 
   return (
     <InputRelationship
       {...other}
       name={name}
+      placeholder={placeholder}
       value={value || []}
       options={rows || []}
       loading={loading}

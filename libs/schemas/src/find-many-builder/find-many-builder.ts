@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client';
 import ucFirst from '../utils/uc-first';
-import pluralize = require('pluralize');
 
 const PARAMS = `
   take: $take,
@@ -34,9 +33,8 @@ function findManyArgs(singular: string, lang = false) {
  * GET MULTIPLE
  */
 const findManyBuilder =
-  (singular: string, plurial?: string) =>
+  (singular: string, plurial: string) =>
   (query: string, lang = false) => {
-    if (!plurial) plurial = pluralize(singular);
     const Plurial = ucFirst(plurial);
     return gql`
     query All${Plurial}(${findManyArgs(singular, lang)}) {

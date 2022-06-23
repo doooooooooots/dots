@@ -21,6 +21,11 @@ import { DotsProvider } from '../src/components/dots-system/context/dots-context
 import createSchema from '../src/components/dots-system/utils/schema';
 import Person from '../src/components/dots-system/entities/person';
 import Project from '../src/components/dots-system/entities/project';
+import Roof from '../src/components/dots-system/entities/roof';
+import Cladding from '../src/components/dots-system/entities/cladding';
+import Layout from '../src/components/dots-system/entities/layout';
+import SolarModule from '../src/components/dots-system/entities/solar-module';
+import Product from '../src/components/dots-system/entities/product';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -34,6 +39,11 @@ const theme = createTheme({
 const schema = createSchema({
   Person,
   Project,
+  Roof,
+  Layout,
+  Cladding,
+  SolarModule,
+  Product,
 });
 
 export default function MyApp(props) {

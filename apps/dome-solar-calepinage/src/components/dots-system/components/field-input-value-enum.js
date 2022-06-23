@@ -55,4 +55,9 @@ function FieldInputValueEnum(props) {
   );
 }
 
+FieldInputValueEnum.bindProp = ({ value, options }) => ({
+  value,
+  options,
+});
+
 export default FieldInputValueEnum;

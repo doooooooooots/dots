@@ -5,14 +5,17 @@ import {
   bindToggle,
   usePopupState,
 } from 'material-ui-popup-state/hooks';
+import { Box, CircularProgress } from '@mui/material';
+
+// [ ](Adrien): Use dynamic import
 import FieldInputEdit from './field-input-edit';
 import FieldInputValueDefault from './field-input-value-default';
 import FieldInputValueEnum from './field-input-value-enum';
 import FieldInputValueRelationShip from './field-input-value-relationship';
 import FieldInputValueDate from './field-input-value-date';
 import FieldInputValueDimension from './field-input-value-dimension';
-import { Box, CircularProgress } from '@mui/material';
 import FieldInputValueBase from './field-input-value-base';
+import FieldInputValueCheckbox from './field-input-value-checkbox';
 
 function FieldInput(props) {
   const {
@@ -48,6 +51,9 @@ function FieldInput(props) {
     case 'dimension':
       Value = FieldInputValueDimension;
       break;
+    case 'checkbox':
+      Value = FieldInputValueCheckbox;
+      break;
     default:
       Value = FieldInputValueDefault;
       break;
@@ -61,7 +67,7 @@ function FieldInput(props) {
           isOpen={!readOnly && isOpen}
           sx={sx}
         >
-          <Value type={type} value={value} options={options} />
+          <Value {...Value.bindProp(props)} />
         </FieldInputValueBase>
       ) : (
         <Box pl={2}>

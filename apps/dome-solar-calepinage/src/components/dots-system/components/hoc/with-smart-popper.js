@@ -1,4 +1,3 @@
-import { isEmpty, last } from 'lodash';
 import { useCallback, useState } from 'react';
 
 const withSmartPopper = (Component) => (props) => {
@@ -15,23 +14,12 @@ const withSmartPopper = (Component) => (props) => {
 
   // Update sumbit function when input changes
   const handleSubmit = useCallback(() => {
-    const getValue = (value, multiple) => {
-      if (isEmpty(value)) return { set: [] };
-      if (multiple)
-        return {
-          set: value.map(({ id }) => ({
-            id,
-          })),
-        };
-      return { set: { id: last(value)?.id } };
-    };
-
     // [ ](Adrien): Improve compare method
     if (value !== input) {
-      onChange(getValue(input, multiple));
+      onChange(input);
     }
     onClose();
-  }, [input, multiple, onChange, onClose, value]);
+  }, [input, onChange, onClose, value]);
 
   const Content = (
     <Component

@@ -2,8 +2,8 @@ import { createGraphQlApi } from '@dots.cool/schemas';
 import { EntitySchemaEnhanced } from '../index.d';
 
 const withGraphQlApi = (schema: EntitySchemaEnhanced) => {
-  const { singular, plurial } = schema;
-  const graphql = createGraphQlApi(singular, plurial);
+  const { singular } = schema;
+  const graphql = createGraphQlApi(singular);
   return {
     ...schema,
     graphql,

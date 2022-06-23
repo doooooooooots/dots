@@ -1,4 +1,4 @@
-import { Box, ClickAwayListener, Grow, Popper } from '@mui/material';
+import { Box, Grow, Popper } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 const defaultId = 'popper-grow';
@@ -10,7 +10,6 @@ function PopperGrow(props) {
     open,
     anchorEl,
     placement,
-    onClose,
     sx = {},
     children,
   } = props;
@@ -50,26 +49,24 @@ function PopperGrow(props) {
       }}
     >
       {({ TransitionProps }) => (
-        <ClickAwayListener onClickAway={onClose} mouseEvent="onMouseDown">
-          <Grow direction="left" {...TransitionProps} timeout={timeout}>
-            <Box pt={1.4}>
-              <Box
-                sx={[
-                  {
-                    backgroundColor: 'background.default',
-                    boxShadow: (theme) => theme.shadows[18],
-                    overflow: 'hidden',
-                    borderRadius: 2,
-                    pt: 2,
-                  },
-                  sx,
-                ]}
-              >
-                {children}
-              </Box>
+        <Grow direction="left" {...TransitionProps} timeout={timeout}>
+          <Box pt={1.4}>
+            <Box
+              sx={[
+                {
+                  backgroundColor: 'background.default',
+                  boxShadow: (theme) => theme.shadows[18],
+                  overflow: 'hidden',
+                  borderRadius: 2,
+                  pt: 2,
+                },
+                sx,
+              ]}
+            >
+              {children}
             </Box>
-          </Grow>
-        </ClickAwayListener>
+          </Box>
+        </Grow>
       )}
     </Popper>
   );

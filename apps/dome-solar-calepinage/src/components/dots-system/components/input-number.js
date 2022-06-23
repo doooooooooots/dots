@@ -57,7 +57,7 @@ function InputNumber(props) {
    * User clicks on a digit
    */
   const handleDigitClick = useCallback(
-    (_value) => () => {
+    (_value) => (event) => {
       if (!(_value === '.' && input.indexOf('.') !== -1)) {
         setInput(`${input}${_value}`);
       }

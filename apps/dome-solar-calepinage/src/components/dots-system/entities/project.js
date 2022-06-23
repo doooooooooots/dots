@@ -7,77 +7,65 @@ import SelectItemPreview from '../components/list-item-preview';
 import entity from '../utils/entity';
 
 // TODO: Export from dots data schema
-const PROJECT_FIELDS = [
-  {
-    name: 'identifier',
+const PROJECT_FIELDS = {
+  identifier: {
     type: 'text',
     label: 'Ref',
   },
-  {
-    name: 'name',
+  name: {
     type: 'text',
     label: 'Nom',
   },
-  {
-    name: 'step',
+  step: {
     type: 'select',
     label: 'Step',
     options: 'ProjectStep',
   },
-  {
-    name: 'typeEmergency',
+  typeEmergency: {
     type: 'select',
     label: 'Emergency',
     options: 'Progress',
   },
-  {
-    name: 'dateReception',
+  dateReception: {
     type: 'date',
     label: 'Date reception',
   },
-  {
-    name: 'dateDelivery',
+  dateDelivery: {
     type: 'date',
     label: 'Date delivery',
   },
-  {
-    name: 'areaField',
+  areaField: {
     type: 'select',
     label: 'Area field',
     options: 'AreaField',
   },
-  {
-    name: 'areaSnow',
+  areaSea: {
+    type: 'select',
+    label: 'Area sea',
+    options: 'AreaSea',
+  },
+  areaSnow: {
     type: 'select',
     label: 'Area snow',
     options: 'AreaSnow',
   },
-  {
-    name: 'areaWind',
+  areaWind: {
     type: 'select',
     label: 'Area wind',
     options: 'AreaWind',
   },
-  {
-    name: 'altitude',
+  altitude: {
     type: 'dimension',
     label: 'Altitude',
   },
-  {
-    name: 'hasCommercial',
+  hasCommercial: {
     type: 'relationship',
     label: 'Commercial',
-    options: 'Person',
-    multiple: true,
+    options: 'Person', // should be ref
+    multiple: true, // Should be many
+    getter: (item) => item.givenName, // should have a default from entity
   },
-  {
-    name: 'name',
-    type: 'file',
-    label: 'Commercial',
-    options: 'Person',
-    multiple: true,
-  },
-];
+};
 
 const Project = entity({
   singular: 'project',

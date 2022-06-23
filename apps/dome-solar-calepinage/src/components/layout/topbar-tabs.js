@@ -1,34 +1,26 @@
 import React, { useCallback } from 'react';
-import TabContext from '@mui/lab/TabContext';
-import TabPanel from '@mui/lab/TabPanel';
-import { Button, Stack, Typography, Divider, Chip } from '@mui/material';
-import { styled } from '@mui/system';
-
-// Icons
-import AddIcon from '@mui/icons-material/Add';
-import CalendarViewWeekOutlinedIcon from '@mui/icons-material/CalendarViewWeekOutlined';
-import CloseIcon from '@mui/icons-material/Close';
-import InfoIcon from '@mui/icons-material/InfoOutlined';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import SolarPowerIcon from '@mui/icons-material/SolarPowerOutlined';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import {
+  Button,
+  Stack,
+  Divider,
+  Alert,
+  Box,
+  ToggleButtonGroup,
+  ToggleButton,
+} from '@mui/material';
 
 // Constants
 import { TOPBAR_SIZE } from '../../constants/constants';
 
-// Tabs
-import TabSolarPanel from './tab-solar-module';
-import TabCladding from './tab-cladding';
-import TabProject from './tab-project';
-import TabProduct from './tab-product';
-import TabLayout from './tab-layout';
-import TabRoof from './tab-roof';
+// Icons
+import CheckIcon from '@mui/icons-material/Check';
+import AddIcon from '@mui/icons-material/Add';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 
-// Components
+// Tabs
+import TabEntity from './tab-entity';
 
 // Hooks
-import { useAuth } from '../../hooks/use-auth';
 import { useStore } from '../../contexts/useStore';
 import { useRouter } from 'next/router';
 
@@ -39,66 +31,85 @@ import { toast } from 'react-hot-toast';
 import { useKey } from 'react-use';
 import Kbd from '../design-system/kbd/kbd';
 import PopperGrow from '../design-system/popper-grow';
+import panels from './data/panels';
+import PopperTop from './popper-top';
 
 const id = 'transition-popper';
 
-const panels = [
-  { name: 'project', Icon: <InfoIcon /> },
-  { name: 'roof', Icon: <InfoIcon /> },
-  { name: 'cladding', Icon: <CalendarViewWeekOutlinedIcon /> },
-  { name: 'layout', Icon: <StarBorderIcon /> },
-  { name: 'solarModule', Icon: <SolarPowerIcon /> },
-  { name: 'product', Icon: <StarBorderIcon /> },
-];
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
 
-const StyledTabPanel = styled(TabPanel)({
-  padding: 0,
-  minWidth: 385,
-  maxWidth: 425,
-});
+  return (
+    <Box
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      ariaLabelledby={`simple-tab-${index}`}
+      sx={{ padding: 0, minWidth: 385, maxWidth: 425 }}
+      {...other}
+    >
+      {value === index && <>{children}</>}
+    </Box>
+  );
+}
 
 function TopBar() {
-  const [value, setValue] = React.useState('project');
+  // Manage tab state
+  const [currentTab, setCurrentTab] = React.useState('');
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [open, setOpen] = React.useState(false);
 
-  const { logout } = useAuth();
   const store = useStore();
+  const { getRelatedData, setRelatedData, renderView } = store;
+
+  /**
+   * User clicks on home icon
+   */
   const router = useRouter();
-
-  const handleTabClick = (newValue) => (event) => {
-    event.stopPropagation();
-    setValue(newValue);
-    setAnchorEl(event.currentTarget);
-    setOpen(true);
-  };
-
-  const handleSelectElement = useCallback(
-    (pageName) => (element) => {
-      store.setRelatedData(pageName, element);
-      store.renderView();
-    },
-    [store]
-  );
-
-  const handleDeleteButtonClick = useCallback(
-    (pageName) => () => {
-      store.setRelatedData(pageName, {});
-      if (pageName === 'project') {
-        store.setRelatedData('roof', null);
-        store.setRelatedData('cladding', null);
-      }
-      if (pageName === 'roof') store.setRelatedData('cladding', null);
-    },
-    [store]
-  );
-
   const handleClickHome = () => router.push('/');
 
-  const handleClose = () => {
-    setOpen(false);
+  /**
+   * User clicks on tab
+   */
+  const handleChangeTab = (event, newValue) => {
+    setCurrentTab(newValue);
+    setAnchorEl(event.currentTarget);
   };
 
+  /**
+   * User clicks on element in list
+   */
+  const handleChange = useCallback(
+    (data) => {
+      setRelatedData(currentTab, data);
+      renderView();
+    },
+    [setRelatedData, currentTab, renderView]
+  );
+
+  /**
+   * User clicks on Edit button
+   */
+  const handleRemove = useCallback(() => {
+    setRelatedData(currentTab, {});
+
+    if (currentTab === 'project') {
+      ['roof', 'cladding', 'layout', 'solarModule', 'product'].forEach((item) =>
+        setRelatedData(item, null)
+      );
+    }
+    if (currentTab === 'roof') setRelatedData('cladding', null);
+  }, [currentTab, setRelatedData]);
+
+  /**
+   * User clicks on close Button
+   */
+  const handleCloseButtonClick = () => {
+    setCurrentTab('');
+  };
+
+  /**
+   * User clicks on Cmd + s
+   */
   useKey('s', (event) => {
     if (event.metaKey) {
       event.preventDefault();
@@ -106,18 +117,8 @@ function TopBar() {
     }
   });
 
-  // const handleLogout = async () => {
-  //   try {
-  //     await logout();
-  //     router.push('/authentication/login').catch(console.error);
-  //   } catch (err) {
-  //     console.error(err);
-  //     toast.error('Unable to logout.');
-  //   }
-  // };
-
   return (
-    <TabContext value={value}>
+    <>
       {/*//* MenuBar */}
       <Stack
         direction="row"
@@ -141,47 +142,67 @@ function TopBar() {
           >
             Accueil
           </Button>
-          <Divider orientation="vertical" variant="middle" flexItem />
 
-          {/*//* Pannels */}
-          {panels.map((item) => {
-            const isActive = open && item.name === value;
-            const _isEmpty = isEmpty(store.getRelatedData(item.name));
-            const related = store.getRelatedData(item.name);
+          <ToggleButtonGroup
+            value={currentTab}
+            exclusive
+            onChange={handleChangeTab}
+            aria-label="text alignment"
+          >
+            {/*//* Pannels */}
+            {panels.map(({ name, Icon }) => {
+              const related = getRelatedData(name);
+              const _isEmpty = isEmpty(related);
 
-            return (
-              <Chip
-                key={`button-${item.name}`}
-                icon={isActive || !_isEmpty ? item.Icon : <AddIcon />}
-                label={
-                  _isEmpty
-                    ? `Ajouter un ${item.name}`
-                    : (related && related.name) || item.name
-                }
-                color={isActive || !_isEmpty ? 'primary' : 'neutral'}
-                variant={isActive ? 'contained' : 'outlined'}
-                onClick={handleTabClick(item.name)}
-                deleteIcon={isActive ? <KeyboardArrowDownIcon /> : undefined}
-                onDelete={
-                  _isEmpty
-                    ? isActive
-                      ? handleTabClick(item.name)
-                      : undefined
-                    : handleDeleteButtonClick(item.name)
-                }
-                size="small"
-                sx={[
-                  { px: 0.5 },
-                  _isEmpty && {
-                    border: 0,
-                  },
-                ]}
-              />
-            );
-          })}
-          {/* <IconButton size="small" onClick={handleLogout}>
-            <LogoutIcon fontSize="small" />
-          </IconButton> */}
+              return (
+                <ToggleButton
+                  key={`button-${name}`}
+                  value={name}
+                  aria-label={name}
+                  sx={[
+                    !_isEmpty && {
+                      color: 'success.dark',
+                    },
+                    {
+                      maxWidth: 220,
+                      typography: 'body2',
+                      textTransform: 'none',
+                      px: 1,
+                      py: '4px',
+                      cursor: 'pointer',
+                      '&.Mui-selected': {
+                        bgcolor: 'primary.background',
+                        color: 'primary.main',
+                        '&:hover': {
+                          bgcolor: 'primary.100',
+                        },
+                        '& .MuiSvgIcon-root': {
+                          color: 'primary.main',
+                        },
+                      },
+                    },
+                  ]}
+                >
+                  {!_isEmpty ? (
+                    <CheckIcon color="success" fontSize="small" />
+                  ) : (
+                    <AddIcon color="neutral" fontSize="small" />
+                  )}
+                  <Box
+                    sx={{
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {_isEmpty
+                      ? `Ajouter un ${name}`
+                      : (related && related.name) || name}
+                  </Box>
+                </ToggleButton>
+              );
+            })}
+          </ToggleButtonGroup>
         </Stack>
 
         <Stack direction="row">
@@ -193,76 +214,71 @@ function TopBar() {
         </Stack>
       </Stack>
 
-      {/*//* Poppers */}
+      {/*//* Popper */}
       <PopperGrow
         id={id}
-        open={!!open}
+        open={!!currentTab}
         anchorEl={anchorEl}
-        onClose={handleClose}
+        onClose={handleCloseButtonClick}
         placement={'bottom-start'}
         sx={{ minWidth: 425, p: 0 }}
       >
-        {/*//? TopBar */}
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          px={2}
-          py={1}
-        >
-          <Typography variant="h6">{value}</Typography>
-          <Button
-            aria-label="delete"
-            size="small"
-            onClick={handleClose}
-            endIcon={<CloseIcon fontSize="inherit" />}
-            sx={{ py: 0.25, px: 2 }}
-          >
-            Modifier
-          </Button>
-        </Stack>
-
-        <Divider />
-
         {/*//* Content */}
-        <StyledTabPanel value="project">
-          <TabProject
-            onChange={handleSelectElement('project')}
-            onClose={handleClose}
-          />
-        </StyledTabPanel>
-        <StyledTabPanel value="roof">
-          <TabRoof
-            onChange={handleSelectElement('roof')}
-            onClose={handleClose}
-          />
-        </StyledTabPanel>
-        <StyledTabPanel value="layout">
-          <TabLayout
-            onChange={handleSelectElement('layout')}
-            onClose={handleClose}
-          />
-        </StyledTabPanel>
-        <StyledTabPanel value="solarModule">
-          <TabSolarPanel
-            onChange={handleSelectElement('solarModule')}
-            onClose={handleClose}
-          />
-        </StyledTabPanel>
-        <StyledTabPanel value="product">
-          <TabProduct
-            onChange={handleSelectElement('product')}
-            onClose={handleClose}
-          />
-        </StyledTabPanel>
-        <StyledTabPanel value="cladding">
-          <TabCladding
-            onChange={handleSelectElement('cladding')}
-            onClose={handleClose}
-          />
-        </StyledTabPanel>
+        {panels.map(({ name, query, title, Icon, dependencies }) => {
+          let canLoad = true;
+          const value = getRelatedData(name);
+
+          if (!isEmpty(dependencies)) {
+            canLoad = dependencies.reduce(
+              (acc, dependency) => acc * !isEmpty(getRelatedData(dependency)),
+              canLoad
+            );
+          }
+
+          return (
+            <TabPanel key={name} value={currentTab} index={name}>
+              {canLoad ? (
+                <>
+                  <PopperTop
+                    title={title}
+                    HomeIcon={Icon}
+                    onClose={handleCloseButtonClick}
+                    onClickBack={handleRemove}
+                    showBackButton={Boolean(value)}
+                  />
+                  <TabEntity
+                    select={name}
+                    query={query}
+                    value={value}
+                    onChange={handleChange}
+                    onLoadSuccess={handleChange}
+                  />
+                  {isEmpty(value) && (
+                    <>
+                      <Divider />
+                      <Button
+                        size="small"
+                        color="neutral"
+                        onClick={handleCloseButtonClick}
+                        startIcon={<AddIcon />}
+                        fullWidth
+                      >
+                        Créer un nouveau
+                      </Button>
+                    </>
+                  )}
+                </>
+              ) : (
+                <Alert key={name} severity="error">
+                  Vous devez d&apos;abord selectionner :{' '}
+                  {dependencies.join(', ')}
+                </Alert>
+              )}
+            </TabPanel>
+          );
+        })}
       </PopperGrow>
-    </TabContext>
+    </>
   );
 }
 

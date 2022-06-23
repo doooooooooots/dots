@@ -32,7 +32,7 @@ function FieldInputValueBase(props) {
           borderColor: 'background.default',
           bgcolor: 'neutral.background',
           '&  input': {
-            typography: 'body2',
+            typography: 'body1',
           },
         },
       ]}

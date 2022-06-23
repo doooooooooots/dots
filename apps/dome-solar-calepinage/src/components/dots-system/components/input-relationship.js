@@ -23,8 +23,8 @@ function InputRelationship(props) {
     value,
     options,
     onChange,
-    getValue = (datas) => datas,
     loading,
+    placeholder,
 
     // Templates
     templates,
@@ -54,8 +54,6 @@ function InputRelationship(props) {
     onCancel,
   } = props;
 
-  console.log(currentTemplate);
-
   const { id, pendingValue, handleChange, handleDelete } = useAutocomplete({
     name: name,
     value: value,
@@ -75,7 +73,13 @@ function InputRelationship(props) {
    */
   useEffect(() => {
     if (typeof onChange === 'function') {
-      onChange(pendingValue);
+      const getValue = (value) => {
+        if (isEmpty(value)) return multiple ? [] : null;
+        if (multiple) return value;
+        return last(value);
+      };
+
+      onChange(getValue(pendingValue, multiple));
     }
   }, [onChange, pendingValue, multiple]);
 
@@ -100,6 +104,7 @@ function InputRelationship(props) {
                   inputProps={params.inputProps}
                   loading={loading}
                   onClear={onInputClear}
+                  placeholder={placeholder}
                   autoFocus
                 />
                 {!isEmpty(templates) && (

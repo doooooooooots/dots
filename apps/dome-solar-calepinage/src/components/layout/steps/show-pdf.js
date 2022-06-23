@@ -1,16 +1,17 @@
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { usePDF, PDFViewer } from '@react-pdf/renderer';
-import { useEffect, useMemo, useState } from 'react';
 import { format } from 'date-fns';
 import PdfLayoutTemplate from '../pdf/pdf-layout-template';
 import { useStore } from '../../../contexts/useStore';
+import { useEffect, useState } from 'react';
 // import { addNewMediaTo } from '../../slices/media-object-slice';
 
 export default function StepPreview() {
   const store = useStore();
+  const { setRelatedData } = store;
 
   // const fileName = store.lastMediaObjectVersion();
-  // const [isMounted, setIsMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const date = format(new Date(), 'dd/MM/yyyy');
 
   const [instance] = usePDF({
@@ -27,27 +28,20 @@ export default function StepPreview() {
     ),
   });
 
-  // useEffect(() => {
-  //   if (
-  //     isMounted &&
-  //     instance &&
-  //     !instance.loading &&
-  //     instance.url &&
-  //     fileName
-  //   ) {
-  //     if ('blob' in instance) {
-  //       instance.blob.name = fileName;
-  //       instance.blob.width = 842;
-  //       instance.blob.height = 595;
-  //       // dispatch(addNewMediaTo(instance.blob, store.form.currentLayout));
-  //     }
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [instance]);
+  useEffect(() => {
+    if (isMounted && instance && !instance.loading && instance.url) {
+      if ('blob' in instance) {
+        instance.blob.width = 842;
+        instance.blob.height = 595;
+        setRelatedData('pdf', instance);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [instance]);
 
-  // useEffect(() => {
-  //   setIsMounted(true);
-  // }, []);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const { loading, url } = instance;
 

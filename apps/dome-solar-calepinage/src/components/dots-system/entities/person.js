@@ -19,6 +19,28 @@ const avatar = (option) => (
 // [ ](Adrien): Add function to init each object
 const Person = entity({
   singular: 'person',
+  fields: {
+    givenName: {
+      type: 'text',
+      label: 'Prénom',
+    },
+    familyName: {
+      type: 'text',
+      label: 'Nom',
+    },
+    email: {
+      type: 'text',
+      label: 'Email',
+    },
+    telephone: {
+      type: 'text',
+      label: 'Phone',
+    },
+    jobTitle: {
+      type: 'text',
+      label: 'Job Title',
+    },
+  },
   default: {
     name: 'prénom, nom',
     query: ['givenName', 'familyName'],

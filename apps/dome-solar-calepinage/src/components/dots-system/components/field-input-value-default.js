@@ -7,4 +7,8 @@ function FieldInputValueDefault(props) {
   return <Tag>{value}</Tag>;
 }
 
+FieldInputValueDefault.bindProp = ({ value }) => ({
+  value,
+});
+
 export default FieldInputValueDefault;

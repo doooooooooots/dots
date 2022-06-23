@@ -58,7 +58,7 @@ function FieldLabel(props) {
     >
       {Icon && <Icon type={type} />}
       <Typography
-        variant="body2"
+        variant="caption"
         sx={{
           display: 'block',
           overflow: 'hidden',

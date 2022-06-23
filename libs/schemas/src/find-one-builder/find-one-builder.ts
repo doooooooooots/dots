@@ -25,7 +25,7 @@ const findOneBuilder =
     const Singular = ucFirst(singular);
     return gql`
       query Get${Singular}(${findOneArgs(singular, lang)}) {
-        ${singular}(${QUERY_ONE_PARAMS}) {
+        entity: ${singular}(${QUERY_ONE_PARAMS}) {
           ${query}
         }
       }
