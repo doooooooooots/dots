@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import PdfLayoutTemplate from '../pdf/pdf-layout-template';
 import { useStore } from '../../../contexts/useStore';
 import { useEffect, useState } from 'react';
+import moment from 'moment';
 // import { addNewMediaTo } from '../../slices/media-object-slice';
 
 export default function StepPreview() {
@@ -33,6 +34,7 @@ export default function StepPreview() {
       if ('blob' in instance) {
         instance.blob.width = 842;
         instance.blob.height = 595;
+        instance.blob.name = `test-de-nom-${moment().format('YYYY-DD-MM')}.pdf`;
         setRelatedData('pdf', instance);
       }
     }
