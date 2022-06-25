@@ -18,7 +18,7 @@ import {
 import { gql, useQuery } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import { AuthGuard } from '../src/components/authentication/auth-guard';
-import ProjectFormCreate from '../src/components/project-create/project-create';
+import ProjectFormCreate from '../src/components/layout-create/forms/project-create';
 import ProjectDetails from '../src/components/project/project-details';
 import NoProject from './project/no-project';
 import InputNumber from '../src/components/design-system/popper-inputs/popper-input-number';

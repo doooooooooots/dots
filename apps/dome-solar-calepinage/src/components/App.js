@@ -30,7 +30,7 @@ import StepUseSolarPanel from './layout/steps/show-solar-panel';
 import StepHasProduct from './layout/steps/show-product';
 import StepUseCladding from './layout/steps/show-cladding';
 import StepTemplate from './layout/steps/show-template';
-import StepLayout from './layout/steps/step-layout';
+import StepLayout from './layout-create/main/view-layout';
 import StepHasTechnician from './layout/steps/_trash/StepHasTechnician';
 import StepRails from './layout/steps/snap-all-column-details';
 import StepMarkup from './layout/steps/snap-type-column';

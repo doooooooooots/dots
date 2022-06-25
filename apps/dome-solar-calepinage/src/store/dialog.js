@@ -15,6 +15,10 @@ const withDialog = (app) => ({
     this.dialog.open = false;
   },
 
+  getCurrentOpen() {
+    return this.dialog.open;
+  },
+
   isDialogOpen() {
     return !!this.dialog.open;
   },

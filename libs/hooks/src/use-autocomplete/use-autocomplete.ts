@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { isArray, isEmpty } from 'lodash';
+import { isArray, isEmpty, last } from 'lodash';
 
 interface ConfigType<T> {
   id: string;
@@ -7,6 +7,7 @@ interface ConfigType<T> {
   type: string;
   multiple: boolean;
   value: T[];
+  onChange?: (data: unknown) => void;
 }
 
 type OptionType = {
@@ -18,7 +19,7 @@ type OptionType = {
 };
 
 function useAutocomplete(config: ConfigType<OptionType>) {
-  const { name, value, multiple = false } = config;
+  const { name, value, multiple = false, onChange } = config;
 
   /**
    * Local values
@@ -45,8 +46,17 @@ function useAutocomplete(config: ConfigType<OptionType>) {
       if (isEmpty(newValue)) _newValue = [];
       else _newValue = multiple ? newValue : [newValue.pop()];
       setPendingValue(_newValue);
+
+      if (typeof onChange === 'function') {
+        const getValue = (value: unknown[]) => {
+          if (isEmpty(value)) return multiple ? [] : null;
+          if (multiple) return value;
+          return last(value);
+        };
+        onChange(getValue(_newValue));
+      }
     },
-    [multiple]
+    [multiple, onChange]
   );
 
   /**

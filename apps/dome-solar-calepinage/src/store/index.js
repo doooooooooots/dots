@@ -13,7 +13,6 @@ import withMediaObjects from './media-object';
 import withUtils from './utils';
 import withPreview from './preview';
 import withRelatedData from './related-data';
-import withAnalytics from './analytics';
 import withToolbar from './toolbar';
 import { SIDEBAR_WIDTH, TOOLBAR_WIDTH } from '../constants/constants';
 
@@ -44,15 +43,14 @@ export const config = {
 const createStore = () =>
   compose(
     withPreview,
-    withAnalytics,
     withMediaObjects,
+    withRelatedData,
     withComments,
     withSnaps,
     withSelection,
     withObstacles,
     withModules,
     withRender,
-    withRelatedData,
     withUserDatas,
     withKeyboard,
     withUtils,

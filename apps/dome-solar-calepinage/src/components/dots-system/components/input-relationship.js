@@ -9,6 +9,7 @@ import makeSortFunc from '../../design-system/autocomplete/utils/makeSortFunc';
 import StyledAutocompletePopper from './styled-autocomplete-popper';
 import PopperLinkTemplateSelect from './select-template';
 import Actions from './actions';
+import Image from 'next/image';
 
 function PopperComponent(props) {
   const { disablePortal, anchorEl, open, ...other } = props;
@@ -57,6 +58,7 @@ function InputRelationship(props) {
   const { id, pendingValue, handleChange, handleDelete } = useAutocomplete({
     name: name,
     value: value,
+    onChange,
     multiple,
   });
 
@@ -67,21 +69,6 @@ function InputRelationship(props) {
       ? options
       : [...options].sort(makeSortFunc({ value: pendingValue, options }));
   }, [disableSort, pendingValue, options]);
-
-  /**
-   * Suscribe to each changes
-   */
-  useEffect(() => {
-    if (typeof onChange === 'function') {
-      const getValue = (value) => {
-        if (isEmpty(value)) return multiple ? [] : null;
-        if (multiple) return value;
-        return last(value);
-      };
-
-      onChange(getValue(pendingValue, multiple));
-    }
-  }, [onChange, pendingValue, multiple]);
 
   return (
     <>
@@ -124,6 +111,19 @@ function InputRelationship(props) {
             filterOptions={(options) => options}
             isOptionEqualToValue={(_option, _value) =>
               _option?.id === _value?.id
+            }
+            noOptionsText={
+              <Stack direction="column" alignItems="center" spacing={1}>
+                <Image
+                  alt="no result"
+                  src={'/assets/illustrations/no-result.svg'}
+                  width={60}
+                  height={60}
+                />
+                <Typography variant="body2">
+                  Pas d&apos;option disponible
+                </Typography>
+              </Stack>
             }
             filterSelectedOptions={withPreview}
             onClose={() => null}

@@ -8,6 +8,7 @@ import FieldContainer from './container';
 import { isArray, isEmpty } from 'lodash';
 import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
 import { ucFirst } from '@dots.cool/utils';
+import Loading from '../../design-system/screens/loading';
 
 function Entity(props) {
   const {
@@ -120,7 +121,7 @@ function Entity(props) {
   /**
    * Browser is fetching data
    */
-  if (loading) return 'Loading...';
+  if (loading) return <Loading minWidth={350} />;
 
   /**
    * Error while fetching data
@@ -133,9 +134,12 @@ function Entity(props) {
     <FieldContainer>
       {!isEmpty(entity) &&
         fieldToPrint.map((fieldName) => {
+          // [ ](Adrien): create id input
           if (fieldName === 'id') return;
           if (!fields[fieldName]) return;
+
           const { type, label, options, multiple, getter } = fields[fieldName];
+
           const fieldProps = {
             type: type,
             name: fieldName,

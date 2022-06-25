@@ -1,36 +1,29 @@
 import { observer } from 'mobx-react';
-import { Dialog, Grid, Box, Stack, Typography, Button } from '@mui/material';
-import Toolbar from '../../src/components/layout/toolbar';
-import TopBar from '../../src/components/layout/topbar-tabs';
+import { Dialog as MuiDialog, Grid, Box } from '@mui/material';
 import { useStore } from '../../src/contexts/useStore';
+import {
+  Topbar,
+  Main,
+  Toolbar,
+  Sidebar,
+  Dialog,
+} from '../../src/components/layout-create';
+
 import {
   PAGE_PROJECT,
   SIDEBAR_WIDTH,
   TOPBAR_SIZE,
 } from '../../src/constants/constants';
-import MainCanvas from '../../src/components/layout/main-canvas';
-import LayoutSidebar from '../../src/components/layout/sidebar';
-import MainOnboarding from '../../src/components/layout/main-onboarding';
-import DialogForms from '../../src/components/layout/dialog-forms';
-import SidePreview from '../../src/components/layout/sidebar-preview';
-import { AuthGuard } from '../../src/components/authentication/auth-guard';
-import { useKey } from 'react-use';
-import { toast } from 'react-hot-toast';
 
 const PageCreateLayout = () => {
   const store = useStore();
 
-  // useEffect(() => {
-  //   const subscription = watch(() => {
-  //     store.setNeedRerender(true);
-  //   });
-  //   return () => subscription.unsubscribe();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [watch]);
+  const { dialog, closeDialog, isDialogOpen } = store;
+  const isOpen = isDialogOpen();
 
   return (
     <Box position="relative" height="100vh" overflow="hidden">
-      {/*//* TOPBAR */}
+      {/* TOPBAR */}
       <Box
         sx={{
           position: 'fixed',
@@ -39,10 +32,10 @@ const PageCreateLayout = () => {
           overflow: 'hidden',
         }}
       >
-        <TopBar />
+        <Topbar />
       </Box>
 
-      {/*//* MAIN */}
+      {/* MAIN */}
       <Grid
         container
         sx={{
@@ -54,44 +47,34 @@ const PageCreateLayout = () => {
           flexWrap: 'nowrap',
         }}
       >
-        {/*//? Canvas */}
-        {/*-> We need at least solarModules and a product */}
         <Grid item xs>
-          {store.hasRequiredInfos() && store.hasConfirmedOnBoarding() ? (
-            <MainCanvas />
-          ) : (
-            <MainOnboarding />
-          )}
+          <Main />
         </Grid>
 
-        {/*//? Toolbar */}
+        {/* Toolbar */}
         <Grid item width={36} sx={{ borderLeft: 1, borderColor: 'divider' }}>
           <Toolbar />
         </Grid>
 
-        {/*//? Side */}
+        {/* Side */}
         <Grid
           item
           flex={`0 0 ${SIDEBAR_WIDTH}px`}
           sx={{ borderLeft: 1, borderColor: 'divider' }}
         >
-          {store.getCurrentPage() !== 'preview' ? (
-            <LayoutSidebar />
-          ) : (
-            <SidePreview />
-          )}
+          <Sidebar />
         </Grid>
       </Grid>
 
-      {/*//* Dialog */}
-      <Dialog
-        open={store.isDialogOpen()}
-        onClose={store.closeDialog}
-        maxWidth={store.dialog.open === PAGE_PROJECT ? 'lg' : 'sm'}
+      {/*Dialog */}
+      <MuiDialog
+        open={isOpen}
+        onClose={closeDialog}
+        maxWidth={dialog.open === PAGE_PROJECT ? 'lg' : 'sm'}
         fullWidth
       >
-        <DialogForms />
-      </Dialog>
+        <Dialog />
+      </MuiDialog>
     </Box>
   );
 };

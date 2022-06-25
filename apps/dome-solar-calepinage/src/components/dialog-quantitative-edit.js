@@ -59,7 +59,7 @@ export default function DialogQuantitativeEdit(props) {
   const { tagName, onClose } = props;
   const store = useStore();
 
-  const currentRef = store.getFinalAnalytic(tagName);
+  const currentRef = {};
 
   const [options, setOptions] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -122,6 +122,7 @@ export default function DialogQuantitativeEdit(props) {
   return (
     <>
       <DialogTitle>Modifier une référence</DialogTitle>
+
       <DialogContent>
         <DialogContentText>
           Par quelle référence est-ce que je dois modifier ?
@@ -133,12 +134,12 @@ export default function DialogQuantitativeEdit(props) {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               label="Référence"
-              value={localForm.ref.guid || ''}
+              value={localForm?.ref?.guid || ''}
               onChange={handleChangeRefGuid}
             >
               {options.map((item) => (
-                <MenuItem key={item.id} value={item.guid}>
-                  {item.name}
+                <MenuItem key={item?.id} value={item?.guid}>
+                  {item?.name}
                 </MenuItem>
               ))}
             </Select>
@@ -148,7 +149,7 @@ export default function DialogQuantitativeEdit(props) {
             label="Count"
             type="number"
             variant="standard"
-            value={localForm.count}
+            value={localForm?.count}
             onChange={handleChangeCount}
             fullWidth
           />
@@ -156,7 +157,7 @@ export default function DialogQuantitativeEdit(props) {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={localForm.delivery}
+                  checked={localForm?.delivery}
                   onChange={handleChangeDelivery}
                 />
               }
@@ -169,6 +170,7 @@ export default function DialogQuantitativeEdit(props) {
         </Alert>
         {isLoading && <CircularProgress />}
       </DialogContent>
+
       <DialogActions>
         <Button onClick={onClose}>Annuler</Button>
         <Button variant="contained" onClick={handleSave}>

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, Stack, Typography, CircularProgress } from '@mui/material';
+import { Box } from '@mui/material';
 import { SIDEBAR_WIDTH } from '../../../constants/constants';
+import Loading from './loading';
 
-function Loading() {
+function LoadingScreen() {
   return (
     <Box
       position="absolute"
@@ -15,19 +16,9 @@ function Loading() {
       justifyContent="center"
       alignItems="center"
     >
-      <Stack
-        p={3}
-        spacing={2}
-        backgroundColor="background.default"
-        borderRadius={1}
-        boxShadow={(theme) => theme.shadows[10]}
-        alignItems="center"
-      >
-        <CircularProgress />
-        <Typography variant="h6">Chargement</Typography>
-      </Stack>
+      <Loading />
     </Box>
   );
 }
 
-export default Loading;
+export default LoadingScreen;

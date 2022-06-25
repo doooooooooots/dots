@@ -13,7 +13,7 @@ const withComments = (app) => ({
   getCommentById(id) {
     return this.comments.byId[id];
   },
-  getAllComments() {
+  getComments() {
     return this.comments.byId;
   },
   setCurrentComment(commentId) {
