@@ -1,3 +1,6 @@
+import Alignment from '../components/dots-system/enums/alignment';
+const { TOP_LEFT } = Alignment.getValues();
+
 const withRender = (app) => ({
   ...app,
 
@@ -11,7 +14,7 @@ const withRender = (app) => ({
     y: 0,
     scale: 1,
     isDragging: false,
-    anchorPoint: 'top-left',
+    anchorPoint: TOP_LEFT,
   },
   renderZone: {
     x: 0,

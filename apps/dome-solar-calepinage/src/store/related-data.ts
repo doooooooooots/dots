@@ -57,13 +57,20 @@ const withRelatedData = (app) => {
       isPassingTest: false,
     },
 
-    updateRelatedData(key, value) {
-      set(this.related, key, value);
+    updateRelatedData(key: string, value: unknown) {
+      this.related = set(this.related, key, value);
+    },
+
+    mergeRelated(key, value) {
+      this.related[key] = {
+        ...this.related[key],
+        ...value,
+      };
     },
 
     setCorrespondingUserData(entity, corresponding) {
       Object.entries(corresponding).forEach(([dbKey, appKey]) => {
-        if (entity[dbKey] !== null) {
+        if (entity[dbKey] != null) {
           this.setUserData(appKey, entity[dbKey]);
         }
       });
@@ -83,6 +90,7 @@ const withRelatedData = (app) => {
         this.related[key] = null;
         this.deleteDependencies(key);
         this.related.isPassingTest = false;
+        this.related.tests = null;
         return;
       }
 
@@ -109,16 +117,25 @@ const withRelatedData = (app) => {
           this.setRelatedData(key, !isEmpty(item[key]) ? item[key] : null);
         });
       }
+
+      if (key !== 'tests') {
+        this.related.isPassingTest = false;
+        this.related.tests = null;
+      }
     },
+
     getAllRelatedData() {
       return this.related;
     },
+
     getRelatedData(key) {
       return this.related[key];
     },
+
     isPassingTests() {
       return this.related.isPassingTest;
     },
+
     getSummaryModules() {
       return this.modules.allIndexes.reduce(
         (acc, index) => {
@@ -139,6 +156,7 @@ const withRelatedData = (app) => {
         { top: 0, middle: 0, bottom: 0, total: 0 }
       );
     },
+
     getSummaryProducts() {
       const summaryModules = this.getSummaryModules();
 
@@ -154,12 +172,14 @@ const withRelatedData = (app) => {
               summaryModules.totalModules),
       };
     },
+
     getTotalPower() {
       return round(
         this.totalModules() * (parseInt(this.getUserDatas('MPw'), 10) / 1000),
         2
       );
     },
+
     getSummary() {
       return {
         totalPower: this.getTotalPower(),
@@ -167,20 +187,31 @@ const withRelatedData = (app) => {
         products: this.getSummaryProducts(),
       };
     },
+
     getMergeBalance() {
       const override = this.related.overrideBalance || {};
       const raw = this.related.massBalance?.data || {};
 
-      return Object.entries(raw).map(([key, defaultRef]) => {
-        const overrideRef = (key in override && override[key]) || {};
-        return {
-          key: key,
-          reference: overrideRef.reference ?? (defaultRef.reference || ''),
-          count: overrideRef.count ?? (defaultRef.count || 0),
-          delivery: overrideRef.delivery ?? defaultRef.delivery,
-        };
-      });
+      return Object.entries(raw).map(
+        ([key, defaultRef]: [
+          string,
+          {
+            reference?: { [key: string]: unknown };
+            count?: number;
+            delivery?: boolean;
+          }
+        ]) => {
+          const overrideRef = (key in override && override[key]) || {};
+          return {
+            key: key,
+            reference: overrideRef.reference ?? (defaultRef.reference || ''),
+            count: overrideRef.count ?? (defaultRef.count || 0),
+            delivery: overrideRef.delivery ?? defaultRef.delivery,
+          };
+        }
+      );
     },
+
     getMassBalance() {
       return {
         balance: this.getMergeBalance(),

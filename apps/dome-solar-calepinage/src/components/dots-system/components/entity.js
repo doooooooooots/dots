@@ -134,7 +134,7 @@ function Entity(props) {
     <FieldContainer>
       {!isEmpty(entity) &&
         fieldToPrint.map((fieldName) => {
-          // [ ](Adrien): create id input
+          // [ ](Adrien): create id input component
           if (fieldName === 'id') return;
           if (!fields[fieldName]) return;
 

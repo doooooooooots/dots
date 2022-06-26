@@ -3,7 +3,7 @@ import { Avatar } from '@mui/material';
 import stringAvatar from '../../../utils/string-to-avatar';
 import ListItemDefault from '../components/list-item-default';
 import SelectItemPreview from '../components/list-item-preview';
-import dimension2D from '../fields/molecules/dimensions-2d';
+import length2D from '../fields/molecules/length-2d';
 import entity from '../utils/entity';
 import text from '../fields/atoms/text';
 import select from '../fields/atoms/select';
@@ -42,7 +42,7 @@ const Roof = entity({
     ridgeHeight: number({
       label: 'Hauteur de crête',
     }),
-    ...dimension2D(),
+    ...length2D(),
   },
 
   default: {

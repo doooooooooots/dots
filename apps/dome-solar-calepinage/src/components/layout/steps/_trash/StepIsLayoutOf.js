@@ -12,7 +12,7 @@ import {
 } from '../../../slices/entity-slice';
 import { useSelector } from '../../store/store';
 import { useStore } from '../../../../contexts/useStore';
-import Form from '../../form';
+import Form from '../../../_trash/form';
 import ActionRow from '../../../components/layouts/form/ActionRow';
 import { Fields } from '../../../components/entity/molecules/form';
 import * as actionsBdd from '../../../libraries/actions';

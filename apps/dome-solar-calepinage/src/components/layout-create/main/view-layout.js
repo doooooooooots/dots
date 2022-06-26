@@ -3,9 +3,12 @@ import { observer } from 'mobx-react';
 import { useStore } from '../../../contexts/useStore';
 import Canvas from '../../layout/canvas/canvas';
 import Roof from '../../layout/canvas/roof';
+import Alignment from '../../dots-system/enums/alignment';
 
 function StepLayout() {
   const store = useStore();
+  const { getAnchorPoint, getUserDatas } = store;
+  const anchorPoint = getAnchorPoint();
 
   return (
     <Canvas
@@ -29,27 +32,27 @@ function StepLayout() {
           fontSize: 9,
           marks: [
             {
-              ...(store.getAnchorPoint().includes('top') && {
+              ...(Alignment.isTop(anchorPoint) && {
                 id: 'Y0',
               }),
-              ...(store.getAnchorPoint().includes('middle') && {
+              ...(Alignment.isMiddle(anchorPoint) && {
                 size: store.offsetY(),
               }),
-              ...(store.getAnchorPoint().includes('bottom') && {
+              ...(Alignment.isBottom(anchorPoint) && {
                 id: 'Y0',
-                offset: store.getUserDatas('Ty') - store.getUserDatas('Y0'),
+                offset: getUserDatas('Ty') - getUserDatas('Y0'),
               }),
             },
             {
-              ...(store.getAnchorPoint().includes('left') && {
+              ...(Alignment.isLeft(anchorPoint) && {
                 id: 'X0',
               }),
-              ...(store.getAnchorPoint().includes('center') && {
+              ...(Alignment.isCenter(anchorPoint) && {
                 size: store.offsetX(),
               }),
-              ...(store.getAnchorPoint().includes('right') && {
+              ...(Alignment.isRight(anchorPoint) && {
                 id: 'X0',
-                offset: store.getUserDatas('Tx') - store.getUserDatas('X0'),
+                offset: getUserDatas('Tx') - getUserDatas('X0'),
               }),
               side: 'up',
             },

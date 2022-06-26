@@ -20,7 +20,7 @@ import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 import { isEmpty } from 'lodash';
 import useDialog from '../../../../hooks/use-dialog';
 import { useStore } from '../../../../contexts/useStore';
-import DialogQuantitativeEdit from '../../../dialog-quantitative-edit';
+import DialogQuantitativeEdit from './dialog-quantitative-edit';
 
 export default function StepSummaryQuantitative() {
   const { isOpen, onOpen, onClose } = useDialog();

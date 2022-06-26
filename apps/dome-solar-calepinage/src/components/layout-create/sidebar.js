@@ -8,8 +8,11 @@ import SidebarPdf from './sidebar/sidebar-pdf';
 
 const LayoutSidebar = () => {
   const store = useStore();
-  const currentPage = store.getCurrentPage();
+  const { hasRequiredInfos, getCurrentPage } = store;
 
+  const currentPage = getCurrentPage();
+
+  if (!hasRequiredInfos()) return null;
   if (currentPage === 'preview') return <SidePreview />;
   if (currentPage === 'pdf') return <SidebarPdf />;
   if (store.allSelected().length !== 0) return <SideBarSelect />;

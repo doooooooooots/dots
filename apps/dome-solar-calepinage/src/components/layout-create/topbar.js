@@ -60,7 +60,13 @@ function TopBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const store = useStore();
-  const { getRelatedData, setRelatedData, renderView } = store;
+  const {
+    getRelatedData,
+    getAllRelatedData,
+    setRelatedData,
+    renderView,
+    onOpenToClick,
+  } = store;
 
   /**
    * User clicks on home icon
@@ -228,9 +234,10 @@ function TopBar() {
         sx={{ minWidth: 425, p: 0 }}
       >
         {/* Content */}
-        {panels.map(({ name, query, title, Icon, dependencies }) => {
+        {panels.map(({ name, query, title, Icon, dependencies, where }) => {
           let canLoad = true;
-          const value = getRelatedData(name);
+          const relateds = getAllRelatedData();
+          const { [name]: value } = relateds;
 
           if (!isEmpty(dependencies)) {
             canLoad = dependencies.reduce(
@@ -253,8 +260,10 @@ function TopBar() {
                   <TabEntity
                     select={name}
                     query={query}
+                    where={where ? where(relateds) : {}}
                     value={value}
                     onChange={handleChange}
+                    // [ ](Adrien): Reload each time we open tab
                     onLoadSuccess={handleChange}
                   />
                   <Divider />
@@ -263,7 +272,7 @@ function TopBar() {
                     <Button
                       size="small"
                       color="neutral"
-                      onClick={handleCloseButtonClick}
+                      onClick={onOpenToClick(name)}
                       startIcon={<AddIcon />}
                       fullWidth
                     >

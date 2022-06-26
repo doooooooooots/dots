@@ -2,7 +2,6 @@ import { useCallback, useMemo } from 'react';
 import { GRAPHQL_REQUESTS } from '@dots.cool/tokens';
 import { useContext } from '../hoc';
 import DotsDatagrid from './dots-datagrid';
-import pluralize from 'pluralize';
 
 // [ ](Adrien): Create language logic
 const lang = '';

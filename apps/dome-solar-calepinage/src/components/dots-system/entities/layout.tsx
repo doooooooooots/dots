@@ -11,6 +11,9 @@ import number from '../fields/atoms/float';
 import json from '../fields/atoms/json';
 import select from '../fields/atoms/select';
 import integer from '../fields/atoms/integer';
+import dimension2D from '../fields/molecules/dimensions-2d';
+import lengthX from '../fields/molecules/length-x';
+import lengthY from '../fields/molecules/length-y';
 
 const icon = (option) => <PeopleAltOutlined fontSize="small" />;
 
@@ -45,24 +48,6 @@ const Layout = entity({
     moduleMapping: json({
       label: 'numberOfLines',
     }),
-    moduleSpaceBetweenX: number({
-      label: 'moduleSpaceBetweenX',
-    }),
-    moduleSpaceBetweenY: number({
-      label: 'moduleSpaceBetweenY',
-    }),
-    offsetX: number({
-      label: 'offsetX',
-    }),
-    offsetY: number({
-      label: 'offsetY',
-    }),
-    numberOfColumns: integer({
-      label: 'numberOfColumns',
-    }),
-    numberOfLines: integer({
-      label: 'numberOfLines',
-    }),
     overrideMassBalance: json({
       label: 'override',
     }),
@@ -81,6 +66,10 @@ const Layout = entity({
       select: 'Roof', // should be ref
       getter: (item) => item.name, // should have a default from entity
     }),
+    numberOfColumns: lengthX('Nbre colonnes'),
+    numberOfLines: lengthY('Nbre rangées'),
+    ...dimension2D('offset'),
+    ...dimension2D('moduleSpaceBetween', 'Ecart Module'),
   },
   default: {
     name: 'nom',

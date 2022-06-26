@@ -7,7 +7,7 @@ import entity from '../utils/entity';
 import text from '../fields/atoms/text';
 import number from '../fields/atoms/float';
 import select from '../fields/atoms/select';
-import dimension3D from '../fields/molecules/dimensions-3d';
+import length3D from '../fields/molecules/length-3d';
 
 const icon = (option) => <PeopleAltOutlined fontSize="small" />;
 
@@ -36,7 +36,7 @@ const SolarModule = entity({
     electricalPower: number({
       label: 'Puissance éléctrique',
     }),
-    ...dimension3D({ z: 'Epaisseur' }),
+    ...length3D({ z: 'Epaisseur' }),
   },
 
   default: {

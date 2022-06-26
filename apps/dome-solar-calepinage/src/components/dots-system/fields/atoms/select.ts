@@ -6,7 +6,7 @@ type SelectFieldType = BaseFieldConfig & {
 
 function select(args: SelectFieldType) {
   return {
-    type: 'text',
+    type: 'select',
     ...args,
   };
 }

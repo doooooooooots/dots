@@ -10,6 +10,7 @@ import select from '../fields/atoms/select';
 import timestamp from '../fields/atoms/timestamp';
 import text from '../fields/atoms/text';
 import dimension from '../fields/atoms/dimension';
+import * as yup from 'yup';
 
 // TODO: Export from dots data schema
 const PROJECT_FIELDS = {
@@ -18,6 +19,9 @@ const PROJECT_FIELDS = {
   }),
   name: text({
     label: 'Nom',
+    isIndexed: true,
+    defaultValue: 'Nom du projet',
+    validation: yup.string().required(), // auto add depending on field
   }),
   step: select({
     label: 'Etape',
@@ -86,6 +90,36 @@ const Project = entity({
       info: (option) => ``,
     },
   },
+  form: {
+    basicInfos: {
+      primary: 'Information de base',
+      secondary: '',
+      description: '',
+      fields: {
+        name: { col: 4, renderInput: null },
+        step: { col: 4 },
+        typeEmergency: { col: 4 },
+      },
+    },
+    step: {
+      primary: 'Etapes',
+      fields: {
+        areaField: { col: 4 },
+        areaSea: { col: 4 },
+        areaSnow: {
+          col: 6,
+        },
+      },
+    },
+    dates: {
+      primary: 'Dates et deadlines',
+      fields: {
+        dateReception: {},
+        dateDelivery: {},
+      },
+    },
+  },
+  // Search box
   templates: {
     byDate: {
       name: 'By date',

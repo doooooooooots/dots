@@ -1,5 +1,6 @@
-import { isEmpty } from 'lodash';
+import { useState, useCallback } from 'react';
 
+import { isEmpty } from 'lodash';
 import InputRelationWithFetch from './input-relationship-with-fetch';
 import Entity from './entity';
 
@@ -15,6 +16,12 @@ const TabEntity = (props) => {
     onLoadSuccess,
     onUpdateSuccess,
   } = props;
+
+  // const [entity, setEntity] = useState(value);
+
+  // const handleChange = useCallback((data) => {
+  //   setEntity(data);
+  // }, []);
 
   return (
     <>

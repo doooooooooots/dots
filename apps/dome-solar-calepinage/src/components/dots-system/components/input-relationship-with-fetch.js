@@ -19,7 +19,7 @@ function InputRelationWithFetch(props) {
     // Autocomplete
     options,
     renderModel = 'default',
-    where = [],
+    where = {},
     take = 10,
     skip = 0,
     orderBy = [],
@@ -100,12 +100,7 @@ function InputRelationWithFetch(props) {
           take: take,
           skip: skip,
           input: input || '',
-          where: [
-            {
-              id: { notIn: [] },
-            },
-            ...where,
-          ],
+          where: where,
           orderBy: orderBy,
         },
       });

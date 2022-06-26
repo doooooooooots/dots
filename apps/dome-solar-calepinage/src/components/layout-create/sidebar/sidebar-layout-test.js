@@ -19,9 +19,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
-import Loading from '../../design-system/screens/loading-screen';
-
 import pluralize from 'pluralize';
+import { LoadingButton } from '@mui/lab';
 
 const formatData = ({
   project: { areaSea, areaSnow, areaWind, areaField, altitude },
@@ -60,11 +59,10 @@ const formatData = ({
 });
 
 const IS_ALLOWED = gql`
-  query IsAllowed($data: JSON) {
+  query IsAllowed($data: IsAllowedRequestInput!) {
     isAllowed(data: $data) {
-      data
       errors
-      message
+      data
       status
     }
   }
@@ -127,6 +125,7 @@ const TestResult = (props) => {
 function SidebarLayoutTest() {
   const { getAllRelatedData, getRelatedData, setRelatedData, isPassingTests } =
     useStore();
+
   const [checkIsAllowed, { loading, error }] = useLazyQuery(IS_ALLOWED);
 
   const tests = getRelatedData('tests');
@@ -143,6 +142,8 @@ function SidebarLayoutTest() {
       variables: { data: formatData({ project, solarModule, cladding, roof }) },
     });
 
+    console.log(data);
+
     if (!isEmpty(data) && isEmpty(data?.isAllowed?.errors))
       setRelatedData('tests', data?.isAllowed?.data);
   }, [getAllRelatedData, checkIsAllowed, setRelatedData]);
@@ -150,7 +151,6 @@ function SidebarLayoutTest() {
   /**
    * Render
    */
-  if (loading) return <Loading />;
   if (error) return 'Error...';
 
   return (
@@ -174,7 +174,8 @@ function SidebarLayoutTest() {
         </Box>
       )}
       <Divider sx={{ my: 2 }} />
-      <Button
+      <LoadingButton
+        loading={loading}
         size="small"
         variant="outlined"
         color="error"
@@ -182,7 +183,7 @@ function SidebarLayoutTest() {
         disabled={isPassingTests()}
       >
         Vérifier
-      </Button>
+      </LoadingButton>
     </Box>
   );
 }

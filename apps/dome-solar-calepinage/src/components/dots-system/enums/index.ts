@@ -8,9 +8,11 @@ import PurlinType from './purlin-type';
 import Status from './status';
 import Progress from './progress';
 import Reaction from './reaction';
+import Alignment from './alignment';
 import enums from '../utils/enums';
 
 const enumSchema = enums({
+  Alignment,
   AreaField,
   AreaSea,
   AreaSnow,

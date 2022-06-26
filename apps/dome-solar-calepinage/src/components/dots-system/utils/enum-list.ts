@@ -9,8 +9,10 @@ type OptionType = {
   color?: string;
 };
 
-export default function enumList<T extends string>(defObj: BaseEnumConfig<T>) {
-  const { values, labels, colors } = defObj;
+export default function enumList<T extends string, U>(
+  defObj: BaseEnumConfig<T, U>
+) {
+  const { values, labels, colors, helpers } = defObj;
 
   const { valuesIndexed, options, minValue, maxValue } = Object.entries<number>(
     values
@@ -55,15 +57,18 @@ export default function enumList<T extends string>(defObj: BaseEnumConfig<T>) {
   const getTokenFromValue = (value: number) => valuesIndexed[`${value}`];
 
   return Object.freeze({
-    ...defObj,
+    values,
+    labels,
+    colors,
     getTokenFromValue,
     has: (value: number) => Object.values(values).includes(value),
-    getLabelFromValue: (value: number, lang = 'fr') =>
-      (labels && labels[lang][getTokenFromValue(value)]) || '',
     getOptions: () => options,
     getValues: () => values,
     getMinValue: () => minValue,
     getMaxValue: () => maxValue,
     getOptionsLength: () => options.length,
+    getLabelFromValue: (value: number, lang = 'fr') =>
+      (labels && labels[lang][getTokenFromValue(value)]) || '',
+    ...(helpers ?? null),
   });
 }

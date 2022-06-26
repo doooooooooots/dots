@@ -8,7 +8,7 @@ import ActionRow from '../../../components/layouts/form/ActionRow';
 import { DrawerContentSource } from '../../../components/teleporters/DrawerContent';
 import { useStore } from '../../../contexts/useStore';
 import Canvas from '../canvas/canvas';
-import Form from '../form';
+import Form from '../../_trash/form';
 import Module from '../../module';
 import StepDrawerContainer from './_trash/StepDrawerContainer';
 import moduleFields from '../../../config/module.json';

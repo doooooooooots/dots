@@ -1,18 +1,18 @@
+import Alignment from '../components/dots-system/enums/alignment';
 import { getIndexTrunc } from '../utils/trunc-int';
 
 const withUserDatas = (app) => ({
   ...app,
 
   userDatas: {
-    name: '',
     // Roof
     Tx: 12000,
     Ty: 13000,
     // Solar edge
     useSolarEdge: false,
     // Roof offset
-    X0: 100,
-    Y0: 100,
+    X0: 0,
+    Y0: 0,
     // Modules
     Mx: 1800,
     My: 850,
@@ -45,10 +45,11 @@ const withUserDatas = (app) => ({
 
   getUserDatas(key) {
     if (key !== undefined) {
-      return this.userDatas[key];
+      return parseInt(1 * this.userDatas[key], 10);
     }
     return this.userDatas;
   },
+
   setUserData(key, value) {
     let parsedValue;
     switch (value) {
@@ -63,6 +64,7 @@ const withUserDatas = (app) => ({
         this.userDatas[key] = Number.isNaN(parsedValue) ? value : parsedValue;
     }
   },
+
   updateUserDatas(newValues) {
     let formattedValues = Object.entries(newValues).map(([key, value]) => [
       key,
@@ -85,12 +87,15 @@ const withUserDatas = (app) => ({
   getCol(index) {
     return index % this.getCurrentMaxCol();
   },
+
   getRow(index) {
     return Math.trunc(index / this.getCurrentMaxCol());
   },
+
   getIndex(col, row) {
     return row * this.getCurrentMaxCol() + col;
   },
+
   getMaxCol() {
     const maxCol = Math.trunc(
       (this.getUserDatas('Tx') +
@@ -100,6 +105,7 @@ const withUserDatas = (app) => ({
     );
     return maxCol;
   },
+
   getMaxRow() {
     const maxRow = Math.trunc(
       (this.getUserDatas('Ty') +
@@ -111,21 +117,25 @@ const withUserDatas = (app) => ({
     );
     return maxRow;
   },
+
   getCurrentMaxCol() {
     return this.getUserDatas('userMaxCol') &&
       this.getUserDatas('userMaxCol') <= this.getMaxCol()
       ? Math.max(this.getUserDatas('userMaxCol'), 1)
       : this.getMaxCol();
   },
+
   getCurrentMaxRow() {
     return this.getUserDatas('userMaxRow') &&
       this.getUserDatas('userMaxRow') <= this.getMaxRow()
       ? Math.max(this.getUserDatas('userMaxRow'), 1)
       : this.getMaxRow();
   },
+
   setCurrentLastCol(index) {
     this.userDatas.currentLastCol = index;
   },
+
   getCurrentLastCol() {
     return this.userDatas.currentLastCol;
   },
@@ -135,14 +145,17 @@ const withUserDatas = (app) => ({
       this.getCol(index) * (this.getUserDatas('Mx') + this.getUserDatas('Ex'))
     );
   },
+
   getModuleYPosAbsolute(index) {
     return (
       this.getRow(index) * (this.getUserDatas('My') + this.getUserDatas('Ey'))
     );
   },
+
   getPosX(index) {
     return this.getModuleXPosAbsolute(index) + this.offsetX();
   },
+
   getPosY(index) {
     return (
       this.getModuleYPosAbsolute(index) +
@@ -159,9 +172,11 @@ const withUserDatas = (app) => ({
   railPosX() {
     return this.getConfig().railOffset - this.getUserDatas('Px') / 2;
   },
+
   getRailTop() {
     return this.getUserDatas('Py') - this.getRailMiddleOffset();
   },
+
   getRailMiddleOffset() {
     return (this.getUserDatas('Py') - this.getUserDatas('Ey')) / 2;
   },
@@ -179,6 +194,7 @@ const withUserDatas = (app) => ({
       this.getUserDatas('Ex')
     );
   },
+
   generatorY() {
     return (
       this.getCurrentMaxRow() *
@@ -189,90 +205,91 @@ const withUserDatas = (app) => ({
 
   // Space left between right of generator and right of roof
   spaceLeftX() {
+    const anchorPoint = this.getAnchorPoint();
     const offset =
       this.getCurrentLastCol() !== -1
         ? (this.getCurrentMaxCol() - (this.getCurrentLastCol() + 1)) *
           (this.getUserDatas('Mx') + this.getUserDatas('Ex'))
         : 0;
 
-    switch (this.getAnchorPoint().split('-')[1]) {
-      case 'right':
-        return this.getUserDatas('X0') + offset;
-      case 'center':
-        return (this.getUserDatas('Tx') - this.generatorX()) / 2 + offset;
-      case 'left':
-      default:
-        return (
-          this.getUserDatas('Tx') -
-          this.generatorX() -
-          this.getUserDatas('X0') +
-          offset
-        );
-    }
+    if (Alignment.isRight(anchorPoint)) return this.getUserDatas('X0') + offset;
+
+    if (Alignment.isCenter(anchorPoint) || Alignment.isRight(anchorPoint))
+      return (this.getUserDatas('Tx') - this.generatorX()) / 2 + offset;
+
+    return (
+      this.getUserDatas('Tx') -
+      this.generatorX() -
+      this.getUserDatas('X0') +
+      offset
+    );
   },
 
   // Space left between bottom of generator and bottom of roof
   spaceLeftY() {
-    switch (this.getAnchorPoint().split('-')[0]) {
-      case 'top':
-      default:
-        return (
-          this.getUserDatas('Ty') -
+    const anchorPoint = this.getAnchorPoint();
+
+    if (Alignment.isMiddle(anchorPoint))
+      return (
+        (this.getUserDatas('Ty') -
           this.generatorY() -
-          this.getUserDatas('Y0') -
-          (this.getUserDatas('Py') - this.getRailMiddleOffset())
-        );
-      case 'middle':
-        return (
-          (this.getUserDatas('Ty') -
-            this.generatorY() -
-            (this.getUserDatas('Py') - this.getRailMiddleOffset()) -
-            this.getConfig().railBottomOffset) /
-            2 +
-          this.getConfig().railBottomOffset
-        );
-      case 'bottom':
-        return this.getUserDatas('Y0') + this.getConfig().railBottomOffset;
-    }
+          (this.getUserDatas('Py') - this.getRailMiddleOffset()) -
+          this.getConfig().railBottomOffset) /
+          2 +
+        this.getConfig().railBottomOffset
+      );
+
+    if (Alignment.isBottom(anchorPoint))
+      return this.getUserDatas('Y0') + this.getConfig().railBottomOffset;
+
+    return (
+      this.getUserDatas('Ty') -
+      this.generatorY() -
+      this.getUserDatas('Y0') -
+      (this.getUserDatas('Py') - this.getRailMiddleOffset())
+    );
   },
 
   // Offset :
   offsetX() {
-    switch (this.getAnchorPoint().split('-')[1]) {
-      case 'left':
-      default:
-        return this.getUserDatas('X0');
-      case 'center':
-        return (this.getUserDatas('Tx') - this.generatorX()) / 2;
-      case 'right':
-        return (
-          this.getUserDatas('Tx') - this.generatorX() - this.getUserDatas('X0')
-        );
-    }
+    const anchorPoint = this.getAnchorPoint();
+
+    if (Alignment.isCenter(anchorPoint))
+      return (this.getUserDatas('Tx') - this.generatorX()) / 2;
+
+    if (Alignment.isRight(anchorPoint))
+      return (
+        this.getUserDatas('Tx') - this.generatorX() - this.getUserDatas('X0')
+      );
+
+    return this.getUserDatas('X0') || 0;
   },
+
   offsetY() {
-    switch (this.getAnchorPoint().split('-')[0]) {
-      case 'top':
-      default:
-        return this.getUserDatas('Y0');
-      case 'middle':
-        return (
-          (this.getUserDatas('Ty') -
-            this.generatorY() -
-            (this.getUserDatas('Py') - this.getRailMiddleOffset()) -
-            this.getConfig().railBottomOffset) /
-          2
-        );
-      case 'bottom':
-        return (
-          this.getUserDatas('Ty') -
+    const anchorPoint = this.getAnchorPoint();
+
+    if (Alignment.isMiddle(anchorPoint)) {
+      return (
+        (this.getUserDatas('Ty') -
           this.generatorY() -
-          this.getUserDatas('Y0') -
-          (this.getUserDatas('Py') -
-            this.getRailMiddleOffset() +
-            this.getConfig().railBottomOffset)
-        );
+          (this.getUserDatas('Py') - this.getRailMiddleOffset()) -
+          this.getConfig().railBottomOffset) /
+        2
+      );
     }
+
+    if (Alignment.isBottom(anchorPoint)) {
+      return (
+        this.getUserDatas('Ty') -
+        this.generatorY() -
+        this.getUserDatas('Y0') -
+        (this.getUserDatas('Py') -
+          this.getRailMiddleOffset() +
+          this.getConfig().railBottomOffset)
+      );
+    }
+
+    return this.getUserDatas('Y0') || 0;
   },
 
   // Get current column or right column if we are in space between two modules
@@ -283,6 +300,7 @@ const withUserDatas = (app) => ({
       1;
     return getIndexTrunc(col, outOfRange);
   },
+
   // Get current row or bottom row if we are in space between two modules
   getRowOrBottomFromY(y, outOfRange = 0) {
     const row =
@@ -294,6 +312,7 @@ const withUserDatas = (app) => ({
       1;
     return getIndexTrunc(row, outOfRange);
   },
+
   // Get current column or left column if we are in space between two modules
   getColOrLeftFromX(x, outOfRange = -1) {
     const col =
@@ -301,6 +320,7 @@ const withUserDatas = (app) => ({
       (this.getUserDatas('Mx') + this.getUserDatas('Ex'));
     return getIndexTrunc(col, outOfRange);
   },
+
   // Get current row or upper row if we are in space between two modules
   getRowOrUpperFromY(y, outOfRange = -1) {
     const row =

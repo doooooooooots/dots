@@ -6,7 +6,7 @@ import SelectItemPreview from '../components/list-item-preview';
 
 import entity from '../utils/entity';
 import text from '../fields/atoms/text';
-import dimension3D from '../fields/molecules/dimensions-3d';
+import length3D from '../fields/molecules/length-3d';
 
 const icon = (option) => <PeopleAltOutlined fontSize="small" />;
 
@@ -25,7 +25,7 @@ const Product = entity({
     name: text({
       label: 'Nom',
     }),
-    ...dimension3D({ z: 'Epaisseur' }),
+    ...length3D({ z: 'Epaisseur' }),
   },
 
   default: {

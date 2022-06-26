@@ -4,7 +4,17 @@ import { ucFirst } from '@dots.cool/utils';
 
 export default function handler(req, res) {
   const { name } = req.query;
-  const Enum = enumSchema[ucFirst(toCamelCase(name))];
+  const EnmumName = ucFirst(toCamelCase(name));
+
+  if (!(EnmumName in enumSchema)) {
+    res.status(400).json({
+      status: 400,
+      message: `Bad Request: ${name} does not exist on enum list`,
+    });
+    return;
+  }
+
+  const Enum = enumSchema[EnmumName];
 
   res.status(200).json({
     options: Enum.getOptions(),

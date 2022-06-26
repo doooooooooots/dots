@@ -9,7 +9,7 @@ import number from '../fields/atoms/float';
 import select from '../fields/atoms/select';
 import integer from '../fields/atoms/integer';
 import color from '../fields/atoms/color';
-import dimension3D from '../fields/molecules/dimensions-3d';
+import length3D from '../fields/molecules/length-3d';
 
 const icon = (option) => <PeopleAltOutlined fontSize="small" />;
 
@@ -47,7 +47,7 @@ const Cladding = entity({
       label: 'material',
       options: 'material',
     }),
-    ...dimension3D({ z: "Hauteur d'onde" }),
+    ...length3D({ z: "Hauteur d'onde" }),
   },
   default: {
     name: 'nom',

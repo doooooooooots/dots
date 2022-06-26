@@ -26,6 +26,7 @@ import ProjectFormCreate from './forms/project-create';
 import CladdingCreate from './forms/cladding-create';
 import RoofFormCreate from './forms/roof-create';
 import LayoutFormCreate from './forms/layout-create';
+import EntityCreate from './forms/entity-create';
 
 const TITLES = {
   [PAGE_SOLAR_MODULE]: 'Créer un panneau solaire',
@@ -58,13 +59,13 @@ function DialogForms() {
       <Divider />
 
       <DialogContent sx={{ bgcolor: 'background.default' }}>
-        {open === PAGE_PROJECT && <ProjectFormCreate />}
-        {open === PAGE_LAYOUT && <LayoutFormCreate />}
-        {open === PAGE_ROOF && <RoofFormCreate />}
-        {open === PAGE_CLADDING && <CladdingCreate />}
-        {open === PAGE_SOLAR_MODULE && <SolarModuleCreate />}
-        {open === PAGE_PRODUCT && <div>Product</div>}
-        {open === false && <Box sx={{ height: 400 }} />}
+        {open && <EntityCreate entityName={open} />}
+        {/* {open === PAGE_LAYOUT && <LayoutFormCreate />} */}
+        {/* {open === PAGE_ROOF && <RoofFormCreate />} */}
+        {/* {open === PAGE_CLADDING && <CladdingCreate />} */}
+        {/* {open === PAGE_SOLAR_MODULE && <SolarModuleCreate />} */}
+        {/* {open === PAGE_PRODUCT && <div>Product</div>} */}
+        {/* {open === false && <Box sx={{ height: 400 }} />} */}
       </DialogContent>
     </>
   );

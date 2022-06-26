@@ -23,6 +23,16 @@ const productFragment = `
   lengthZ
 `;
 
+const claddingFragment = `
+  id
+  name
+  lengthX
+  lengthY
+  lengthZ
+  numberOfWaves
+  thickness
+`;
+
 const panels = [
   {
     name: 'project',
@@ -53,6 +63,7 @@ const panels = [
     name: 'roof',
     title: 'Toiture',
     dependencies: ['project'],
+    where: ({ project }) => ({ project: { id: { equals: project.id } } }),
     Icon: RoofingIcon,
     query: `
       id
@@ -64,6 +75,9 @@ const panels = [
       purlinThickness
       incline
       obstacles
+      cladding {
+        ${claddingFragment}
+      }
     `,
   },
   {
@@ -72,32 +86,29 @@ const panels = [
     dependencies: ['roof'],
     Icon: CalendarViewWeekOutlinedIcon,
     query: `
-      id
-      name
-      lengthX
-      lengthY
-      lengthZ
-      numberOfWaves
-      thickness
+      ${claddingFragment}
     `,
   },
   {
     name: 'layout',
     title: 'Calepinage',
-    dependencies: ['project', 'roof'],
     Icon: StarBorderIcon,
+    dependencies: ['project', 'roof'],
+    // multiple
+    where: ({ roof }) => ({ roof: { id: { equals: roof.id } } }),
+    // single
     query: `
       id
       name
       solarEdge
-      numberOfColumns
-      numberOfLines
       comments
       alignment
-      offsetX
-      offsetY
       overrideMassBalance
+      numberOfColumns
+      offsetX
       moduleSpaceBetweenX
+      numberOfLines
+      offsetY
       moduleSpaceBetweenY
       solarModule {
         ${solarModuleFragment}

@@ -6,7 +6,12 @@ function ErrorPage(props) {
 
   return (
     <Alert severity="error" {...other}>
-      {message}
+      {typeof message === 'string' && message}
+      {typeof message !== 'string' && (
+        <pre>
+          <code>{JSON.stringify(message, null, 2)}</code>
+        </pre>
+      )}
     </Alert>
   );
 }
