@@ -110,6 +110,88 @@
       "tags": [],
       "implicitDependencies": ["dome-solar-calepinage"]
     },
+    "dots-app": {
+      "root": "apps/dots-app",
+      "sourceRoot": "apps/dots-app",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/next:build",
+          "outputs": ["{options.outputPath}"],
+          "defaultConfiguration": "production",
+          "options": {
+            "root": "apps/dots-app",
+            "outputPath": "dist/apps/dots-app"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/next:server",
+          "options": {
+            "buildTarget": "dots-app:build",
+            "dev": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "dots-app:build:production",
+              "dev": false
+            }
+          }
+        },
+        "export": {
+          "executor": "@nrwl/next:export",
+          "options": {
+            "buildTarget": "dots-app:build:production"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/dots-app"],
+          "options": {
+            "jestConfig": "apps/dots-app/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/dots-app/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      },
+      "tags": []
+    },
+    "dots-app-e2e": {
+      "root": "apps/dots-app-e2e",
+      "sourceRoot": "apps/dots-app-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/dots-app-e2e/cypress.json",
+            "devServerTarget": "dots-app:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "dots-app:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/dots-app-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["dots-app"]
+    },
     "dots-system": {
       "root": "libs/dots-system",
       "sourceRoot": "libs/dots-system/src",
