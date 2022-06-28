@@ -2,17 +2,19 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import toast from 'react-hot-toast';
 import ErrorPage from '../../design-system/screens/error-page';
-import { useDots } from '../context/dots-context';
 import Field from './field';
 import FieldContainer from './container';
 import { isArray, isEmpty } from 'lodash';
 import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
 import { ucFirst } from '@dots.cool/utils';
 import Loading from '../../design-system/screens/loading';
+import { useDots } from '@dots.cool/schema';
+import Button from './button';
 
 function Entity(props) {
   const {
     select: singular,
+    direction = 'column',
     query,
     where,
     onLoadSuccess,
@@ -131,7 +133,7 @@ function Entity(props) {
   }
 
   return (
-    <FieldContainer>
+    <FieldContainer direction={direction}>
       {!isEmpty(entity) &&
         fieldToPrint.map((fieldName) => {
           // [ ](Adrien): create id input component
@@ -156,15 +158,30 @@ function Entity(props) {
           }
 
           return (
-            <Field
-              key={fieldName}
-              value={entity[fieldName]}
-              loading={loadingSave === fieldName}
-              onChange={
-                type === 'relationship' ? handleChangeLinkConfirm : saveData
-              }
-              {...fieldProps}
-            />
+            <>
+              {direction === 'column' && (
+                <Field
+                  key={fieldName}
+                  value={entity[fieldName]}
+                  loading={loadingSave === fieldName}
+                  onChange={
+                    type === 'relationship' ? handleChangeLinkConfirm : saveData
+                  }
+                  {...fieldProps}
+                />
+              )}
+              {direction === 'row' && (
+                <Button
+                  key={fieldName}
+                  value={entity[fieldName]}
+                  loading={loadingSave === fieldName}
+                  onChange={
+                    type === 'relationship' ? handleChangeLinkConfirm : saveData
+                  }
+                  {...fieldProps}
+                />
+              )}
+            </>
           );
         })}
     </FieldContainer>

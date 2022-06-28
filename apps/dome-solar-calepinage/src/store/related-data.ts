@@ -1,5 +1,5 @@
+import { Alignment } from '@dots.cool/schema';
 import { set, isEmpty, round } from 'lodash';
-import Alignment from '../components/dots-system/enums/alignment';
 
 const correspondingDatas = Object.freeze({
   roof: {

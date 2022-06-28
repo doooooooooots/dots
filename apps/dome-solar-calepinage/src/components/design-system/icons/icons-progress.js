@@ -14,7 +14,7 @@ import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOu
 import BuildCircleOutlinedIcon from '@mui/icons-material/BuildCircleOutlined';
 import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
 import NotStartedOutlinedIcon from '@mui/icons-material/NotStartedOutlined';
-import Progress from '../../dots-system/enums/progress';
+import { Progress } from '@dots.cool/schema';
 
 const { values } = Progress;
 

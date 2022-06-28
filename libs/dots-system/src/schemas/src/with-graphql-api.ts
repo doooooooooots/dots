@@ -1,4 +1,4 @@
-import { createGraphQlApi } from '@dots.cool/schemas';
+import { createGraphQlApi } from '@keystone-nx/schema--to-delete';
 import { EntitySchemaEnhanced } from '../index.d';
 
 const withGraphQlApi = (schema: EntitySchemaEnhanced) => {

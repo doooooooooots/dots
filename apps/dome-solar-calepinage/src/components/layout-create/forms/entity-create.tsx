@@ -6,17 +6,17 @@ import {
   Stack,
   Container,
   Typography,
-  Checkbox,
   TextField,
 } from '@mui/material';
-import { useDots } from '../../dots-system/context/dots-context';
 import { Controller, useForm } from 'react-hook-form';
+import { useDots } from '@dots.cool/schema';
+import FormInput from '../../dots-system/components/form-input';
 
 export default function EntityCreate(props) {
   const { entityName, model } = props;
 
   const { getSchema } = useDots();
-  const entity = getSchema(entityName);
+  const { form, fields } = getSchema(entityName);
 
   const { control, handleSubmit } = useForm({
     defaultValues: {},
@@ -38,12 +38,15 @@ export default function EntityCreate(props) {
                 <Grid container spacing={2}>
                   {Object.entries(sectionInfo.fields).map(
                     ([fieldName, fieldInfos]) => {
+                      const fieldData = fields[fieldName];
                       return (
                         <Grid key={fieldName} item xs={fieldInfos.col || 6}>
                           <Controller
                             name={fieldName}
                             control={control}
-                            render={({ field }) => <TextField {...field} />}
+                            render={({ field }) => (
+                              <FormInput {...field} type={fieldData} />
+                            )}
                           />
                         </Grid>
                       );

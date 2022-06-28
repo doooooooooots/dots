@@ -5,7 +5,7 @@ import {
   bindToggle,
   usePopupState,
 } from 'material-ui-popup-state/hooks';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Button } from '@mui/material';
 
 // [ ](Adrien): Use dynamic import + suspense
 import FieldInputEdit from './field-input-edit';
@@ -21,6 +21,7 @@ function FieldInput(props) {
   const {
     name,
     type,
+    variant = 'field',
     loading,
     value,
     onChange,
@@ -62,13 +63,27 @@ function FieldInput(props) {
   return (
     <>
       {!loading ? (
-        <FieldInputValueBase
-          {...bindToggle(popupState)}
-          isOpen={!readOnly && isOpen}
-          sx={sx}
-        >
-          <Value {...Value.bindProp(props)} />
-        </FieldInputValueBase>
+        <>
+          {variant === 'field' && (
+            <FieldInputValueBase
+              {...bindToggle(popupState)}
+              isOpen={!readOnly && isOpen}
+              sx={sx}
+            >
+              <Value {...Value.bindProp(props)} />
+            </FieldInputValueBase>
+          )}
+          {variant === 'button' && (
+            <Button
+              {...bindToggle(popupState)}
+              disabled={!readOnly && isOpen}
+              color="neutral"
+              sx={sx}
+            >
+              <Value {...Value.bindProp(props)} />
+            </Button>
+          )}
+        </>
       ) : (
         <Box pl={2}>
           <CircularProgress color="neutral" size={15} />

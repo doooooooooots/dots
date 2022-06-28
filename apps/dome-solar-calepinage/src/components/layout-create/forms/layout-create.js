@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { Button, TextField, Grid, Typography, Alert } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
-import { createOneBuilder } from '@dots.cool/schemas';
+import { createOneBuilder } from '@keystone-nx/schema--to-delete';
 import { useStore } from '../../../contexts/useStore';
 
 const CREATE_LAYOUT = createOneBuilder('layout')('id');

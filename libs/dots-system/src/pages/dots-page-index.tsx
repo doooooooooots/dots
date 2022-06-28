@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { GRAPHQL_REQUESTS } from '@dots.cool/tokens';
-import { useContext } from '../hoc';
 import DotsDatagrid from './dots-datagrid';
+import { useDots } from '@dots.cool/schema';
 
 // [ ](Adrien): Create language logic
 const lang = '';
@@ -13,7 +13,8 @@ interface DotsPageIndexType {
 function DotsPageIndex(props: DotsPageIndexType) {
   const { entityName } = props;
 
-  const { plurial, views, graphql, columns: _columns } = useContext(entityName);
+  const { getSchema } = useDots();
+  const { plurial, views, graphql, columns: _columns } = getSchema(entityName);
 
   //* COLUMNS & QUERY
   //?Extract default values from context

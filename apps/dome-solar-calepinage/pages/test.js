@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import toast from 'react-hot-toast';
-import { useDots } from '../src/components/dots-system/context/dots-context';
+import { useDots } from '../src/components/_trash/context/dots-context';
 import ShareIcon from '@mui/icons-material/Share';
 import InfoIcon from '@mui/icons-material/InfoOutlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';

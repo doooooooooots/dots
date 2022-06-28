@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import ENTITIES from '../../schemas';
-import { createSchema } from '@dots.cool/schemas';
+import { createSchema } from '@keystone-nx/schema--to-delete';
 import { FetchError } from '@dots.cool/components';
 
 const withQuery =

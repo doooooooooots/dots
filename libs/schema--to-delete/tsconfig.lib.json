@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "composite": true,
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "declaration": true,
+    "types": []
+  },
+  "include": [
+    "**/*.ts",
+    "src/index.js",
+    "src/create-schema/index.js",
+    "src/utils/entity.tsx"
+  ],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts"]
+}

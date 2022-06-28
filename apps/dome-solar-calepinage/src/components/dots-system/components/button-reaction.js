@@ -1,10 +1,9 @@
 import React, { useCallback, useState } from 'react';
-import { MenuItem, Stack, Typography } from '@mui/material';
+import { Button, MenuItem, Stack, Typography } from '@mui/material';
 import AddReactionOutlinedIcon from '@mui/icons-material/AddReactionOutlined';
 import ButtonBase from './button-base';
-import PopperGrowWithClickaway from '../popper-grow-with-clickaway';
 import { uniqueId, isEmpty, remove } from 'lodash';
-import ButtonBaseUnstyled from './button-base-unstyled';
+import PopperGrowWithClickaway from '../../popper-grow-with-clickaway';
 
 const ICONS = {
   '+1': '👍',
@@ -22,7 +21,7 @@ const ICONS = {
   error: '❌',
 };
 
-const ReactionIcon = ({ variant, count, onClick, isActive }) => {
+const ReactionIcon = ({ variant, count, onClick, isActive, onClose }) => {
   if (variant === '' || variant === 'default') {
     return <AddReactionOutlinedIcon />;
   }
@@ -55,7 +54,7 @@ const ReactionIcon = ({ variant, count, onClick, isActive }) => {
 };
 
 function SelectReaction(props) {
-  const { tooltip = 'add a reaction' } = props;
+  const { tooltip = 'add a reaction', onOpen, onClose } = props;
 
   const [reacts, setReacts] = useState([
     {
@@ -143,14 +142,14 @@ function SelectReaction(props) {
         const mine = people.find(({ id }) => id === '__my__ID__');
         const didIVote = !isEmpty(mine);
         return (
-          <ButtonBaseUnstyled key={reaction.id} tooltip={reaction.variant}>
+          <Button key={reaction.id} tooltip={reaction.variant}>
             <ReactionIcon
               variant={reaction.variant}
               count={reaction.countPeople}
               onClick={didIVote ? downVote(reaction) : upVote(reaction)}
               isActive={didIVote}
             />
-          </ButtonBaseUnstyled>
+          </Button>
         );
       })}
       <ButtonBase
@@ -159,7 +158,7 @@ function SelectReaction(props) {
         onClick={onOpen}
       />
       <PopperGrowWithClickaway
-        anchorEl={anchorEl}
+        anchorEl={null}
         open={open}
         onClose={onClose}
         p={0}

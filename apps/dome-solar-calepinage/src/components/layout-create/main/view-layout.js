@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { useStore } from '../../../contexts/useStore';
 import Canvas from '../../layout/canvas/canvas';
 import Roof from '../../layout/canvas/roof';
-import Alignment from '../../dots-system/enums/alignment';
+import Alignment from '../../_trash/enums/alignment';
 
 function StepLayout() {
   const store = useStore();

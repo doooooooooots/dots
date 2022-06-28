@@ -1,4 +1,6 @@
+import { Alignment } from '@dots.cool/schema';
 import React from 'react';
+
 import BottomCenter from './align-bottom-center';
 import BottomLeft from './align-bottom-left';
 import BottomRight from './align-bottom-right';
@@ -8,7 +10,6 @@ import MiddleRight from './align-middle-right';
 import TopCenter from './align-top-center';
 import TopLeft from './align-top-left';
 import TopRight from './align-top-right';
-import Alignment from '../components/dots-system/enums/alignment';
 
 type AlignmentsIconsPropsType = {
   variant: number;
@@ -52,5 +53,9 @@ function AlignmentsIcons(props: AlignmentsIconsPropsType) {
       return null;
   }
 }
+
+AlignmentsIcons.bindProps = ({ label, value, color }) => ({
+  variant: value,
+});
 
 export default AlignmentsIcons;

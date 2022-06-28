@@ -1,5 +1,3 @@
-import { useState, useCallback } from 'react';
-
 import { isEmpty } from 'lodash';
 import InputRelationWithFetch from './input-relationship-with-fetch';
 import Entity from './entity';

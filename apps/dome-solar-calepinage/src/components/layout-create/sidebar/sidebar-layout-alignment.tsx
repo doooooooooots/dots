@@ -6,12 +6,12 @@ import { observer } from 'mobx-react';
 import { Controller, useForm } from 'react-hook-form';
 import SidebarLayoutInfobox from './sidebar-layout-infobox';
 import AlignmentMap from '../../alignment-map';
-import Alignment from '../../dots-system/enums/alignment';
-import { useDots } from '../../dots-system/context/dots-context';
+import Alignment from '../../_trash/enums/alignment';
 import { useMutation } from '@apollo/client';
 import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
 import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-hot-toast';
+import { useDots } from '@dots.cool/schema';
 
 const SidebarAlignment = () => {
   const store = useStore();

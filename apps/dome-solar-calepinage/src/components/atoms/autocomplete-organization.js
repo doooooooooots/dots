@@ -1,7 +1,7 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { findManyBuilder } from '@dots.cool/schemas';
+import { findManyBuilder } from '@keystone-nx/schema--to-delete';
 import { useQuery } from '@apollo/client';
 import { Box, styled } from '@mui/system';
 import { Avatar, Chip, CircularProgress } from '@mui/material';

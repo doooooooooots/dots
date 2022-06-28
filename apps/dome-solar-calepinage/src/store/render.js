@@ -1,4 +1,4 @@
-import Alignment from '../components/dots-system/enums/alignment';
+import { Alignment } from '@dots.cool/schema';
 const { TOP_LEFT } = Alignment.getValues();
 
 const withRender = (app) => ({

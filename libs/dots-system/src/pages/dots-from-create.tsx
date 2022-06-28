@@ -12,7 +12,7 @@ const DotsFormCreate = (props) => {
     props;
 
   // HACK: Allow component to re-render in order to re-inititate form (react-hook and saved data)
-  const [isMounted, setIsMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(true);
 
   // TOTHINK(Adrien): get context can make a call for getting last schema
   const {
@@ -72,12 +72,12 @@ const DotsFormCreate = (props) => {
   // HACK: Allow component to re-render in order to re-inititate form (react-hook and saved data)
   //-> Force Component unmount to re-init all datas ...
   // ... so we can use life cycle of Form component
-  useEffect(() => {
-    setIsMounted(false);
-    setTimeout(() => {
-      setIsMounted(true);
-    }, 5);
-  }, [id]);
+  // useEffect(() => {
+  //   setIsMounted(false);
+  //   setTimeout(() => {
+  //     setIsMounted(true);
+  //   }, 5);
+  // }, [id]);
 
   if (!isMounted) return null;
 

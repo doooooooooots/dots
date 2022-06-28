@@ -1,6 +1,6 @@
 import { useAutocomplete } from '@dots.cool/hooks';
 import { Autocomplete, Divider, Stack, Typography } from '@mui/material';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import PopperTitle from '../../design-system/popper/popper-title';
 import { isEmpty, last } from 'lodash';
 import PopperInput from '../../design-system/popper/popper-input';
@@ -164,6 +164,7 @@ function InputRelationship(props) {
           </Stack>
         )}
       </Stack>
+
       {showActions && (
         <>
           <Divider />

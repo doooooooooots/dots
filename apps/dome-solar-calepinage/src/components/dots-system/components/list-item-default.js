@@ -114,10 +114,10 @@ const ListItemDefault = (props) => {
 };
 
 ListItemDefault.bindProps = (getters, option, state) => ({
-  Icon: getters.avatar(option),
-  label: getters.primary(option),
-  description: getters.secondary(option),
-  tooltip: getters.info(option),
+  Icon: getters.avatar && getters.avatar(option),
+  label: getters.primary && getters.primary(option),
+  description: getters.secondary && getters.secondary(option),
+  tooltip: getters.info && getters.info(option),
   selected: state.selected,
 });
 

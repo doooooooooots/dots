@@ -1,12 +1,14 @@
 import { useLazyQuery } from '@apollo/client';
 import { useMemo } from 'react';
 import { useDebounce } from 'react-use';
-import { useDots } from '../context/dots-context';
-import { searchManyBuilder } from '@dots.cool/schemas';
+import { searchManyBuilder } from '@keystone-nx/schema--to-delete';
 import { useInputText, useInputSelect } from '@dots.cool/hooks';
 import InputRelationship from './input-relationship';
 import ErrorPage from '../../design-system/screens/error-page';
 import { ucFirst } from '@dots.cool/utils';
+import { useDots } from '@dots.cool/schema';
+import ListItemDefault from './list-item-default';
+import SelectItemPreview from './list-item-preview';
 
 function InputRelationWithFetch(props) {
   const {
@@ -38,13 +40,18 @@ function InputRelationWithFetch(props) {
    */
   const ucOptions = ucFirst(options);
   const { [ucOptions]: model } = useDots();
-  const { singular, default: defaultModel, templates } = model;
+
+  const {
+    singular,
+    filters,
+    filters: { default: defaultModel },
+  } = model;
 
   const { query, filterAttributes, components, getters } = useMemo(() => {
-    if (!(currentTemplate in templates)) return defaultModel;
+    if (!(currentTemplate in filters)) return defaultModel;
 
     let { query, filterAttributes, components, getters } = defaultModel;
-    const currentModel = templates[currentTemplate];
+    const currentModel = filters[currentTemplate];
 
     if ('query' in currentModel) {
       query = currentModel.query;
@@ -66,9 +73,10 @@ function InputRelationWithFetch(props) {
     }
 
     return { query, filterAttributes, components, getters };
-  }, [defaultModel, templates, currentTemplate]);
+  }, [currentTemplate, filters, defaultModel]);
 
-  const { Option, Preview } = components;
+  const Option = ListItemDefault;
+  const Preview = SelectItemPreview;
 
   /**
    * Create the query from entity settings
@@ -124,7 +132,7 @@ function InputRelationWithFetch(props) {
       input={input}
       onInputChange={onInputChange}
       onInputClear={onClear}
-      templates={templates}
+      templates={filters}
       currentTemplate={currentTemplate}
       onTemplateChange={onTemplateChange}
       getOptionLabel={getOptionLabel}

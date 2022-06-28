@@ -16,7 +16,7 @@ import PopperActions from '../../design-system/popper/popper-actions';
 import { useLazyQuery } from '@apollo/client';
 import { useDebounce } from 'react-use';
 import PopperTitle from '../../design-system/popper/popper-title';
-import { searchManyBuilder } from '@dots.cool/schemas';
+import { searchManyBuilder } from '@keystone-nx/schema--to-delete';
 import PopperSelectedList from '../../design-system/select-with-autocomplete/components/popper-selected-list';
 import { useDots } from '../context/dots-context';
 import { isEmpty } from 'lodash';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/system';
 import AlignmentsIcons from '../icons/alignments-icons';
-import { ALIGNMENT_MAP } from './dots-system/enums/alignment';
+import { ALIGNMENT_MAP } from './_trash/enums/alignment';
 import { IconButton } from '@mui/material';
 import Loading from './design-system/screens/loading';
 

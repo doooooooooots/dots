@@ -1,6 +1,6 @@
-import enumSchema from '../../../../src/components/dots-system/enums';
 import { toCamelCase, toSnakeCase } from 'js-convert-case';
 import { ucFirst } from '@dots.cool/utils';
+import enumSchema from '../_enum-schema';
 
 export default function handler(req, res) {
   const { name, token } = req.query;

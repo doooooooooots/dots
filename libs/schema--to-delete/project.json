@@ -1,0 +1,33 @@
+{
+  "root": "libs/schema--to-delete",
+  "sourceRoot": "libs/schema--to-delete/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/schema--to-delete",
+        "main": "libs/schema--to-delete/src/index.ts",
+        "tsConfig": "libs/schema--to-delete/tsconfig.lib.json",
+        "assets": ["libs/schema--to-delete/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/schema--to-delete/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/schema--to-delete"],
+      "options": {
+        "jestConfig": "libs/schema--to-delete/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,9 +1,9 @@
 import React from 'react';
-import ButtonPopper from './button-popper';
 import BugReportOutlinedIcon from '@mui/icons-material/BugReportOutlined';
-import InputLink from './input-relationship';
+import ButtonPopper from './button-popper';
+import InputRelationship from './input-relationship';
 
-function ButtonEnum(props) {
+function ButtonRelationShip(props) {
   const { tooltip = 'link', count = 0, variant = 'outlined' } = props;
 
   return (
@@ -13,9 +13,9 @@ function ButtonEnum(props) {
       startIcon={<BugReportOutlinedIcon />}
       variant={variant}
     >
-      <InputLink entity="Person" />
+      <InputRelationship entity="Person" />
     </ButtonPopper>
   );
 }
 
-export default ButtonEnum;
+export default ButtonRelationShip;

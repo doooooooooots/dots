@@ -1,4 +1,4 @@
-import Alignment from '../components/dots-system/enums/alignment';
+import { Alignment } from '@dots.cool/schema';
 import { getIndexTrunc } from '../utils/trunc-int';
 
 const withUserDatas = (app) => ({

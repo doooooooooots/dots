@@ -5,6 +5,7 @@ export default function handler(req, res) {
     status: 200,
     paths: ['constants/[constantName]', 'constants/[constantName]/label'],
     constantNames: [
+      'alignment',
       'area-wind',
       'area-sea',
       'area-field',

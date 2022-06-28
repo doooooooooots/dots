@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
-import { findManyBuilder } from '@dots.cool/schemas';
+import { findManyBuilder } from '@keystone-nx/schema--to-delete';
 import { useQuery } from '@apollo/client';
 import { styled } from '@mui/system';
 import {

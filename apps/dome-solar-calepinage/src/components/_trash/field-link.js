@@ -5,7 +5,7 @@ import FieldInput from './input';
 import Popper from '../../popper-styled';
 import { useLazyQuery } from '@apollo/client';
 import { useDebounce } from 'react-use';
-import { searchManyBuilder } from '@dots.cool/schemas';
+import { searchManyBuilder } from '@keystone-nx/schema--to-delete';
 import { useDots } from '../context/dots-context';
 import FieldLinkPopper from './field-link-popper';
 import { usePopupState } from 'material-ui-popup-state/hooks';

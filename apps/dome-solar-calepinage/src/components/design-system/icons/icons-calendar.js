@@ -32,4 +32,8 @@ const CalendarIcon = ({ variant }) => {
   }
 };
 
+CalendarIcon.bindProps = ({ value }) => ({
+  variant: value,
+});
+
 export default CalendarIcon;

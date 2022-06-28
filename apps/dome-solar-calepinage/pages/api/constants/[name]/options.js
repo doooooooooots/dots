@@ -1,4 +1,4 @@
-import enumSchema from '../../../../src/components/dots-system/enums';
+import enumSchema from '../_enum-schema';
 import { toCamelCase } from 'js-convert-case';
 import { ucFirst } from '@dots.cool/utils';
 

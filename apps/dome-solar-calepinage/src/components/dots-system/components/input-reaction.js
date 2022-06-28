@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { MenuItem, Stack } from '@mui/material';
-import Reaction from '../enums/reaction';
+import { Reaction } from '@dots.cool/schema';
 
 function InputReaction(props) {
   const { value, onChange, onSubmit, onCancel } = props;

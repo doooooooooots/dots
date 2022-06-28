@@ -56,7 +56,7 @@ function ButtonPopper(props) {
         {...popperProps}
       >
         {isClicked ? (
-          <ClickAwayListener onClickAway={toggleClick}>
+          <ClickAwayListener onClickAway={toggleClick} mouseEvent="onMouseDown">
             <Box
               sx={{
                 border: 1,
