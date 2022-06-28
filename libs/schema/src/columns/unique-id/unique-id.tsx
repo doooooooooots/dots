@@ -1,10 +1,9 @@
 import { FC } from 'react';
 import { GridColDef } from '@mui/x-data-grid-pro';
-import ButtonOpenSingle from '../../components/button-open-single';
 import { DotsColumnProps } from '../types';
 import withMiddleware from '../middlewares/with-middleware';
-import { DotsSinglePage } from '../../pages';
 import { lcFirst } from '@dots.cool/utils';
+import { Button } from '@mui/material';
 
 type uniqueIdProps = DotsColumnProps & {
   Component: FC;
@@ -12,19 +11,20 @@ type uniqueIdProps = DotsColumnProps & {
 
 const uniqueId = ({ Component, ...props }: uniqueIdProps): GridColDef => ({
   renderCell: ({ row }) => (
-    <ButtonOpenSingle
-      cellText={row.name}
-      // History props
-      path={'cartes'}
-      title={'Details du rack'}
-      Component={DotsSinglePage}
-      componentProps={{
-        filter: {
-          where: { id: row.id },
-        },
-        entityName: lcFirst(row.__typename),
-      }}
-    />
+    <Button>OK</Button>
+    // <ButtonOpenSingle
+    //   cellText={row.name}
+    //   // History props
+    //   path={'cartes'}
+    //   title={'Details du rack'}
+    //   Component={DotsSinglePage}
+    //   componentProps={{
+    //     filter: {
+    //       where: { id: row.id },
+    //     },
+    //     entityName: lcFirst(row.__typename),
+    //   }}
+    // />
   ),
   type: 'string',
   width: 180,

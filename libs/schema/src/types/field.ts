@@ -1,24 +1,19 @@
 import { SchemaLike } from 'yup/lib/types';
-
-type FieldTypes =
-  | 'checkbox'
-  | 'file'
-  | 'float'
-  | 'image'
-  | 'integer'
-  | 'json'
-  | 'number'
-  | 'password'
-  | 'relationship'
-  | 'select'
-  | 'text'
-  | 'timestamps'
-  | 'virtual';
+import { FIELD_TYPES } from '@dots.cool/tokens';
 
 export type BaseFieldConfig = {
   label: string;
-  type?: FieldTypes;
   defaultValue?: string;
   isIndexed?: boolean;
   validation?: SchemaLike;
+  hideIn?: string[];
 };
+
+export type Field = BaseFieldConfig & {
+  type: FIELD_TYPES;
+};
+
+export interface FormattedFieldInput {
+  primary: string;
+  secondary: string;
+}

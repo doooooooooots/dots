@@ -3,7 +3,7 @@ import relationship from '../../fields/atoms/relationship/relationship';
 import entity from '../../utils/entity';
 import select from '../../fields/atoms/select/select';
 import timestamp from '../../fields/atoms/timestamp/timestamp';
-import text from '../../fields/atoms/text/text';
+import { text } from '../../fields/atoms';
 import dimension from '../../fields/atoms/dimension/dimension';
 import * as yup from 'yup';
 

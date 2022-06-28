@@ -1,10 +1,8 @@
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid-pro';
 import { FC } from 'react';
-import ButtonOpenRelation from '../../components/button-open-relation';
 import { DotsColumnProps } from '../types';
-import { DotsSinglePage } from '../../pages';
 import withMiddleware from '../middlewares/with-middleware';
-import { useContext as getContext } from '../../hoc';
+import { Button } from '@mui/material';
 
 type relationshipProps = DotsColumnProps & {
   target: string;
@@ -21,20 +19,22 @@ const relationshipSingle = ({
 }: relationshipProps): GridColDef => ({
   renderCell: (params) => {
     const { row } = params;
-    const { indexColumn } = getContext(target);
+    // const { indexColumn } = getContext(target);
+    const { indexColumn } = { indexColumn: 3 };
     try {
       return (
-        <ButtonOpenRelation
-          actionText={row[target][indexColumn]}
-          // History props
-          path={field}
-          title={`Details de ${field}`}
-          Component={Component || DotsSinglePage}
-          componentProps={{
-            filter: { where: { id: row[target].id } },
-            entityName: target,
-          }}
-        />
+        <Button>OK</Button>
+        // <ButtonOpenRelation
+        //   actionText={row[target][indexColumn]}
+        //   // History props
+        //   path={field}
+        //   title={`Details de ${field}`}
+        //   Component={Component || DotsSinglePage}
+        //   componentProps={{
+        //     filter: { where: { id: row[target].id } },
+        //     entityName: target,
+        //   }}
+        // />
       );
     } catch {
       return <div>{`Add ${field}`}</div>;

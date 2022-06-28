@@ -1,10 +1,9 @@
 import { FC } from 'react';
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid-pro';
-import ButtonOpenRelation from '../../components/button-open-relation';
 import { DotsColumnProps } from '../types';
-import { DotsDialogRelationship } from '../../pages';
 import withMiddleware from '../middlewares/with-middleware';
 import { lcFirst } from '@dots.cool/utils';
+import { Button } from '@mui/material';
 
 type relationshipProps = DotsColumnProps & {
   target: string;
@@ -27,20 +26,21 @@ const relationshipMany = ({
     else _count = count as number;
 
     return (
-      <ButtonOpenRelation
-        actionText={field}
-        count={_count}
-        //-> History props
-        path={field}
-        title={`Details de ${field}`}
-        Component={Component || DotsDialogRelationship}
-        componentProps={{
-          agent: lcFirst(row.__typename),
-          filterAgent: { id: row.id },
-          target: target,
-        }}
-        multiple
-      />
+      <Button>OK</Button>
+      // <ButtonOpenRelation
+      //   actionText={field}
+      //   count={_count}
+      //   //-> History props
+      //   path={field}
+      //   title={`Details de ${field}`}
+      //   Component={Component || DotsDialogRelationship}
+      //   componentProps={{
+      //     agent: lcFirst(row.__typename),
+      //     filterAgent: { id: row.id },
+      //     target: target,
+      //   }}
+      //   multiple
+      // />
     );
   },
   field,
