@@ -1,6 +1,7 @@
 export { default as checkbox } from './checkbox';
 export { default as color } from './color';
 export { default as dimension } from './dimension';
+export { default as document } from './document';
 export { default as file } from './file';
 export { default as float } from './float';
 export { default as image } from './image';
