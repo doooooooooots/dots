@@ -2,9 +2,9 @@ import { useCallback } from 'react';
 import { FORM_MODAL_WIDTH } from '@dots.cool/tokens';
 import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
 import { useQuery } from '@apollo/client';
-import { useContext } from '../../hoc/with-context';
 import useHistory from '../../hooks/use-history';
 import DotsFormCreate from '../../pages/dots-from-create';
+import { useDots } from '@dots.cool/schema';
 
 const SKIP = 0;
 const TAKE = 10;
@@ -13,7 +13,8 @@ function FieldWithContext(props) {
   const { name, target, formId, children, ...other } = props;
 
   const { push, goBackTo } = useHistory();
-  const { indexColumn, graphql, plurial } = useContext(target);
+  const { getSchema } = useDots();
+  const { indexColumn, graphql, plurial } = getSchema(target);
 
   //* REQUEST
   //? Request is made 'onInputChange' (i.e. When user is changing input value)

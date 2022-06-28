@@ -2,16 +2,19 @@ import { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { Single, SingleMain, SingleSidebar } from '@dots.cool/components';
 import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
-import { useContext } from '../hoc';
+
+import { useDots } from '@dots.cool/schema';
 
 const DotsSinglePage = (props) => {
   const { entityName, query: _query, filter = {} } = props;
 
   //* QUERIES
-  const { graphql, views } = useContext(entityName);
-  const query = _query || views[GRAPHQL_ACTIONS.FindOne].query;
+  const { getSchema } = useDots();
+  const { graphql, views = {} } = getSchema(entityName);
 
+  const query = _query || views[GRAPHQL_ACTIONS.FindOne].query;
   const findOneQuery = graphql[GRAPHQL_ACTIONS.FindOne];
+
   const findOne = useMemo(() => findOneQuery(query), [query, findOneQuery]);
 
   const { data, loading, error } = useQuery(findOne, {

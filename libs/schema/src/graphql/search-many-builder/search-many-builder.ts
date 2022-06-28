@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 import { ucFirst } from '@dots.cool/utils';
-import pluralize = require('pluralize');
+import pluralize from 'pluralize';
 
 function searchManyArgs(singular: string, lang = false) {
   const Singular = ucFirst(singular);
@@ -26,9 +26,9 @@ function searchManyArgs(singular: string, lang = false) {
  * GET MULTIPLE
  */
 const searchManyBuilder =
-  (singular: string, plurial?: string) =>
+  (singular: string) =>
   (query: string, seachOn: string[], lang = false) => {
-    if (!plurial) plurial = pluralize(singular);
+    const plurial = pluralize(singular);
     const Plurial = ucFirst(plurial);
     const _searchOn = seachOn.map(
       (key) => `{${key}: { contains: $input, mode: insensitive }}

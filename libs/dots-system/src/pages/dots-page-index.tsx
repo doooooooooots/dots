@@ -1,8 +1,8 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { GRAPHQL_REQUESTS } from '@dots.cool/tokens';
 import DotsDatagrid from './dots-datagrid';
 import { useDots } from '@dots.cool/schema';
-import { Box } from '@mui/system';
+import { Box } from '@mui/material';
 
 // [ ](Adrien): Create language logic
 const lang = '';
@@ -16,46 +16,52 @@ function DotsPageIndex(props: DotsPageIndexType) {
 
   const { getSchema } = useDots();
   const Entity = getSchema(entityName);
-  console.log(Entity);
 
-  return (
-    <Box bgcolor="background.dark" color="white">
-      <pre>
-        <code>{JSON.stringify(Entity, null, 2)}</code>
-      </pre>
-    </Box>
-  );
+  const {
+    graphql,
+    fields,
+    fragments: { default: query },
+  } = Entity;
+
+  console.log(Entity);
 
   // //* COLUMNS & QUERY
   // //?Extract default values from context
   // const currentContextView = views[GRAPHQL_REQUESTS.FindMany];
-  // const { fieldNames, query } = currentContextView;
 
   // //-> Columns
-  // const columns = fieldNames.map((columnName: string) => _columns[columnName]);
+  // const columns = Object.keys(fields).map(
+  //   (columnName: string) => _columns[columnName]
+  // );
 
   // //* QUERIES
   // //?Extract query builder from context
-  // const { [GRAPHQL_REQUESTS.FindMany]: findMany } = graphql;
+  const { [GRAPHQL_REQUESTS.FindMany]: findMany } = graphql;
 
   // //-> Create query
-  // const rowsQuery = useMemo(() => findMany(query, !!lang), [query, findMany]);
-  // const rowsGetter = useCallback(
-  //   (data) => {
-  //     return [data?.[`${plurial}`] || [], data?.[`${plurial}Count`] || 0];
-  //   },
-  //   [plurial]
-  // );
+  const rowsQuery = useMemo(() => findMany(query, !!lang), [query, findMany]);
 
-  // return (
-  //   <DotsDatagrid
-  //     entityName={entityName}
-  //     variant="details"
-  //     columns={columns}
-  //     rowsQuery={rowsQuery}
-  //     rowsGetter={rowsGetter}
-  //   />
-  // );
+  return (
+    <DotsDatagrid
+      entityName={entityName}
+      variant="details"
+      columns={[
+        {
+          renderCell: ({ row }) => <Box>{row.id}</Box>,
+          type: 'string',
+          width: 180,
+          ...props,
+        },
+      ]}
+      rowsQuery={rowsQuery}
+    />
+  );
 }
 
 export default DotsPageIndex;
+
+// <Box bgcolor="background.dark" color="white">
+//   <pre>
+//     <code>{JSON.stringify(Entity, null, 2)}</code>
+//   </pre>
+// </Box>;

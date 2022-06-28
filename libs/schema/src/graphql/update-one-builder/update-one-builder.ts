@@ -21,7 +21,7 @@ const updateOneBuilder = (singular: string) => (query: string) => {
   const Singular = ucFirst(singular);
   return gql`
       mutation Update${Singular}(${updateOneArgs(singular)}) {
-        entity: update${Singular}(${PARAMS}) {
+        update: update${Singular}(${PARAMS}) {
           ${query}
         }
       }

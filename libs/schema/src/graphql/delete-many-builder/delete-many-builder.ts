@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
 import { ucFirst } from '@dots.cool/utils';
+import pluralize from 'pluralize';
 
 const PARAMS = `where: $where`;
 
@@ -11,16 +12,16 @@ function deleteManyArgs(singular: string) {
 /**
  * *DELETE MANY
  */
-const deleteManyBuilder =
-  (singular: string, plurial: string) => (query: string) => {
-    const Plurial = ucFirst(plurial);
-    return gql`
+const deleteManyBuilder = (singular: string) => (query: string) => {
+  const plurial = pluralize(singular);
+  const Plurial = ucFirst(plurial);
+  return gql`
       mutation Delete${Plurial}(${deleteManyArgs(singular)}) {
-        delete${Plurial}(${PARAMS}) {
+        deletes: delete${Plurial}(${PARAMS}) {
           ${query}
         }
       }
     `;
-  };
+};
 
 export default deleteManyBuilder;

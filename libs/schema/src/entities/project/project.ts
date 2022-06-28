@@ -64,7 +64,10 @@ const Project = entity({
   filters: {
     default: {
       name: 'identifier',
-      query: ['identifier', 'name'],
+      query: `
+        id
+        identifier
+      `,
       filterAttributes: ['identifier', 'name'],
       getters: {
         primary: (option) => `${option.name}`,
@@ -74,7 +77,11 @@ const Project = entity({
     },
     byDate: {
       name: 'By date',
-      query: ['identifier', 'name', 'dateReception'],
+      query: `
+        id
+        name
+        dateReception
+      `,
       filterAttributes: ['identifier'],
       getters: {
         primary: (option) =>
@@ -140,17 +147,37 @@ const Project = entity({
   },
   fragments: {
     default: `
-      id
       name
       step
       typeEmergency
       dateReception
       dateDelivery
-      areaField
-      areaSea
-      areaSnow
-      areaWind
-      altitude
+      customer {
+        id
+        name
+      }
+    `,
+    single: `
+      fragment::default
+      hasTechnician {
+        id
+        fullName
+      }
+      hasCommercial {
+        id
+        fullname
+      }
+    `,
+    index: `
+      ...fragment:default
+    `,
+    layout: `
+      identifier
+      name
+    `,
+    person: `
+      identifier
+      dateDelivery
     `,
   },
 });

@@ -15,10 +15,10 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
   const {
     variant = 'details',
     entityName,
+
     // Data
     columns,
     rowsQuery,
-    rowsGetter,
     variables,
     // Filter
     filter,
@@ -87,10 +87,8 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
       orderBy: _sort,
     },
   });
-  const [rows, rowsCount] = useMemo(
-    () => rowsGetter(data) || [],
-    [rowsGetter, data]
-  );
+  const rows = data?.rows;
+  const rowsCount = data?.count;
 
   // *COMPONENTS
   const mergedComponents = useMemo(
@@ -104,6 +102,8 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
   //* RENDER
   if (error || isEmpty(columns))
     return <LayoutMain>{`Error! oups`}</LayoutMain>;
+
+  if (isEmpty(rows)) return null;
 
   // -- COMPONENT-PROPS
   // -- Extract components
@@ -174,7 +174,7 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
               onViewChange={onViewChange}
             />
           )}
-          <FilterBar
+          {/* <FilterBar
             entityName={entityName}
             // Sort
             sort={sort}
@@ -189,7 +189,7 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
             actionText={filterBarProps?.actionText}
             actionPage={filterBarProps?.actionPage}
             onSubmitCallback={refetch}
-          />
+          /> */}
           <Divider />
           <Toolbar
             // Selection actions

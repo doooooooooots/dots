@@ -51,7 +51,8 @@ function MainFilterbar(props: any) {
   //* HOOKS
   const { push, clear } = useHistory();
   const [mode, setMode] = useState('default');
-  const { singular, sortableFields } = useContext(entityName);
+  const { getSchema } = useDots();
+  const { singular, sorts } = getSchema(entityName);
 
   //* Search button
   const handleSearchButtonClick = useCallback(() => {
@@ -128,7 +129,7 @@ function MainFilterbar(props: any) {
                 componentProps={{
                   popperComponent: {
                     list: sort,
-                    sortableFields,
+                    sortableFields: [],
                     onSortOrderChange: onSortChange,
                     SortItemComponent: SortField,
                   },

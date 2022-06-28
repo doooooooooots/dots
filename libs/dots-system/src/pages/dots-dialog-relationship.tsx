@@ -3,9 +3,9 @@ import { gql } from '@apollo/client';
 import { ucFirst } from '@dots.cool/utils';
 import DotsDatagrid from './dots-datagrid';
 import { Grid } from '@mui/material';
-import { useContext } from '../hoc';
 import { Box } from '@mui/system';
 import { GRAPHQL_REQUESTS } from '@dots.cool/tokens';
+import { useDots } from '@dots.cool/schema';
 
 const QUERY_AGENT_PARAMS = `where: $whereAgent`;
 const QUERY_TARGET_PARAMS = `skip: $skip, take: $take, where:$where, orderBy: $orderBy`;
@@ -50,7 +50,8 @@ const findLinkedBuilder =
 function DotsDialogRelationship(props) {
   const { agent, filterAgent, target } = props;
 
-  const { singular, plurial, columns: _columns, views } = useContext(target);
+  const { getSchema } = useDots();
+  const { singular, columns: _columns, views = {} } = getSchema(target);
 
   //* COLUMNS & QUERY
   //?Extract default values from context

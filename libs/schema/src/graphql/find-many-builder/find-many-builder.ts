@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
 import { ucFirst } from '@dots.cool/utils';
+import pluralize from 'pluralize';
 
 const PARAMS = `
   take: $take,
@@ -33,15 +34,17 @@ function findManyArgs(singular: string, lang = false) {
  * GET MULTIPLE
  */
 const findManyBuilder =
-  (singular: string, plurial: string) =>
+  (singular: string) =>
   (query: string, lang = false) => {
+    const plurial = pluralize(singular);
     const Plurial = ucFirst(plurial);
     return gql`
     query All${Plurial}(${findManyArgs(singular, lang)}) {
       rows: ${plurial}(${PARAMS}) {
+        id
         ${query}
       }
-      ${plurial}Count(${PARAMS_COUNT})
+      count: ${plurial}Count(${PARAMS_COUNT})
     }
   `;
   };

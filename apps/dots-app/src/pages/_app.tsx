@@ -86,12 +86,15 @@ export default function MyApp(props: DotsAppProps) {
         <DotsSchemaProvider schema={schema}>
           <ApolloProvider client={apolloClient}>
             <AuthProvider>
+              {/* Meta */}
               <Head>
                 <meta
                   name="viewport"
                   content="initial-scale=1, width=device-width"
                 />
               </Head>
+
+              {/* Theme */}
               <ThemeProvider theme={theme}>
                 {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                 <CssBaseline />
@@ -105,6 +108,7 @@ export default function MyApp(props: DotsAppProps) {
                     },
                   }}
                 />
+
                 <AuthConsumer>
                   {(auth) =>
                     !auth.isInitialized ? (

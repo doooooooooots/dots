@@ -7,4 +7,5 @@ export * from './tabs';
 export * from './dialog';
 export * from './pages';
 export * from './screens';
+export * from './icons';
 export { default as Editor } from './editor';

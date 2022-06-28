@@ -15,7 +15,8 @@ const createOneBuilder = (singular: string) => (query: string) => {
   const Singular = ucFirst(singular);
   return gql`
       mutation Create${Singular}(${createOneArgs(singular)}) {
-        create${Singular}(${PARAMS}) {
+        create: create${Singular}(${PARAMS}) {
+          id
           ${query}
         }
       }

@@ -1,11 +1,11 @@
 import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
 import { Form } from '@dots.cool/form-builder';
-import { useContext } from '../hoc/with-context';
 import { useMemo, useCallback, useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import toast from 'react-hot-toast';
 import { ucFirst } from '@dots.cool/utils';
 import FieldWithContext from '../components/field-with-context/field-with-context';
+import { useDots } from '@dots.cool/schema';
 
 const DotsFormCreate = (props) => {
   const { id, parentFormId, entityName, defaultValues, onSubmitSuccess } =
@@ -15,6 +15,7 @@ const DotsFormCreate = (props) => {
   const [isMounted, setIsMounted] = useState(true);
 
   // TOTHINK(Adrien): get context can make a call for getting last schema
+  const { getSchema } = useDots();
   const {
     inputs,
     needsContext,
@@ -23,7 +24,7 @@ const DotsFormCreate = (props) => {
     defaultValues: _defaultValues,
     formatData,
     validations,
-  } = useContext(entityName);
+  } = getSchema(entityName);
 
   //* DEFAULT VALUES
   const defaultValuesMerged = useMemo(

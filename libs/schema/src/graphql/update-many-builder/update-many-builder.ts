@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
 import { ucFirst } from '@dots.cool/utils';
+import pluralize from 'pluralize';
 
 const PARAMS = `data: $data`;
 
@@ -11,16 +12,16 @@ function updateManyArgs(singular: string) {
 /**
  * *UPDATE MANY
  */
-const updateManyBuilder =
-  (singular: string, plurial: string) => (query: string) => {
-    const Plurial = ucFirst(plurial);
-    return gql`
+const updateManyBuilder = (singular: string) => (query: string) => {
+  const plurial = pluralize(singular);
+  const Plurial = ucFirst(plurial);
+  return gql`
       mutation Update${Plurial}(${updateManyArgs(singular)}) {
-        update${Plurial}(${PARAMS}) {
+        updates: update${Plurial}(${PARAMS}) {
           ${query}
         }
       }
     `;
-  };
+};
 
 export default updateManyBuilder;

@@ -15,7 +15,7 @@ const deleteOneBuilder = (singular: string) => (query: string) => {
   const Singular = ucFirst(singular);
   return gql`
       mutation Delete${Singular}(${deleteOneArgs(singular)}) {
-        delete${Singular}(${PARAMS}) {
+        delete: delete${Singular}(${PARAMS}) {
           ${query}
         }
       }

@@ -14,9 +14,10 @@ import {
   initField,
 } from '../../builder';
 
-import { FIELD_TYPES } from '@dots.cool/tokens';
+import { FIELD_TYPES, GRAPHQL_ACTIONS } from '@dots.cool/tokens';
 
 import { BaseFieldConfig, Field } from '../../../types/field';
+const { CreateOne, CreateMany } = GRAPHQL_ACTIONS;
 type TimestampFieldType = BaseFieldConfig;
 
 //* TIMESTAMP
@@ -29,7 +30,7 @@ const timestamp = (config: TimestampFieldType): Field => {
   if (!hasUiColumn(config)) addUiColumn(config, columns.timestamp({}));
   if (!hasValidation(config)) addValidation(config, yup.string());
 
-  config.hideIn = [...hideIn, CREATE_ONE, CREATE_MANY];
+  config.hideIn = [...hideIn, CreateOne, CreateMany];
 
   return {
     ...config,

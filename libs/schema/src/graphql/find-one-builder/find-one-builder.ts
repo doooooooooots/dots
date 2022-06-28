@@ -26,6 +26,7 @@ const findOneBuilder =
     return gql`
       query Get${Singular}(${findOneArgs(singular, lang)}) {
         entity: ${singular}(${QUERY_ONE_PARAMS}) {
+          id
           ${query}
         }
       }

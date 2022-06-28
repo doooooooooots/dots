@@ -9,7 +9,7 @@ import {
   DefaultContext,
   ApolloCache,
 } from '@apollo/client';
-import { useContext } from '../../hoc';
+import { useDots } from '@dots.cool/schema';
 
 export type OnSubmitType = (
   options?:
@@ -55,7 +55,8 @@ function MainDialogs(props: MainDialogsPropsType) {
     components = {}, // For further customization
   } = props;
 
-  const { graphql } = useContext(entityName);
+  const { getSchema } = useDots();
+  const { graphql } = getSchema(entityName);
 
   // [ ](Adrien): query logic to implement
   const query = useMemo(() => ['id'], []);

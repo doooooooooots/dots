@@ -1,6 +1,3 @@
-export * from './index.d';
-
-export { default as createGraphQlApi } from './create-graphql-api';
 export { default as createSchema } from './create-schema';
 export { default as formatEnums } from './utils/enums';
 

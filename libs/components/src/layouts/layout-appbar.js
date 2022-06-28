@@ -1,4 +1,5 @@
 import { AppBar, Button, Stack, styled, Toolbar } from '@mui/material';
+import { Box } from '@mui/system';
 import React from 'react';
 import Link from '../link';
 
@@ -10,10 +11,19 @@ const MenuButton = styled(Button)(({ theme }) => ({
   padding: '2px 10px',
 }));
 
-function LayoutAppBar() {
+function LayoutAppBar(props) {
+  const { children } = props;
   return (
-    <AppBar>
-      <Toolbar variant="dense">
+    <AppBar sx={{ boxShadow: 0 }}>
+      <Toolbar
+        variant="dense"
+        sx={{
+          bgcolor: 'background.default',
+          justifyContent: 'space-between',
+          borderBottom: 1,
+          borderColor: 'divider',
+        }}
+      >
         {/* <ToggleGameConnected /> */}
         <Stack direction="row" spacing={1} ml={2}>
           {[
@@ -28,6 +38,7 @@ function LayoutAppBar() {
             </MenuButton>
           ))}
         </Stack>
+        <Box>{children}</Box>
       </Toolbar>
     </AppBar>
   );
