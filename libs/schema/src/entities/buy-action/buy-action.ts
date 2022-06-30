@@ -38,7 +38,8 @@ const BUY_ACTION_FIELDS = {
     label: 'Person',
     options: 'Person',
     target: 'agent',
-    valueGetter: ({ row }) => `${row.agent.givenName} ${row.agent.familyName}`,
+    valueGetter: ({ row }) =>
+      `${row?.agent?.givenName} ${row?.agent?.familyName}`,
     many: false,
   }),
 };
@@ -73,6 +74,25 @@ const BuyAction = entity<keyof typeof BUY_ACTION_FIELDS>({
       description: '',
       fields: {
         name: { col: 12 },
+      },
+    },
+    time: {
+      primary: "L'important",
+      secondary: 'Veuillez indiquez le montant de la dépense',
+      description: '',
+      fields: {
+        seller: { col: 12 },
+        price: { col: 12 },
+        priceCurrency: { col: 12 },
+      },
+    },
+    optional: {
+      primary: "L'optionnel",
+      secondary: 'Veuillez indiquez la raison de la dépense',
+      description: '',
+      fields: {
+        startTime: { col: 12 },
+        project: { col: 12 },
       },
     },
   },

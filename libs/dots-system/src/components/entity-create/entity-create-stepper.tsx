@@ -126,8 +126,12 @@ export default function EntityCreateStepper(props) {
         error: <b>Erreur.</b>,
       }
     );
-    handleReset();
-    onCancel();
+    if (typeof handleReset === 'function') {
+      handleReset();
+    }
+    if (typeof onCancel === 'function') {
+      onCancel();
+    }
   };
   const onError = (errors, e) => console.log(errors, e);
 

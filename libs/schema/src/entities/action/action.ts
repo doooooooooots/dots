@@ -71,6 +71,25 @@ const Action = entity<keyof typeof ACTION_FIELDS>({
         name: { col: 12 },
       },
     },
+    important: {
+      primary: "L'important",
+      secondary: "Un peu plus d'infos ?",
+      description: '',
+      fields: {
+        description: { col: 12 },
+      },
+    },
+    optional: {
+      primary: "L'optionnel",
+      secondary: "C'est pour quand ?",
+      description: '',
+      fields: {
+        startTime: { col: 6 },
+        endTime: { col: 6 },
+        tasksCount: { col: 12 },
+        responsible: { col: 12 },
+      },
+    },
   },
   fragments: {
     details: `

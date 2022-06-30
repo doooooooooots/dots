@@ -59,6 +59,16 @@ const Task = entity<keyof typeof TASK>({
       description: '',
       fields: {
         name: { col: 12 },
+        description: { col: 12 },
+      },
+    },
+    timming: {
+      primary: "Y a qu'a, faut qu'on",
+      secondary: "C'est quoi les dates ?",
+      description: '',
+      fields: {
+        startTime: { col: 12 },
+        endTime: { col: 12 },
       },
     },
   },
