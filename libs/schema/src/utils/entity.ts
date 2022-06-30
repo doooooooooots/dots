@@ -11,6 +11,8 @@ export default function entity<T extends string>(
 ): EntitySchema<T> {
   const {
     singular,
+    copyright,
+    pictures,
     fields,
     allowedSort,
     allowedFilter,
@@ -43,11 +45,14 @@ export default function entity<T extends string>(
 
   return {
     singular,
+    fields: fields,
     allowedSort,
     allowedFilter,
     searchFilters,
+    copyright,
+    pictures,
     columnApi: columnApi,
-    fields: fieldApi,
+    fieldApi: fieldApi,
     fragments: _fragments,
     graphql: graphqlApi,
     formApi: formApi,

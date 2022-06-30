@@ -17,7 +17,7 @@ type OptionType<T> = {
 export default function enumList<T extends string, U>(
   defObj: BaseEnumConfig<T, U>
 ) {
-  const { values, labels, colors, helpers } = defObj;
+  const { type, values, labels, colors, helpers } = defObj;
 
   // Extract datas form values list
   const { valuesIndexed, options, minValue, maxValue } = (
@@ -76,6 +76,7 @@ export default function enumList<T extends string, U>(
   const getTokenFromValue = (value: number) => valuesIndexed[`${value}`];
 
   return Object.freeze({
+    type,
     values: values,
     labels,
     colors,

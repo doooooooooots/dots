@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import { useDebounce } from 'react-use';
 import { useInputText, useInputSelect } from '@dots.cool/hooks';
 import InputRelationship from './input-relationship';
-import { ucFirst } from '@dots.cool/utils';
 import { searchManyBuilder, useDots } from '@dots.cool/schema';
 import { ErrorPage } from '@dots.cool/components';
 import ListItemDefault from '../list-item/list-item-default';
@@ -37,32 +36,20 @@ function InputRelationWithFetch(props) {
   /**
    * Get entity settings from context
    */
-  const ucOptions = ucFirst(options);
-  const { [ucOptions]: model } = useDots();
+  const { getSchema } = useDots();
+  const { singular, searchFilters } = getSchema(options);
 
-  const {
-    singular,
-    filters,
-    filters: { default: defaultModel },
-  } = model;
+  const { query, filterAttributes, getters } = useMemo(() => {
+    if (!(currentTemplate in searchFilters)) return searchFilters.default;
 
-  const { query, filterAttributes, components, getters } = useMemo(() => {
-    if (!(currentTemplate in filters)) return defaultModel;
-
-    let { query, filterAttributes, components, getters } = defaultModel;
-    const currentModel = filters[currentTemplate];
+    let { query, filterAttributes, getters } = searchFilters.default;
+    const currentModel = searchFilters[currentTemplate];
 
     if ('query' in currentModel) {
       query = currentModel.query;
     }
     if ('filterAttributes' in currentModel) {
       filterAttributes = currentModel.filterAttributes;
-    }
-    if ('components' in currentModel) {
-      components = {
-        ...components,
-        ...currentModel.components,
-      };
     }
     if ('getters' in currentModel) {
       getters = {
@@ -71,8 +58,8 @@ function InputRelationWithFetch(props) {
       };
     }
 
-    return { query, filterAttributes, components, getters };
-  }, [currentTemplate, filters, defaultModel]);
+    return { query, filterAttributes, getters };
+  }, [currentTemplate, searchFilters]);
 
   const Option = ListItemDefault;
   const Preview = ListItemPreview;
@@ -131,7 +118,7 @@ function InputRelationWithFetch(props) {
       input={input}
       onInputChange={onInputChange}
       onInputClear={onClear}
-      templates={filters}
+      templates={searchFilters}
       currentTemplate={currentTemplate}
       onTemplateChange={onTemplateChange}
       getOptionLabel={getOptionLabel}

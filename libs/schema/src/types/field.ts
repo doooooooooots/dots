@@ -12,8 +12,10 @@ export interface BaseFieldConfig extends Omit<GridColDef, 'field' | 'type'> {
 }
 
 export interface Field extends BaseFieldConfig {
+  valueGetter?: (options: unknown) => string;
   field: string;
   type: FIELD_TYPES;
+  many?: boolean;
   dataType: GridNativeColTypes;
 }
 

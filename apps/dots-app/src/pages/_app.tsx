@@ -29,6 +29,7 @@ import {
   createSchema,
   DotsSchemaProvider,
   // Person,
+  BuyAction,
   Project,
   // Roof,
   // Layout,
@@ -54,6 +55,7 @@ const theme = createTheme({
 const schema = createSchema({
   // Person,
   Project,
+  BuyAction,
   // Roof,
   // Layout,
   // Cladding,

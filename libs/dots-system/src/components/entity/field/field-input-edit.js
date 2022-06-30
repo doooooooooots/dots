@@ -31,6 +31,7 @@ function FieldInputEdit(props) {
     onChange,
     onClose,
     askForConfirmation,
+    clickAction,
     ...other
   } = props;
 
@@ -39,6 +40,7 @@ function FieldInputEdit(props) {
   switch (type) {
     case FIELD_TYPES.dimension:
     case FIELD_TYPES.number:
+    case FIELD_TYPES.integer:
       PopperContent = InputNumber;
       break;
     case FIELD_TYPES.text:

@@ -16,10 +16,12 @@ import { useDots } from '@dots.cool/schema';
 import toast from 'react-hot-toast';
 
 export default function EntityCreateStepper(props) {
-  const { entityName, onSubmitCallback, onCancel } = props;
+  const { entityName, onSubmitCallback, onCancel, boundary } = props;
 
   const { getSchema } = useDots();
   const {
+    copyright,
+    pictures,
     formApi,
     graphql,
     fields,
@@ -82,11 +84,20 @@ export default function EntityCreateStepper(props) {
     } else {
       node = document.getElementById(`form-${step}`);
     }
-    scrollIntoView(node, {
-      behavior: 'smooth',
-      block: 'center',
-      inline: 'center',
-    });
+
+    if (boundary) {
+      scrollIntoView(node, {
+        behavior: 'smooth',
+        block: 'center',
+        scrollMode: 'always',
+        boundary: document.getElementById(boundary),
+      });
+    } else {
+      scrollIntoView(node, {
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
     setActiveStep(step);
   };
 
@@ -147,7 +158,7 @@ export default function EntityCreateStepper(props) {
         ]}
       >
         <Typography variant="h2" mt="120px">
-          {`Vous allez créer un ${entityName}`}
+          {copyright?.form ?? `Vous allez créer un ${entityName}`}
         </Typography>
         <Typography variant="body2">{`Ce formulaire comporte ${totalSteps()} étapes`}</Typography>
         <ButtonBar
@@ -157,7 +168,7 @@ export default function EntityCreateStepper(props) {
         />
         <Image
           alt="create"
-          src="/assets/illustrations/create.svg"
+          src={pictures?.form ?? '/assets/illustrations/create.svg'}
           width={250}
           height={250}
         />

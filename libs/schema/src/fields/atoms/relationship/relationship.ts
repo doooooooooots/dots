@@ -11,7 +11,12 @@ const relationship = (
     many?: boolean;
   }
 ) => {
-  const { many } = config;
+  const { options, many } = config;
+
+  let valuGetter = ({ row }) => row[options].id;
+  if (many) {
+    valuGetter = ({ row }) => row[`${options}Count`];
+  }
   const type = FIELD_TYPES.relationship;
 
   return {
@@ -19,6 +24,7 @@ const relationship = (
     ...addColumnConfig(columns.text()),
     ...addDefaultValue(type),
     ...config,
+    valuGetter,
     type: type,
   } as Field;
 };

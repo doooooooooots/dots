@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import toast from 'react-hot-toast';
 import { isArray, isEmpty } from 'lodash';
-import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
-import { ucFirst } from '@dots.cool/utils';
+import { FIELD_TYPES, GRAPHQL_ACTIONS } from '@dots.cool/tokens';
 import { useDots } from '@dots.cool/schema';
 import { ErrorPage, Loading } from '@dots.cool/components';
 import Field from './field';
@@ -31,9 +30,8 @@ function Entity(props) {
     throw new Error('singular is missing');
   }
 
-  const entityName = ucFirst(singular);
-  const { [entityName]: model } = useDots();
-  const { fields, graphql } = model;
+  const { getSchema } = useDots();
+  const { fields, graphql } = getSchema(singular);
 
   const [loadingSave, setLoadingSave] = useState(false);
 
@@ -147,11 +145,14 @@ function Entity(props) {
             label: label,
           };
 
-          if (type === 'relationship') {
+          if (type === FIELD_TYPES.relationship) {
             fieldProps.getter = getter;
           }
 
-          if (type === 'select' || type === 'relationship') {
+          if (
+            type === FIELD_TYPES.select ||
+            type === FIELD_TYPES.relationship
+          ) {
             fieldProps.options = options;
             fieldProps.multiple = multiple;
           }
@@ -164,7 +165,9 @@ function Entity(props) {
                   value={entity[fieldName]}
                   loading={loadingSave === fieldName}
                   onChange={
-                    type === 'relationship' ? handleChangeLinkConfirm : saveData
+                    type === FIELD_TYPES.relationship
+                      ? handleChangeLinkConfirm
+                      : saveData
                   }
                   {...fieldProps}
                 />
@@ -175,7 +178,9 @@ function Entity(props) {
                   value={entity[fieldName]}
                   loading={loadingSave === fieldName}
                   onChange={
-                    type === 'relationship' ? handleChangeLinkConfirm : saveData
+                    type === FIELD_TYPES.relationship
+                      ? handleChangeLinkConfirm
+                      : saveData
                   }
                   {...fieldProps}
                 />

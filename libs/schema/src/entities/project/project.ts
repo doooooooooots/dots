@@ -52,11 +52,17 @@ const PROJECT_FIELDS = {
   altitude: dimension({
     label: 'Altitude',
   }),
-  hasCommercial: relationship({
-    label: 'Commercial',
+  buyActionsCount: relationship({
+    label: 'depenses',
+    options: 'buyAction',
     many: true,
-    options: 'Person',
+    onClick: 'open',
   }),
+  // hasCommercial: relationship({
+  //   label: 'Commercial',
+  //   many: true,
+  //   options: 'Person',
+  // }),
 };
 
 const Project = entity<keyof typeof PROJECT_FIELDS>({
@@ -165,6 +171,11 @@ const Project = entity<keyof typeof PROJECT_FIELDS>({
         id
         fullName
       }
+      buyActions(take:10, orderBy:{createdAt: desc}) {
+        id
+        name
+      }
+      buyActionsCount
     `,
     single: `
       fragment::details

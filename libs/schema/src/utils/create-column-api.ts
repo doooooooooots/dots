@@ -11,7 +11,7 @@ export default function createColumnApi<T extends string>(
   /**
    * Extract all columns from fragments
    */
-  const getColumnsFromFragment = (fragment: keyof FragmentType): Field[] => {
+  const getColumnsFromFragment = (fragment: string): Field[] => {
     return gql(`{ Entity {${fragments[fragment]}}}`)
       .definitions[0].selectionSet.selections[0].selectionSet.selections.reduce(
         (acc: Field[], item: any) => {

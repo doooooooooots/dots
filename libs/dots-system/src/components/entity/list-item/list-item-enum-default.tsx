@@ -118,7 +118,7 @@ ListItemEnumDefault.bindProps = (
   { label, description, value },
   { selected }
 ) => ({
-  Icon: console.log(props),
+  Icon: null,
   label: label,
   description: description,
   tooltip: description,

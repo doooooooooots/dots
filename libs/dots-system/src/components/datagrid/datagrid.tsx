@@ -19,6 +19,7 @@ type AnchorElStateFunc = [
 function MainDatagrid(props: any) {
   const {
     rows,
+    rowHeight,
     columns,
     loading,
     selectionModel,
@@ -56,6 +57,7 @@ function MainDatagrid(props: any) {
         selectionModel={selectionModel}
         onSelectionModelChange={onSelectionModelChange}
         headerHeight={32}
+        rowHeight={rowHeight}
         editMode="row"
         paginationMode="server"
         sortingMode="server"

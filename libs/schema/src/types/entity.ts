@@ -6,6 +6,12 @@ import { SearchFilterAttributesType } from './search-filter';
 
 export interface EntityConfig<T extends string> {
   singular: string;
+  copyright?: {
+    form: string;
+  };
+  pictures?: {
+    form: string;
+  };
   allowedSort: T[];
   allowedFilter: T[];
   fields: FieldDefinitions<T>;

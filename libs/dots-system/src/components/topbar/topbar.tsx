@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useCallback } from 'react';
-import useHistory from '../../hooks/use-history';
+import { useHistory } from '../../hooks';
 
 function Topbar(props: any) {
   const { title, actionText, actionPage, fullscreenPage } = props;

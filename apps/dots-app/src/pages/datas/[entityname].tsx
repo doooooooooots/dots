@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Grid } from '@mui/material';
 
@@ -7,7 +7,12 @@ import {
   LayoutMain,
   LoadingOverlay,
 } from '@dots.cool/components';
-import { DotsDatagrid } from '@dots.cool/dots-system';
+
+import {
+  DotsDatagrid,
+  HistoryBrowser,
+  useHistory,
+} from '@dots.cool/dots-system';
 
 function EntityName() {
   const router = useRouter();
@@ -21,6 +26,7 @@ function EntityName() {
       <LayoutMain>
         <DotsDatagrid entityName={entityname} variant="details" />
       </LayoutMain>
+      <HistoryBrowser maxWidth="lg" fullWidth />
     </Grid>
   );
 }

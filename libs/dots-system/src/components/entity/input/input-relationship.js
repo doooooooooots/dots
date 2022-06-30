@@ -5,9 +5,8 @@ import { isEmpty } from 'lodash';
 
 import Actions from '../actions';
 import Image from 'next/image';
-import { PopperTitle } from '@dots.cool/components';
 import { makeSortFunc } from '@dots.cool/utils';
-import PopperInput from '../styled-input';
+import { PopperInput, PopperTitle } from '@dots.cool/components';
 import StyledAutocompletePopper from '../styled-autocomplete-popper';
 import PopperLinkTemplateSelect from '../select-template';
 

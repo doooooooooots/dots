@@ -32,6 +32,7 @@ import {
 import { useDots } from '@dots.cool/schema';
 import { FORM_MODAL_WIDTH } from '@dots.cool/tokens';
 import FormInDialog from '../entity-create/entity-create-in-dialog';
+import { Add } from '@mui/icons-material';
 
 const FILTER_MARGIN = 0.5;
 
@@ -109,7 +110,7 @@ function MainFilterbar(props: any) {
               overflow: 'hidden',
               justifyContent: 'flex-start',
               color: 'neutral.600',
-              bgcolor: 'neutral.200',
+              bgcolor: 'neutral.50',
             }}
             size="small"
             onClick={handleSearchButtonClick}
@@ -213,23 +214,34 @@ function MainFilterbar(props: any) {
         </Stack>
       )}
       <Stack direction="row" alignItems="center" spacing={1}>
-        <Button
+        {/* <Button
           size="small"
           variant="outlined"
           startIcon={<SettingsOutlinedIcon />}
-        >
-          {/* ui.filterbar.option */}
-          Options
-        </Button>
+        > */}
+        {/* ui.filterbar.option */}
+        {/* Options */}
+        {/* </Button> */}
         {/*  */}
-        <FormInDialog
-          variant="contained"
+        <Button
+          variant="outlined"
           size="small"
-          entityName={entityName}
-          onSubmitCallback={onSubmitCallback}
+          sx={{
+            height: 30,
+          }}
+          startIcon={<Add />}
+          onClick={() => {
+            push({
+              path: entityName,
+              title: 'Ajouter une entrée',
+              variant: 'create',
+              entityName: entityName,
+              actionCallback: onSubmitCallback,
+            });
+          }}
         >
           Créer un nouveau
-        </FormInDialog>
+        </Button>
         {/* <Button variant="contained" size="small" onClick={handleClickAction}>
           {actionText || `ui.filterbar.button.action--default`}
         </Button> */}

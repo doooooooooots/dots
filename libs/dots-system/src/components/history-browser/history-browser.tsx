@@ -6,13 +6,28 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  Divider,
   IconButton,
+  Slide,
   Stack,
   Typography,
 } from '@mui/material';
 import { isEmpty } from 'lodash';
-import { useCallback, useEffect } from 'react';
-import useHistory from '../../hooks/use-history';
+import React, { useCallback, useEffect } from 'react';
+import { useHistory } from '../../hooks';
+import { TransitionProps } from '@mui/material/transitions';
+import EntityCreateContained from '../entity-create/entity-create-contained';
+import DotsDatagrid from '../../pages/dots-datagrid';
+import EntitySingle from '../entity/entity-single';
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 function HistoryBrowser(props: any) {
   const { present, undo, redo, clear, canUndo, canRedo, history, goTo, close } =
@@ -46,26 +61,40 @@ function HistoryBrowser(props: any) {
 
   if (isEmpty(present)) return null;
 
-  const {
-    title,
-    path,
-    Component,
-    componentProps,
-    width = 'xl',
-  } = present as HistoryItem;
+  const { path, title, entityName, variant, where, width = 'xl' } = present;
+
+  let Component;
+
+  switch (variant) {
+    default:
+    case 'single':
+      Component = EntitySingle;
+      break;
+    case 'preview':
+      Component = DotsDatagrid;
+      break;
+    case 'create':
+      Component = EntityCreateContained;
+      break;
+  }
 
   return (
     <Dialog
-      {...props}
       open={open}
+      TransitionComponent={Transition}
       onClose={handleClose}
-      PaperProps={{ sx: { bgcolor: 'neutral.25', p: 2, height: '100%' } }}
+      aria-describedby="alert-dialog-slide-description"
       fullWidth
-      maxWidth={width}
+      maxWidth="lg"
     >
       <Stack spacing={1}>
         <DialogTitle
-          sx={{ p: 1, borderRadius: 1, bgcolor: 'background.default' }}
+          sx={{
+            p: 1,
+            borderRadius: 1,
+            bgcolor: 'background.default',
+            width: '100%',
+          }}
         >
           <Stack
             direction="row"
@@ -115,8 +144,16 @@ function HistoryBrowser(props: any) {
             </IconButton>
           </Stack>
         </DialogTitle>
-        <DialogContent sx={{ p: 0 }}>
-          <Component id={path} {...(componentProps || {})} />
+
+        <Divider />
+
+        <DialogContent sx={{ p: 0, m: '0!important' }}>
+          <Component
+            entityName={entityName}
+            boundary="history-popper"
+            variant={variant}
+            where={where}
+          />
         </DialogContent>
       </Stack>
     </Dialog>

@@ -1,17 +1,19 @@
-import { Box, Divider, Stack } from '@mui/material';
+import { Box, Button, Divider, Stack } from '@mui/material';
 import { DialogConfirm, ErrorPage, LayoutMain } from '@dots.cool/components';
 import withDotsSystem from '../hoc/with-dots-system';
 import { GRAPHQL_REQUESTS, VIEW_MODES } from '@dots.cool/tokens';
 import DEFAULT_COMPONENTS from '../components/default-components/default-components';
 
 // Types
-import { isEmpty } from 'lodash';
 import { useCallback, useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { DotsIndexPageProps } from '../types/dots-index-page';
 import { useDots } from '@dots.cool/schema';
 import toast from 'react-hot-toast';
 import FieldInput from '../components/entity/field/field-input';
+import { useHistory } from '../hooks';
+import ButtonOpenSingle from '../components/button-open-single/button-open-single';
+import ButtonRelationshipPreview from '../components/buttons/button-relationship-preview';
 
 const ENABLE_VIEWS = false;
 
@@ -23,15 +25,18 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
 
     // Data
     variables,
+
     // Filter
     filter,
     onFilterChange,
     withFilter,
+
     // Sort
     sort,
     sortPinned,
     onSortChange,
     withSort,
+
     // Pagination
     page,
     onPageNext,
@@ -41,11 +46,13 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
     onTakeChange,
     skip = 0,
     hidePagination,
+
     // Tabs
     views,
     currentView,
     onViewChange,
     hideViews,
+
     // Toolbar
     selectionModel,
     onSelectionModelChange,
@@ -53,21 +60,29 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
     onOpenDialog,
     onCloseDialog,
     hideDialog,
+
     // viewMode
     viewMode,
     onViewModeChange,
+
     // Lang
     lang,
+
     // Components
     components = {},
     componentProps = {},
   } = props;
 
+  console.log(entityName);
+
   // Use to show user save loading state on enum and relationship cells
   const [loadingSave, setLoadingSave] = useState('');
 
+  const { push } = useHistory();
+
   const { getSchema } = useDots();
   const {
+    singular,
     graphql,
     columnApi,
     fragments: { [variant]: query = '' },
@@ -145,12 +160,62 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
   const _columns = useMemo(
     () =>
       columnApi.getColumnsFromFragment(variant).map((column) => {
-        const { field, type, options } = column;
+        const { field, type, options, dataType, onClick, isIndexed } = column;
+
+        if (isIndexed) {
+          return {
+            ...column,
+            align: 'left',
+            type: dataType,
+            renderCell: ({ id, name, value }) => (
+              <ButtonOpenSingle
+                size={variant === 'preview' ? 'small' : 'medium'}
+                cellText={value}
+                onClick={() => {
+                  push({
+                    path: value || singular,
+                    title: `Détails de ${entityName}`,
+                    variant: 'single',
+                    entityName: entityName,
+                    where: { id },
+                  });
+                }}
+              >
+                Open
+              </ButtonOpenSingle>
+            ),
+          };
+        }
+
+        if (onClick === 'open') {
+          return {
+            ...column,
+            align: 'left',
+            type: dataType,
+            renderCell: ({ id, value }: { id: string; value: number }) => (
+              <ButtonRelationshipPreview
+                entityName={options}
+                count={value}
+                onClick={() => {
+                  push({
+                    path: 'Details',
+                    title: 'details',
+                    variant: 'details',
+                    entityName: options,
+                    where: { id },
+                  });
+                }}
+              >
+                Open
+              </ButtonRelationshipPreview>
+            ),
+          };
+        }
 
         return {
           ...column,
           align: 'left',
-          type: 'text',
+          type: dataType,
           renderCell: ({ id, value }: { id: string; value: number }) => (
             <FieldInput
               name={field}
@@ -160,6 +225,7 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
               options={options}
               variant="button"
               onChange={saveData(id, field)}
+              clickAction={onClick}
             />
           ),
         };
@@ -199,10 +265,21 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
   // [ ](Adrien): Extract to a component
   const DataViewerComponent = (
     <>
-      <Box sx={{ flex: 1 }}>
+      <Box
+        sx={{
+          flex: 1,
+          '& .button--open-details': {
+            visibility: 'hidden',
+          },
+          '& .MuiDataGrid-row:hover .button--open-details': {
+            visibility: 'visible',
+          },
+        }}
+      >
         {viewMode === VIEW_MODES.Table && (
           <Datagrid
             rows={rows || []}
+            rowHeight={variant === 'preview' ? 30 : 45}
             columns={_columns}
             entityName={entityName}
             loading={loading}

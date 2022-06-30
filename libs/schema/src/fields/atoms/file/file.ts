@@ -6,7 +6,11 @@ import { FIELD_TYPES } from '@dots.cool/tokens';
 
 import { BaseFieldConfig, Field } from '../../../types/field';
 
-const file = (config: BaseFieldConfig) => {
+const file = (
+  config: BaseFieldConfig & {
+    many: boolean;
+  }
+) => {
   const type = FIELD_TYPES.file;
 
   return {

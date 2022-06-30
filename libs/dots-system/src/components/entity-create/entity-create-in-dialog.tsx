@@ -27,6 +27,7 @@ const Transition = React.forwardRef(function Transition(
  */
 function FormInDialog(props) {
   const {
+    startIcon,
     variant = 'contained',
     size = 'medium',
     entityName,
@@ -46,13 +47,18 @@ function FormInDialog(props) {
 
   return (
     <>
-      <Button variant={variant} size={size} onClick={handleClickOpen}>
+      <Button
+        startIcon={startIcon}
+        variant={variant}
+        size={size}
+        onClick={handleClickOpen}
+        sx={{ height: 30 }}
+      >
         {children}
       </Button>
       <Dialog
         open={open}
         TransitionComponent={Transition}
-        keepMounted
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
         fullWidth

@@ -74,7 +74,7 @@ function MainPagination(props: any) {
   return (
     <Stack
       direction="row"
-      py={1}
+      py={0.25}
       px={2}
       spacing={0}
       justifyContent="space-between"
