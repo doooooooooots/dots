@@ -1,1 +1,1 @@
-export {default as cyrb53} from './cyrb-53'
+export { default as cyrb53 } from './cyrb-53';

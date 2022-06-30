@@ -18,6 +18,7 @@ const deleteManyBuilder = (singular: string) => (query: string) => {
   return gql`
       mutation Delete${Plurial}(${deleteManyArgs(singular)}) {
         deletes: delete${Plurial}(${PARAMS}) {
+          id
           ${query}
         }
       }

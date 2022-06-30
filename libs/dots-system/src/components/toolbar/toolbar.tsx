@@ -1,3 +1,5 @@
+import { useCallback, useState } from 'react';
+
 import {
   Button,
   Stack,
@@ -5,7 +7,12 @@ import {
   FormControlLabel,
   Switch,
 } from '@mui/material';
+
 import { isEmpty } from 'lodash';
+
+import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
+import { openFullscreen, exitFullscreen } from '@dots.cool/utils';
+
 import CallSplitIcon from '@mui/icons-material/CallSplit';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import OutboxIcon from '@mui/icons-material/Outbox';
@@ -14,15 +21,14 @@ import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import BackupOutlinedIcon from '@mui/icons-material/BackupOutlined';
 import CloudOffOutlinedIcon from '@mui/icons-material/CloudOffOutlined';
-import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
-import { useCallback, useState } from 'react';
+
 import SelectViewMode from '../select-view-mode/select-view-mode';
-import { openFullscreen, exitFullscreen } from '@dots.cool/utils';
 
 const ToolbarButton = (props: any) => {
   const { children, startIcon, onClick, disabled, color = 'primary' } = props;
   return (
     <Button
+      size="small"
       color={color}
       onClick={onClick}
       startIcon={startIcon}
@@ -70,7 +76,7 @@ function ToolbarData(props: any) {
         m: 0,
       }}
     >
-      <Stack direction="row" alignItems="center">
+      <Stack direction="row" alignItems="center" spacing={1}>
         <Typography variant="caption">{`${selectionModel.length} élément sélectionné`}</Typography>
         {!isEmpty(selectionModel) && (
           <Stack direction="row" alignItems="center">

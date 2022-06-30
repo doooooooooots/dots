@@ -1,27 +1,28 @@
 import * as React from 'react';
+import { Button, Grid, Stack, Container, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import {
-  Button,
-  Grid,
-  Stack,
-  Container,
-  Typography,
-  TextField,
-} from '@mui/material';
+
+import { useMutation } from '@apollo/client';
 import { Controller, useForm } from 'react-hook-form';
-import { useDots } from '@dots.cool/schema';
+
 import FormInput from '../../dots-system/components/form-input';
+
+import { useDots } from '@dots.cool/schema';
+import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
 
 export default function EntityCreate(props) {
   const { entityName, model } = props;
 
   const { getSchema } = useDots();
-  const { form, fields } = getSchema(entityName);
+  const { form, graphql, fields } = getSchema(entityName);
 
   const { control, handleSubmit } = useForm({
     defaultValues: {},
     resolver: undefined,
   });
+
+  const query = graphql[GRAPHQL_ACTIONS.CreateOne]('id');
+  const [create] = useMutation(query);
 
   const onSubmit = (data, e) => console.log(data, e);
   const onError = (errors, e) => console.log(errors, e);

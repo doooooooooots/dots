@@ -8,6 +8,7 @@ const RuleValueText = (props) => {
   };
   return (
     <TextField
+      size="small"
       placeholder="text"
       defaultValue={value}
       onBlur={handleChange}

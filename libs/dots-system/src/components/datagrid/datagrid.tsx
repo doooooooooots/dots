@@ -7,7 +7,7 @@ import {
   useGridApiRef,
 } from '@mui/x-data-grid-pro';
 import React from 'react';
-import LoadingOverlay from '../loading-overlay';
+import LoadingOverlay from '../datagrid-loading-overlay';
 import MainHeaderColumnPopper from '../header-column-popper/header-column-popper';
 import withDatagridEdit from '../../hoc/with-datagrid-edit';
 

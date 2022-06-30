@@ -1,9 +1,8 @@
-import withMiddleware from '../middlewares/with-middleware';
-import { DotsColumnProps } from '../types';
+import { ColumnConfigType } from '../types/column-config-type';
 
-const checkbox = (props: DotsColumnProps) => ({
-  ...props,
-  type: 'boolean',
+const checkbox = (): ColumnConfigType => ({
+  width: 210,
+  dataType: 'boolean',
 });
 
-export default withMiddleware(checkbox);
+export default checkbox;

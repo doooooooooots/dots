@@ -1,5 +1,5 @@
 import { MenuItem, Select } from '@mui/material';
-import { VIEW_MODES } from '@dots.cool/tokens';
+import { VIEW_MODES, VIEW_MODE_LABELS } from '@dots.cool/tokens';
 import { useCallback } from 'react';
 
 function SelectViewMode(props) {
@@ -13,10 +13,15 @@ function SelectViewMode(props) {
   );
 
   return (
-    <Select value={viewMode} onChange={handleChange}>
+    <Select
+      value={viewMode}
+      onChange={handleChange}
+      size="small"
+      sx={{ fontSize: 14 }}
+    >
       {Object.values(VIEW_MODES).map((mode) => (
         <MenuItem key={mode} value={mode}>
-          {mode}
+          {VIEW_MODE_LABELS[mode]}
         </MenuItem>
       ))}
     </Select>

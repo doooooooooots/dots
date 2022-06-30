@@ -1,32 +1,29 @@
-type GetterFuncType<T extends string> = (field: {
-  [key in T]: unknown;
-}) => string;
+import { FormApiType, FormDefinition } from '../utils/create-form-api';
+import { FragmentType } from '../utils/create-fragment-api';
+import { Field, FieldDefinitions } from './field';
+import { GraphQlApiType } from './graphql-api';
+import { SearchFilterAttributesType } from './search-filter';
 
-export interface FilterAttributesType<U extends string> {
-  name: string;
-  query: Record<number, U>;
-  filterAttributes: Record<number, U>;
-  getters: {
-    primary: GetterFuncType<U>;
-    secondary?: GetterFuncType<U>;
-    info?: GetterFuncType<U>;
-  };
-}
-
-export interface EntityConfig<U> {
+export interface EntityConfig<T extends string> {
   singular: string;
-  fields: U;
-  filters?: {
-    default: FilterAttributesType<Extract<keyof U, string>>;
-    [key: string]: FilterAttributesType<Extract<keyof U, string>>;
-  };
-  form?: {
-    [key: string]: unknown;
-  };
-  fragments?: {
-    default: string;
-    [key: string]: string;
+  allowedSort: T[];
+  allowedFilter: T[];
+  fields: FieldDefinitions<T>;
+  form: FormDefinition<T>;
+  searchFilters?: Record<'default' | string, SearchFilterAttributesType<T>>;
+  fragments: {
+    details: string;
+    preview?: string;
+    single?: string;
   };
 }
+
+export type EntitySchema<T extends string> = Omit<EntityConfig<T>, 'form'> & {
+  graphql: GraphQlApiType;
+  columnApi: {
+    getColumnsFromFragment: (fragment: string) => Field[];
+  };
+  formApi: FormApiType<T>;
+};
 
 export default EntityConfig;

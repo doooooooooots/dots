@@ -1,5 +1,3 @@
-export * from './schemas/index.d';
-
 export interface onActionClickPropsType {
   path: string;
   title: string;

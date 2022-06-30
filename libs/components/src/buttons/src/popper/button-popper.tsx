@@ -22,13 +22,10 @@ export default function ButtonPopper(props) {
 
   const id = open ? 'transition-popper' : undefined;
 
-  const handleClick = React.useCallback(
-    (event) => {
-      setAnchorEl(anchorEl ? null : event.currentTarget);
-      setOpen((previousOpen) => !previousOpen);
-    },
-    [anchorEl]
-  );
+  const handleClick = React.useCallback((event) => {
+    setAnchorEl(event.currentTarget);
+    setOpen((previousOpen) => !previousOpen);
+  }, []);
 
   const handleClose = () => {
     setOpen(false);
@@ -77,7 +74,7 @@ export default function ButtonPopper(props) {
               <Box
                 sx={{
                   backgroundColor: 'background.default',
-                  boxShadow: (theme) => theme.shadowStyles.stripe,
+                  boxShadow: 8,
                   borderRadius: 1,
                 }}
               >

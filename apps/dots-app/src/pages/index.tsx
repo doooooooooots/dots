@@ -7,6 +7,7 @@ export function Index() {
     <Grid container>
       <LayoutAppbar />
       <LayoutMain>
+        <TabEntity />
         <DotsPageIndex entityName="layout" />
       </LayoutMain>
     </Grid>

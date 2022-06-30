@@ -163,6 +163,14 @@ export const baseThemeOptions = {
             display: 'none',
           },
         },
+        columnHeaderTitle: {
+          paddingLeft: 24,
+        },
+        cell: {
+          '& .MuiButton-root': {
+            justifyContent: 'flex-start',
+          },
+        },
       },
     },
     MuiIconButton: {

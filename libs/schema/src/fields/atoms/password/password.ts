@@ -1,29 +1,21 @@
 import * as columns from '../../../columns';
-import * as forms from '@dots.cool/form-builder';
 import * as yup from 'yup';
 
+import { addColumnConfig, addValidation, addDefaultValue } from '../../builder';
 import { FIELD_TYPES } from '@dots.cool/tokens';
 
-import {
-  hasUiColumn,
-  addUiColumn,
-  hasValidation,
-  addValidation,
-  hasDefaultValue,
-  addDefaultValue,
-  addUiInput,
-  hasUiInput,
-  initField,
-} from '../../builder';
-
 import { BaseFieldConfig, Field } from '../../../types/field';
-type PasswordFieldType = BaseFieldConfig;
 
-function password(config: PasswordFieldType): Field {
+const password = (config: BaseFieldConfig) => {
+  const type = FIELD_TYPES.password;
+
   return {
+    ...addValidation(yup.string()),
+    ...addColumnConfig(columns.text()),
+    ...addDefaultValue(type),
     ...config,
-    type: FIELD_TYPES.password,
-  };
-}
+    type: type,
+  } as Field;
+};
 
 export default password;

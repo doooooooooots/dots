@@ -1,12 +1,46 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { FIELD_TYPES } from '@dots.cool/tokens';
+import { GridColDef } from '@mui/x-data-grid-pro';
+import { SchemaLike } from 'yup/lib/types';
+import { DEFAULT_VALUES } from '../../default-values';
+
 export interface EntityType {
   id: string;
 }
 
 export function initField(field: any) {
   if (!field) throw new Error('Props are required');
-  if (!('ui' in field)) field.ui = {};
 }
 
+/**
+ * Builders
+ */
+
+export function addDefaultValue(type: FIELD_TYPES): {
+  defaultValue: unknown;
+} {
+  if (!(type in DEFAULT_VALUES)) {
+    throw new Error(`Type ${type} has no defined default value`);
+  }
+
+  return {
+    defaultValue: DEFAULT_VALUES[type],
+  };
+}
+
+export function addColumnConfig(config: Partial<GridColDef>) {
+  return { ...config };
+}
+
+export function addValidation(validation?: SchemaLike) {
+  return {
+    validation: validation || null,
+  };
+}
+
+/**
+ * Helpers
+ */
 export function hasUiColumn(config: any) {
   return !!config?.ui?.column;
 }
@@ -25,20 +59,4 @@ export function hasValidation(config: any) {
 
 export function hasDefaultValue(config: any) {
   return 'defaultValue' in config;
-}
-
-export function addUiInput(config: any, input: any) {
-  config.ui.input = input;
-}
-
-export function addUiColumn(config: any, column: any) {
-  config.ui.column = column;
-}
-
-export function addValidation(config: any, validation: any) {
-  config.validation = validation;
-}
-
-export function addDefaultValue(config: any, defaultValue: any) {
-  config.defaultValue = defaultValue;
 }

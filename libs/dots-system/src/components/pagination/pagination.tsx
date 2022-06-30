@@ -1,3 +1,4 @@
+import { CircularProgress, Loading } from '@dots.cool/components';
 import { PAGINATION_DEFAULT_AVAILABLE_TAKES } from '@dots.cool/tokens';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -6,6 +7,7 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import {
   Divider,
   IconButton,
+  LinearProgress,
   MenuItem,
   Select,
   Stack,
@@ -18,6 +20,7 @@ import React, { useCallback } from 'react';
 
 function MainPagination(props: any) {
   const {
+    loading,
     page,
     take,
     onPageNext,
@@ -60,6 +63,14 @@ function MainPagination(props: any) {
     [onTakeChange]
   );
 
+  if (loading) {
+    return (
+      <Box sx={{ width: '100%' }}>
+        <LinearProgress />
+      </Box>
+    );
+  }
+
   return (
     <Stack
       direction="row"
@@ -90,13 +101,14 @@ function MainPagination(props: any) {
               value={page}
               onChange={handleGoToPage}
               variant="outlined"
+              size="small"
               sx={{
                 width: 40 + 10 * page.toString().length,
                 '& input': { textAlign: 'center' },
               }}
             />
             <Typography>sur</Typography>
-            <Typography>{`${maxPage || '?'}`}</Typography>
+            <Typography>{`${maxPage ?? '?'}`}</Typography>
           </Stack>
           <IconButton onClick={handlePageNext}>
             <KeyboardArrowRightIcon />

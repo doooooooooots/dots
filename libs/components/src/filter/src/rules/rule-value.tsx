@@ -1,5 +1,6 @@
-import dynamic from 'next/dynamic';
 import React from 'react';
+
+import dynamic from 'next/dynamic';
 
 const RuleValueDate = dynamic(() => import('../values/value-date'));
 const RuleValueCheckbox = dynamic(() => import('../values/value-checkbox'));

@@ -1,3 +1,42 @@
-export default function createColumnApi(fields) {
-  return fields;
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { gql } from '@apollo/client';
+import { isEmpty } from 'lodash';
+import { Field } from '../types/field';
+import { FragmentType } from './create-fragment-api';
+
+export default function createColumnApi<T extends string>(
+  fragments: FragmentType,
+  fields: Record<T, Field>
+) {
+  /**
+   * Extract all columns from fragments
+   */
+  const getColumnsFromFragment = (fragment: keyof FragmentType): Field[] => {
+    return gql(`{ Entity {${fragments[fragment]}}}`)
+      .definitions[0].selectionSet.selections[0].selectionSet.selections.reduce(
+        (acc: Field[], item: any) => {
+          const fieldName = item.name.value as T;
+          if (!isEmpty(item.selectionSet)) return acc;
+          if (!(fieldName in fields)) return acc;
+
+          const field = fields[fieldName];
+          const { label } = field;
+
+          return [
+            ...acc,
+            {
+              ...field,
+              field: fieldName,
+              headerName: label,
+            },
+          ];
+        },
+        [] as Field[]
+      )
+      .filter((item: Field) => item);
+  };
+
+  return {
+    getColumnsFromFragment,
+  };
 }

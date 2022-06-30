@@ -62,8 +62,18 @@ const Layout = entity({
       },
     },
   },
+  form: {
+    required: {
+      primary: "L'essentiel",
+      secondary: 'Veuillez indiquez le nom du calepinage',
+      description: '',
+      fields: {
+        name: { col: 12, renderInput: null },
+      },
+    },
+  },
   fragments: {
-    default: `
+    details: `
       id
       name
       alignment

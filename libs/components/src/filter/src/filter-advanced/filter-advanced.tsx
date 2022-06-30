@@ -1,4 +1,4 @@
-import { uniqueId } from 'lodash';
+import { isEmpty, uniqueId } from 'lodash';
 import { useCallback, useMemo } from 'react';
 import {
   AND,
@@ -22,8 +22,14 @@ interface FilterAdvancedProps {
   onFilterChange;
 }
 
+const initialState = {
+  operator: 'and',
+  filters: [],
+  byId: {},
+};
+
 export default function FilterAdvanced(props: FilterAdvancedProps) {
-  const { filter, onFilterChange } = props;
+  const { entityName, filter = initialState, onFilterChange } = props;
 
   const addToParent = useCallback(
     (id, parentId) => {
@@ -236,10 +242,13 @@ export default function FilterAdvanced(props: FilterAdvancedProps) {
   );
 
   const filterTree = useMemo(() => {
-    if (!filter) return {};
+    if (!filter) return [];
 
     const makeTree = (item) => {
+      if (isEmpty(item)) return initialState;
+
       const { operator, filters } = item;
+
       const tree = filters.reduce((acc, currentId) => {
         const current = filter.byId[currentId];
         if ('filters' in current) {
@@ -249,6 +258,7 @@ export default function FilterAdvanced(props: FilterAdvancedProps) {
         }
         return acc;
       }, []);
+
       return {
         id: item.id,
         operator,
@@ -261,6 +271,7 @@ export default function FilterAdvanced(props: FilterAdvancedProps) {
 
   return (
     <Rules
+      entityName={entityName}
       onAddRuleClick={handleAddRuleClick}
       onAddBlockClick={handleAddBlockClick}
       onDeleteClick={handleDeleteClick}

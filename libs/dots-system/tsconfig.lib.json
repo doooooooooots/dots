@@ -18,13 +18,5 @@
     "**/*.spec.jsx",
     "**/*.test.jsx"
   ],
-  "include": [
-    "**/*.js",
-    "**/*.jsx",
-    "**/*.ts",
-    "**/*.tsx",
-    "../../apps/__tmp__/create-details.tsx",
-    "../schemas/src/article.tsx",
-    "../../apps/dome-solar-calepinage/src/utils/enum-list.ts"
-  ]
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
 }

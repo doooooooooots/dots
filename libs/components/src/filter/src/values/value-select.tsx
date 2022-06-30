@@ -5,6 +5,7 @@ import { Select, StyledOption } from '../../../input';
 const values = ['ham', 'stram', 'gram', 'pick'];
 
 const RuleValueSelect = (props) => {
+  console.log(props);
   const { value, onChange } = props;
   const { t } = useTranslation('common');
 

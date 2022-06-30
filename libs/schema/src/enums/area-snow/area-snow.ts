@@ -1,7 +1,7 @@
 import enumList from '../../utils/enum-list';
 
 const AreaSnow = enumList({
-  type: 'category',
+  type: 'scale',
   values: {
     A1: 10,
     A2: 11,

@@ -1,9 +1,12 @@
+import { useCallback, useState } from 'react';
+
 import AddIcon from '@mui/icons-material/Add';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import SortIcon from '@mui/icons-material/Sort';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+
 import {
   Button,
   Chip,
@@ -13,20 +16,22 @@ import {
   TextField,
   InputAdornment,
 } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { Box } from '@mui/system';
+
+import { isEmpty } from 'lodash';
+
+import DotsFormCreate from '../../pages/dots-from-create';
+import { useHistory } from '../../hooks';
+
 import {
   SortablePopper,
   ButtonPopper,
   FilterAdvanced,
   SortField,
 } from '@dots.cool/components';
-import useHistory from '../../hooks/use-history';
-import { isEmpty } from 'lodash';
-import DotsFormCreate from '../../pages/dots-from-create';
-import { Box } from '@mui/system';
-
+import { useDots } from '@dots.cool/schema';
 import { FORM_MODAL_WIDTH } from '@dots.cool/tokens';
-import { useContext } from '../../hoc';
+import FormInDialog from '../entity-create/entity-create-in-dialog';
 
 const FILTER_MARGIN = 0.5;
 
@@ -51,8 +56,9 @@ function MainFilterbar(props: any) {
   //* HOOKS
   const { push, clear } = useHistory();
   const [mode, setMode] = useState('default');
+
   const { getSchema } = useDots();
-  const { singular, sorts } = getSchema(entityName);
+  const { singular } = getSchema(entityName);
 
   //* Search button
   const handleSearchButtonClick = useCallback(() => {
@@ -84,6 +90,7 @@ function MainFilterbar(props: any) {
       justifyContent="space-between"
       alignItems="center"
       px={1}
+      pt="4px"
     >
       {mode === 'default' ? (
         <Stack
@@ -116,7 +123,7 @@ function MainFilterbar(props: any) {
                 display: 'block',
               }}
             >
-              ui.filterbar.button.search
+              Rechercher
             </Box>
           </Button>
           <Divider orientation="vertical" variant="middle" flexItem />
@@ -136,7 +143,7 @@ function MainFilterbar(props: any) {
                 }}
               >
                 {isEmpty(sort)
-                  ? 'ui.filterbar.sort.add'
+                  ? 'Ajouter un tri'
                   : `tri :${
                       sort.length > 1
                         ? `${sort.length}éléments`
@@ -168,12 +175,13 @@ function MainFilterbar(props: any) {
                 PopperComponent={FilterAdvanced}
                 componentProps={{
                   popperComponent: {
+                    entityName,
                     filter,
                     onFilterChange,
                   },
                 }}
               >
-                ui.filterbar.filter.add
+                Ajouter un filtre
               </ButtonPopper>
             </>
           )}
@@ -210,12 +218,21 @@ function MainFilterbar(props: any) {
           variant="outlined"
           startIcon={<SettingsOutlinedIcon />}
         >
-          ui.filterbar.button.option
+          {/* ui.filterbar.option */}
+          Options
         </Button>
         {/*  */}
-        <Button variant="contained" size="small" onClick={handleClickAction}>
+        <FormInDialog
+          variant="contained"
+          size="small"
+          entityName={entityName}
+          onSubmitCallback={onSubmitCallback}
+        >
+          Créer un nouveau
+        </FormInDialog>
+        {/* <Button variant="contained" size="small" onClick={handleClickAction}>
           {actionText || `ui.filterbar.button.action--default`}
-        </Button>
+        </Button> */}
       </Stack>
     </Stack>
   );

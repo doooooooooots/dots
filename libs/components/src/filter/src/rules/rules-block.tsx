@@ -1,6 +1,7 @@
 import { Add, AddToPhotos } from '@mui/icons-material';
 import Delete from '@mui/icons-material/Delete';
 import { Box, Divider, Stack } from '@mui/material';
+import { isEmpty } from 'lodash';
 import { ButtonAction } from '../../../buttons';
 import Trash from '../../../icons/trash';
 import { Select, StyledOption } from '../../../input';
@@ -41,6 +42,7 @@ const containerStyle = {
 
 const renderBlock = (props: renderBlockProps) => {
   const {
+    entityName,
     depth = 0,
     items,
     onAddRuleClick,
@@ -54,26 +56,29 @@ const renderBlock = (props: renderBlockProps) => {
   } = props;
   const { id: parentId, filters, operator } = items;
 
-  const childs = filters.reduce(
-    (acc, item, index) =>
-      renderRules({
-        acc,
-        item,
-        index,
-        depth,
-        parentId,
-        operator,
-        onAddRuleClick,
-        onAddBlockClick,
-        onDeleteClick,
-        onChangeToGroupClick,
-        onChangeBlockOperator,
-        onChangeRuleOperator,
-        onChangeRuleValue,
-        onChangeProperty,
-      }),
-    []
-  );
+  const childs =
+    !isEmpty(filters) &&
+    filters.reduce(
+      (acc, item, index) =>
+        renderRules({
+          acc,
+          item,
+          index,
+          depth,
+          parentId,
+          operator,
+          entityName,
+          onAddRuleClick,
+          onAddBlockClick,
+          onDeleteClick,
+          onChangeToGroupClick,
+          onChangeBlockOperator,
+          onChangeRuleOperator,
+          onChangeRuleValue,
+          onChangeProperty,
+        }),
+      []
+    );
 
   return (
     <>
@@ -95,6 +100,7 @@ const renderRules = (props: renderRulesProps) => {
     depth,
     parentId,
     operator,
+    entityName,
     onAddRuleClick,
     onAddBlockClick,
     onDeleteClick,
@@ -207,6 +213,7 @@ const renderRules = (props: renderRulesProps) => {
           }}
         >
           {renderBlock({
+            entityName,
             items: item,
             depth: depth + 1,
             onAddRuleClick,
@@ -229,6 +236,7 @@ const renderRules = (props: renderRulesProps) => {
           depth={depth}
           index={index}
           rule={item}
+          entityName={entityName}
           onChangeRuleOperator={onChangeRuleOperator(item.id)}
           onChangeRuleValue={onChangeRuleValue(item.id)}
           onChangeProperty={onChangeProperty(item.id)}
@@ -267,6 +275,7 @@ const AddButtons = (props: AddButtonsProps) => {
 
 const Rules = (props: RulesProps) => {
   const {
+    entityName,
     items,
     onAddRuleClick,
     onAddBlockClick,
@@ -288,6 +297,7 @@ const Rules = (props: RulesProps) => {
       }}
     >
       {renderBlock({
+        entityName,
         items,
         onAddRuleClick,
         onAddBlockClick,

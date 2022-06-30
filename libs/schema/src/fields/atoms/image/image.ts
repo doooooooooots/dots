@@ -1,35 +1,21 @@
 import * as columns from '../../../columns';
-import * as forms from '@dots.cool/form-builder';
 import * as yup from 'yup';
 
+import { addColumnConfig, addValidation, addDefaultValue } from '../../builder';
 import { FIELD_TYPES } from '@dots.cool/tokens';
 
-import {
-  hasUiColumn,
-  addUiColumn,
-  hasValidation,
-  addValidation,
-  hasDefaultValue,
-  addDefaultValue,
-  addUiInput,
-  hasUiInput,
-  initField,
-} from '../../builder';
-
 import { BaseFieldConfig, Field } from '../../../types/field';
-type ImageFieldType = BaseFieldConfig;
 
-function image(config: ImageFieldType): Field {
-  initField(config);
-
-  //-> init all required properties
-  if (!hasUiInput(config)) addUiInput(config, forms.imageInput({}));
-  if (!hasUiColumn(config)) addUiColumn(config, columns.image({}));
+const image = (config: BaseFieldConfig) => {
+  const type = FIELD_TYPES.image;
 
   return {
+    ...addValidation(yup.string()),
+    ...addColumnConfig(columns.text()),
+    ...addDefaultValue(type),
     ...config,
-    type: FIELD_TYPES.image,
-  };
-}
+    type: type,
+  } as Field;
+};
 
 export default image;

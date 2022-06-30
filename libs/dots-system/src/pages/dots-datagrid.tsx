@@ -1,14 +1,19 @@
 import { Box, Divider, Stack } from '@mui/material';
-import { DialogConfirm, LayoutMain } from '@dots.cool/components';
+import { DialogConfirm, ErrorPage, LayoutMain } from '@dots.cool/components';
 import withDotsSystem from '../hoc/with-dots-system';
-import { VIEW_MODES } from '@dots.cool/tokens';
+import { GRAPHQL_REQUESTS, VIEW_MODES } from '@dots.cool/tokens';
 import DEFAULT_COMPONENTS from '../components/default-components/default-components';
 
 // Types
-import { DotsIndexPageProps } from './types/dots-index-page';
 import { isEmpty } from 'lodash';
-import { useMemo } from 'react';
-import { useQuery } from '@apollo/client';
+import { useCallback, useMemo, useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
+import { DotsIndexPageProps } from '../types/dots-index-page';
+import { useDots } from '@dots.cool/schema';
+import toast from 'react-hot-toast';
+import FieldInput from '../components/entity/field/field-input';
+
+const ENABLE_VIEWS = false;
 
 // [ ](Adrien): Check why request is send each time
 const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
@@ -17,8 +22,6 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
     entityName,
 
     // Data
-    columns,
-    rowsQuery,
     variables,
     // Filter
     filter,
@@ -60,6 +63,16 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
     componentProps = {},
   } = props;
 
+  // Use to show user save loading state on enum and relationship cells
+  const [loadingSave, setLoadingSave] = useState('');
+
+  const { getSchema } = useDots();
+  const {
+    graphql,
+    columnApi,
+    fragments: { [variant]: query = '' },
+  } = getSchema(entityName);
+
   //* SORT
   //-> Sort from sort HOC
   const _sort = useMemo(
@@ -75,9 +88,10 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
   // const where = filter;
   const where = useMemo(() => ({}), []);
 
-  //* REQUESTS
+  //* QUERY --- FIND MANY
   //-> GET FindMany datas && extract rows
-  const { loading, error, data, refetch } = useQuery(rowsQuery, {
+  const findMany = graphql[GRAPHQL_REQUESTS.FindMany](query);
+  const { loading, error, data, refetch } = useQuery(findMany, {
     variables: {
       ...(variables || {}),
       ...((lang && { lang: lang }) || {}),
@@ -90,6 +104,34 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
   const rows = data?.rows;
   const rowsCount = data?.count;
 
+  //* MUTATION --- UPDATE ONE
+  const _mutation = graphql[GRAPHQL_REQUESTS.UpdateOne](query);
+  const [update] = useMutation(_mutation);
+
+  // -> Function which save data for one cell
+  const saveData = useCallback(
+    (id, key) => (newValue: unknown) => {
+      setLoadingSave(`${id}_${key}`);
+      toast.promise(
+        update({
+          variables: {
+            where: { id: id },
+            data: { [key]: newValue },
+          },
+        }).then(({ data }) => {
+          refetch();
+          setLoadingSave('');
+        }),
+        {
+          loading: 'Sauvegarde ...',
+          success: 'La cellule a été mise à jour',
+          error: 'Erreur lors de la mise à jour',
+        }
+      );
+    },
+    [refetch, update]
+  );
+
   // *COMPONENTS
   const mergedComponents = useMemo(
     () => ({
@@ -99,11 +141,39 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
     [components]
   );
 
-  //* RENDER
-  if (error || isEmpty(columns))
-    return <LayoutMain>{`Error! oups`}</LayoutMain>;
+  // *COLUMNS
+  const _columns = useMemo(
+    () =>
+      columnApi.getColumnsFromFragment(variant).map((column) => {
+        const { field, type, options } = column;
 
-  if (isEmpty(rows)) return null;
+        return {
+          ...column,
+          align: 'left',
+          type: 'text',
+          renderCell: ({ id, value }: { id: string; value: number }) => (
+            <FieldInput
+              name={field}
+              loading={loadingSave === `${id}_${field}`}
+              type={type}
+              value={value}
+              options={options}
+              variant="button"
+              onChange={saveData(id, field)}
+            />
+          ),
+        };
+      }),
+    [columnApi, loadingSave, variant, saveData]
+  );
+
+  //* RENDER
+  if (error)
+    return (
+      <LayoutMain>
+        <ErrorPage message="Error while fetching data or in columns creation. Check dots-datagrid" />
+      </LayoutMain>
+    );
 
   // -- COMPONENT-PROPS
   // -- Extract components
@@ -132,8 +202,9 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
       <Box sx={{ flex: 1 }}>
         {viewMode === VIEW_MODES.Table && (
           <Datagrid
-            rows={rows}
-            columns={columns}
+            rows={rows || []}
+            columns={_columns}
+            entityName={entityName}
             loading={loading}
             selectionModel={selectionModel}
             onSelectionModelChange={onSelectionModelChange}
@@ -149,6 +220,7 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
         <>
           <Divider />
           <Pagination
+            loading={loading}
             page={page}
             take={take}
             onPageNext={onPageNext}
@@ -167,14 +239,14 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
     <>
       {variant === 'details' && (
         <Stack direction="column" height="100%" overflow="hidden" width="100%">
-          {!hideViews && (
+          {ENABLE_VIEWS && !hideViews && (
             <ViewBar
               views={views}
               currentView={currentView}
               onViewChange={onViewChange}
             />
           )}
-          {/* <FilterBar
+          <FilterBar
             entityName={entityName}
             // Sort
             sort={sort}
@@ -189,7 +261,7 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
             actionText={filterBarProps?.actionText}
             actionPage={filterBarProps?.actionPage}
             onSubmitCallback={refetch}
-          /> */}
+          />
           <Divider />
           <Toolbar
             // Selection actions

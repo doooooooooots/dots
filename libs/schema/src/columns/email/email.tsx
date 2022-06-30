@@ -1,10 +1,8 @@
-import { GridColDef } from '@mui/x-data-grid-pro';
-import withMiddleware from '../middlewares/with-middleware';
-import { DotsColumnProps } from '../types';
+import { ColumnConfigType } from '../types/column-config-type';
 
-const email = (props: DotsColumnProps): GridColDef => ({
-  ...props,
-  type: 'string',
+const email = (): ColumnConfigType => ({
+  width: 210,
+  dataType: 'string',
 });
 
-export default withMiddleware(email);
+export default email;

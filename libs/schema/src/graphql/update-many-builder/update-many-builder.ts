@@ -18,6 +18,7 @@ const updateManyBuilder = (singular: string) => (query: string) => {
   return gql`
       mutation Update${Plurial}(${updateManyArgs(singular)}) {
         updates: update${Plurial}(${PARAMS}) {
+          id
           ${query}
         }
       }

@@ -26,8 +26,8 @@ export default function withEditMode(Component: any) {
       rows,
       columns: _columns,
       query,
-      graphql,
       onSubmitCallBack,
+      entityName,
       ...other
     } = props;
 
@@ -86,6 +86,7 @@ export default function withEditMode(Component: any) {
       return updatedRow;
     };
 
+    // Generate column list
     const columns: GridColumns = [
       ..._columns,
       {
@@ -157,9 +158,8 @@ export default function withEditMode(Component: any) {
         <DialogConfirm open={!!action} onClose={onClose}>
           {action && (
             <DatagridDialogContent
+              entityName={entityName}
               target={target}
-              query={query}
-              graphql={graphql}
               open={action}
               onSubmitCallback={onSubmitCallBack}
               onClose={onClose}
@@ -169,5 +169,6 @@ export default function withEditMode(Component: any) {
       </>
     );
   };
+
   return DatagridWithEditMode;
 }

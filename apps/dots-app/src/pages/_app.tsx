@@ -28,18 +28,19 @@ import { Toaster } from 'react-hot-toast';
 import {
   createSchema,
   DotsSchemaProvider,
-  Person,
+  // Person,
   Project,
-  Roof,
-  Layout,
-  Cladding,
-  SolarModule,
-  Product,
+  // Roof,
+  // Layout,
+  // Cladding,
+  // SolarModule,
+  // Product,
 } from '@dots.cool/schema';
 
 // Components
 import { SplashScreen } from '@dots.cool/components';
 import { NextComponentType } from 'next';
+import { HistoryProvider } from '@dots.cool/dots-system';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -51,13 +52,13 @@ const theme = createTheme({
 });
 
 const schema = createSchema({
-  Person,
+  // Person,
   Project,
-  Roof,
-  Layout,
-  Cladding,
-  SolarModule,
-  Product,
+  // Roof,
+  // Layout,
+  // Cladding,
+  // SolarModule,
+  // Product,
 });
 
 export type AppSchema = typeof schema;
@@ -84,43 +85,45 @@ export default function MyApp(props: DotsAppProps) {
         adapterLocale={frLocale}
       >
         <DotsSchemaProvider schema={schema}>
-          <ApolloProvider client={apolloClient}>
-            <AuthProvider>
-              {/* Meta */}
-              <Head>
-                <meta
-                  name="viewport"
-                  content="initial-scale=1, width=device-width"
-                />
-              </Head>
+          <HistoryProvider>
+            <ApolloProvider client={apolloClient}>
+              <AuthProvider>
+                {/* Meta */}
+                <Head>
+                  <meta
+                    name="viewport"
+                    content="initial-scale=1, width=device-width"
+                  />
+                </Head>
 
-              {/* Theme */}
-              <ThemeProvider theme={theme}>
-                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                <CssBaseline />
-                <Toaster
-                  position="bottom-center"
-                  reverseOrder={false}
-                  toastOptions={{
-                    style: {
-                      backgroundColor: theme.palette.background.default,
-                      color: theme.palette.text.primary,
-                    },
-                  }}
-                />
+                {/* Theme */}
+                <ThemeProvider theme={theme}>
+                  {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                  <CssBaseline />
+                  <Toaster
+                    position="bottom-center"
+                    reverseOrder={false}
+                    toastOptions={{
+                      style: {
+                        backgroundColor: theme.palette.background.default,
+                        color: theme.palette.text.primary,
+                      },
+                    }}
+                  />
 
-                <AuthConsumer>
-                  {(auth) =>
-                    !auth.isInitialized ? (
-                      <SplashScreen />
-                    ) : (
-                      getLayout(<Component {...pageProps} />)
-                    )
-                  }
-                </AuthConsumer>
-              </ThemeProvider>
-            </AuthProvider>
-          </ApolloProvider>
+                  <AuthConsumer>
+                    {(auth) =>
+                      !auth.isInitialized ? (
+                        <SplashScreen />
+                      ) : (
+                        getLayout(<Component {...pageProps} />)
+                      )
+                    }
+                  </AuthConsumer>
+                </ThemeProvider>
+              </AuthProvider>
+            </ApolloProvider>
+          </HistoryProvider>
         </DotsSchemaProvider>
       </LocalizationProvider>
     </CacheProvider>

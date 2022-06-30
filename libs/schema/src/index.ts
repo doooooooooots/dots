@@ -5,4 +5,4 @@ export * from './entities';
 export * from './enums';
 export * from './fields';
 export * from './graphql';
-export * from './context';
+export * from './hooks';

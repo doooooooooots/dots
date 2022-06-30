@@ -1,10 +1,10 @@
 import { GRAPHQL_REQUESTS, VIEW_MODES } from '@dots.cool/tokens';
-import { HistoryItem } from '../../hooks/use-history/index.d';
 import {
   DocumentNode,
   OperationVariables,
   TypedDocumentNode,
 } from '@apollo/client';
+import { HistoryItem } from './use-history';
 
 export interface DotsIndexPageProps {
   variant: 'details' | 'preview';
@@ -75,11 +75,11 @@ export interface DotsIndexPageProps {
       actionPage?: HistoryItem;
     };
     datagrid?: {
-      components;
-      componentProps;
+      components: unknown;
+      componentProps: unknown;
     };
     dialog?: {
-      components;
+      components: unknown;
     };
     topbar?: {
       title: string;

@@ -1,10 +1,8 @@
-import { GridColDef } from '@mui/x-data-grid-pro';
-import { DotsColumnProps } from '../types';
-import withMiddleware from '../middlewares/with-middleware';
+import { ColumnConfigType } from '../types/column-config-type';
 
-const pnl = (props: DotsColumnProps): GridColDef => ({
-  ...props,
-  type: 'number',
+const pnl = (): ColumnConfigType => ({
+  width: 210,
+  dataType: 'number',
 });
 
-export default withMiddleware(pnl);
+export default pnl;

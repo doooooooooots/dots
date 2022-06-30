@@ -5,6 +5,13 @@ export const VIEW_MODES = {
   Grid: 'view_mode_grid',
 } as const;
 
+export const VIEW_MODE_LABELS = {
+  [VIEW_MODES.List]: 'Liste',
+  [VIEW_MODES.Card]: 'Card',
+  [VIEW_MODES.Table]: 'Tableau',
+  [VIEW_MODES.Grid]: 'Grid',
+};
+
 export const FORM_LABEL_SPACING = 1;
 
 export const PAGINATION_DEFAULT_PAGE_START = 1;

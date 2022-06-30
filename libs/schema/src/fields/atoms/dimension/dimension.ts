@@ -1,29 +1,21 @@
 import * as columns from '../../../columns';
-import * as forms from '@dots.cool/form-builder';
 import * as yup from 'yup';
 
+import { addColumnConfig, addValidation, addDefaultValue } from '../../builder';
 import { FIELD_TYPES } from '@dots.cool/tokens';
 
-import {
-  hasUiColumn,
-  addUiColumn,
-  hasValidation,
-  addValidation,
-  hasDefaultValue,
-  addDefaultValue,
-  addUiInput,
-  hasUiInput,
-  initField,
-} from '../../builder';
-
 import { BaseFieldConfig, Field } from '../../../types/field';
-type DimensionFieldType = BaseFieldConfig;
 
-function dimension(config: DimensionFieldType): Field {
+const dimension = (config: BaseFieldConfig) => {
+  const type = FIELD_TYPES.dimension;
+
   return {
+    ...addValidation(yup.number()),
+    ...addColumnConfig(columns.number()),
+    ...addDefaultValue(type),
     ...config,
-    type: FIELD_TYPES.dimension,
-  };
-}
+    type: type,
+  } as Field;
+};
 
 export default dimension;

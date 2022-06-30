@@ -1,4 +1,3 @@
-export { default as button } from './button';
 export { default as checkbox } from './checkbox';
 export { default as country } from './country';
 export { default as currency } from './currency';
@@ -8,7 +7,6 @@ export { default as image } from './image';
 export { default as info } from './info';
 export { default as json } from './json';
 export { default as number } from './number';
-export { default as people } from './people';
 export { default as pnl } from './pnl';
 export { default as progress } from './progress';
 export { default as rating } from './rating';

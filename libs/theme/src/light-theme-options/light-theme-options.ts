@@ -254,8 +254,12 @@ export const lightThemeOptions = {
     },
     MuiDataGrid: {
       styleOverrides: {
+        columnHeaders: {
+          borderBottom: '1px solid',
+          borderColor: grey[100],
+        },
         cell: {
-          borderColor: grey[200],
+          borderColor: grey[100],
         },
       },
     },

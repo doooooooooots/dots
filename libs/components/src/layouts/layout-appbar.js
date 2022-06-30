@@ -1,5 +1,14 @@
-import { AppBar, Button, Stack, styled, Toolbar } from '@mui/material';
+import {
+  AppBar,
+  Button,
+  Chip,
+  Divider,
+  Stack,
+  styled,
+  Toolbar,
+} from '@mui/material';
 import { Box } from '@mui/system';
+import Image from 'next/image';
 import React from 'react';
 import Link from '../link';
 
@@ -25,7 +34,20 @@ function LayoutAppBar(props) {
         }}
       >
         {/* <ToggleGameConnected /> */}
-        <Stack direction="row" spacing={1} ml={2}>
+        <Stack direction="row" spacing={1} ml={2} alignItems="center">
+          <Image
+            src="/assets/logo/dots-logo.svg"
+            alt="logo"
+            width={80}
+            height={25}
+          />
+          <Chip
+            size="small"
+            variant="outlined"
+            label="alpha 0.0.1"
+            sx={{ fontSize: 11, py: 0, lineHeight: 1, height: 19 }}
+          />
+          <Divider orientation="vertical" flexItem sx={{ pl: 2 }} />
           {[
             ['Produits', '/products'],
             ['Stock', '/racks'],

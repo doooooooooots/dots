@@ -9,9 +9,7 @@ import {
 import { isEmpty } from 'lodash';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
-import PopperList from '../../popper/popper-list';
 import { matchSorter } from 'match-sorter';
-import NoResult from '../../screens/no-result';
 
 const SelectionTitle = (props) => {
   const { count, onClick } = props;

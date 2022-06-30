@@ -1,10 +1,9 @@
-import { GridColDef } from '@mui/x-data-grid-pro';
-import withMiddleware from '../middlewares/with-middleware';
-import { DotsColumnProps } from '../types';
+import { ColumnConfigType } from '../types/column-config-type';
 
-const date = (props: DotsColumnProps): GridColDef => ({
-  ...props,
-  type: 'date',
+const date = (): ColumnConfigType => ({
+  width: 210,
+  valueGetter: ({ value }) => value && new Date(value),
+  dataType: 'date',
 });
 
-export default withMiddleware(date);
+export default date;

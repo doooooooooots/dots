@@ -3,46 +3,8 @@ import React, { useMemo } from 'react';
 import { GRAPHQL_ACTIONS } from '@dots.cool/tokens';
 import DEFAULT_DATAGRID_DIALOGS_COMPONENTS from '../dialog-default';
 
-import {
-  MutationFunctionOptions,
-  OperationVariables,
-  DefaultContext,
-  ApolloCache,
-} from '@apollo/client';
 import { useDots } from '@dots.cool/schema';
-
-export type OnSubmitType = (
-  options?:
-    | MutationFunctionOptions<
-        unknown,
-        OperationVariables,
-        DefaultContext,
-        ApolloCache<any>
-      >
-    | undefined
-) => Promise<unknown>;
-
-export type OnSubmitCallbackType = (datas?: any) => void;
-
-export interface ModalComponentProps {
-  target: string[] | unknown;
-  onSubmit: OnSubmitType;
-  onSubmitCallback: OnSubmitCallbackType;
-  onCancel: () => void;
-  onClose: () => void;
-}
-
-type MainDialogsPropsType = {
-  entityName: string;
-  target: string[] | unknown;
-  lang?: string;
-  open: typeof GRAPHQL_ACTIONS[keyof typeof GRAPHQL_ACTIONS] | '';
-  onSubmitCallback: OnSubmitCallbackType;
-  onClose: () => void;
-  components?: {
-    [key in typeof GRAPHQL_ACTIONS[keyof typeof GRAPHQL_ACTIONS]]: React.FC<ModalComponentProps>;
-  };
-};
+import { MainDialogsPropsType } from '../../types/dialog';
 
 function MainDialogs(props: MainDialogsPropsType) {
   const {
@@ -67,7 +29,10 @@ function MainDialogs(props: MainDialogsPropsType) {
     if (open.endsWith('_one')) action = graphql[GRAPHQL_ACTIONS.UpdateOne];
     if (open.endsWith('_many')) action = graphql[GRAPHQL_ACTIONS.UpdateMany];
   }
-  const mutation = useMemo(() => action(query, !!lang), [query, action, lang]);
+  const mutation = useMemo(
+    () => action(query.join(' '), !!lang),
+    [query, action, lang]
+  );
   const [onSubmit] = useMutation(mutation);
 
   const mergedComponents = useMemo(

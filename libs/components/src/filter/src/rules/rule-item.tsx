@@ -1,6 +1,12 @@
 import { Box } from '@mui/material';
 import PropTypes from 'prop-types';
 import { memo } from 'react';
+
+import RuleDateCustomValue from '../values/value-date-custom';
+import RuleOperator from './rule-operator';
+import RuleProperty from './rule-property';
+import RuleValue from './rule-value';
+
 import {
   CUSTOM,
   IS_EMPTY,
@@ -10,10 +16,6 @@ import {
   PROPERTY_IDS,
   TYPE_BY_PROPERTY_ID,
 } from '../../constants';
-import RuleDateCustomValue from '../values/value-date-custom';
-import RuleOperator from './rule-operator';
-import RuleProperty from './rule-property';
-import RuleValue from './rule-value';
 
 const elementStyle = {
   userSelect: 'none',
@@ -32,8 +34,13 @@ const elementStyle = {
 };
 
 const RuleItem = (props) => {
-  const { rule, onChangeRuleOperator, onChangeRuleValue, onChangeProperty } =
-    props;
+  const {
+    rule,
+    entityName,
+    onChangeRuleOperator,
+    onChangeRuleValue,
+    onChangeProperty,
+  } = props;
 
   return (
     <>
@@ -55,6 +62,7 @@ const RuleItem = (props) => {
           columnGap: '8px',
           gridTemplateRows: '32px',
           gridTemplateColumns:
+            // eslint-disable-next-line no-multi-str
             '[value-start] max-content auto \
              [value-end operator-start] auto',
         }}
@@ -73,7 +81,6 @@ const RuleItem = (props) => {
             {/**
              *  For date properties
              *  > if user wants to enter custom date or range
-             *
              * */}
             {rule.filter.value === CUSTOM ? (
               <Box
@@ -87,6 +94,7 @@ const RuleItem = (props) => {
               >
                 <Box sx={elementStyle}>
                   <RuleValue
+                    entityName={entityName}
                     type={TYPE_BY_PROPERTY_ID[rule.property]}
                     operator={rule.filter.operator}
                     value={rule.filter.value}

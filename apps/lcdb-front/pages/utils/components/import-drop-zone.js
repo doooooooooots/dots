@@ -111,7 +111,7 @@ export default function CSVReader(props) {
                 borderRadius: 2,
                 bgcolor: 'background.paper',
                 overflow: 'hidden',
-                boxShadow: (theme) => theme.shadowStyles.stripe,
+                boxShadow: 8,
               }}
             >
               <Stack

@@ -10,7 +10,7 @@ const withSmartFilter = (
   Component: FunctionComponent<any>
 ): FunctionComponent<any> => {
   const FilterableComponent = (props: any) => {
-    const { filter: initalValue } = props;
+    const { filter: initalValue = initialState } = props;
     const [filter, setFilter] = useState(initalValue);
 
     return (

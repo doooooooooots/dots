@@ -1,7 +1,8 @@
 import { Editor } from '@dots.cool/components';
-import { Divider, Typography } from '@mui/material';
+import { Divider, Stack, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import debounce from 'lodash/debounce';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 const EditorPage = (props) => {
@@ -29,7 +30,15 @@ const EditorPage = (props) => {
 
   return (
     <Container sx={{ height: '100vh' }}>
-      <Typography variant="h1">This is cool</Typography>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Typography variant="h2">Exemple de page de partage</Typography>
+        <Image
+          src="/assets/logo/dots-logo.svg"
+          alt="dots logo"
+          width={120}
+          height={40}
+        />
+      </Stack>
       <Divider sx={{ my: 2 }} />
       <Editor
         defaultValue="Hello world!"

@@ -46,7 +46,7 @@ const Cladding = entity({
     },
   },
   fragments: {
-    default: `
+    details: `
       id
       name
       color

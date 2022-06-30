@@ -1,11 +1,14 @@
 // @flow
-import { Button, Stack } from '@mui/material';
+import { Button, Divider, Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import reorder from './reorder';
 import SortableList from './sortable-list';
 import { isEmpty } from 'lodash';
 import { useMemo } from 'react';
+import { Close } from '@mui/icons-material';
+import { NoResult, NoResultImage } from '../../screens';
+import { Box } from '@mui/system';
 
 export default function SortablePopper(props) {
   const {
@@ -83,30 +86,47 @@ export default function SortablePopper(props) {
   }, [availableFields, onSortOrderChange]);
 
   return (
-    <>
-      <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
-        <Stack
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-          }}
-        >
-          <Button variant="text" onClick={onClose}>
+    <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+      <Stack
+        sx={{
+          justifyContent: 'center',
+          alignItems: 'flex-start',
+        }}
+      >
+        <Stack p={1} direction="row" justifyContent="flex-end" width="100%">
+          <Button
+            variant="text"
+            size="small"
+            endIcon={<Close fontSize="inherit" />}
+            onClick={onClose}
+            sx={{ py: 0.25 }}
+          >
             Fermer
           </Button>
-          <SortableList
-            list={list}
-            onSortOrderChange={onSortOrderChange}
-            isCombineEnabled={isCombineEnabled}
-            SortItemComponent={SortItemComponent}
-            sortableFields={sortableFields}
-          />
         </Stack>
-      </DragDropContext>
-      <Button disabled={isEmpty(availableFields)} onClick={handleAddSortClick}>
-        Add Sort
-      </Button>
-    </>
+        <Divider flexItem />
+        {isEmpty(availableFields) ? (
+          <Box px={6}>
+            <NoResult content="Aucun tri disponible" />
+          </Box>
+        ) : (
+          <>
+            <SortableList
+              list={list}
+              onSortOrderChange={onSortOrderChange}
+              isCombineEnabled={isCombineEnabled}
+              SortItemComponent={SortItemComponent}
+              sortableFields={sortableFields}
+            />
+            <Button
+              disabled={isEmpty(availableFields)}
+              onClick={handleAddSortClick}
+            >
+              Add Sort
+            </Button>
+          </>
+        )}
+      </Stack>
+    </DragDropContext>
   );
 }

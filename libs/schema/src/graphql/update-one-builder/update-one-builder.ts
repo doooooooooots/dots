@@ -22,6 +22,7 @@ const updateOneBuilder = (singular: string) => (query: string) => {
   return gql`
       mutation Update${Singular}(${updateOneArgs(singular)}) {
         update: update${Singular}(${PARAMS}) {
+          id
           ${query}
         }
       }
