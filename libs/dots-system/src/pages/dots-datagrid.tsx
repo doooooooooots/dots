@@ -14,6 +14,7 @@ import FieldInput from '../components/entity/field/field-input';
 import { useHistory } from '../hooks';
 import ButtonOpenSingle from '../components/button-open-single/button-open-single';
 import ButtonRelationshipPreview from '../components/buttons/button-relationship-preview';
+import pluralize from 'pluralize';
 
 const ENABLE_VIEWS = false;
 
@@ -73,8 +74,6 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
     componentProps = {},
   } = props;
 
-  console.log(entityName);
-
   // Use to show user save loading state on enum and relationship cells
   const [loadingSave, setLoadingSave] = useState('');
 
@@ -112,7 +111,7 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
       ...((lang && { lang: lang }) || {}),
       skip: skip,
       take: take,
-      where: where,
+      where: filter,
       orderBy: _sort,
     },
   });
@@ -160,7 +159,16 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
   const _columns = useMemo(
     () =>
       columnApi.getColumnsFromFragment(variant).map((column) => {
-        const { field, type, options, dataType, onClick, isIndexed } = column;
+        const {
+          field,
+          type,
+          options,
+          target,
+          dataType,
+          onClick,
+          many,
+          isIndexed,
+        } = column;
 
         if (isIndexed) {
           return {
@@ -192,17 +200,19 @@ const DotsDatagrid = (props: DotsIndexPageProps): JSX.Element => {
             ...column,
             align: 'left',
             type: dataType,
-            renderCell: ({ id, value }: { id: string; value: number }) => (
+            width: 80,
+            renderCell: ({ id, value }) => (
               <ButtonRelationshipPreview
+                size="small"
                 entityName={options}
                 count={value}
                 onClick={() => {
                   push({
                     path: 'Details',
                     title: 'details',
-                    variant: 'details',
+                    variant: 'preview',
                     entityName: options,
-                    where: { id },
+                    where: { [target]: { id: { equals: id } } },
                   });
                 }}
               >

@@ -152,7 +152,8 @@ function HistoryBrowser(props: any) {
             entityName={entityName}
             boundary="history-popper"
             variant={variant}
-            where={where}
+            filter={where}
+            multiple={variant === 'preview'}
           />
         </DialogContent>
       </Stack>

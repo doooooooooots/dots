@@ -28,8 +28,19 @@ const BUY_ACTION_FIELDS = {
     label: 'File',
     many: false,
   }),
-  // agent: relationship({ label: 'Person', options: 'Person', many: false }),
-  project: relationship({ label: 'Project', options: 'Project', many: false }),
+  project: relationship({
+    label: 'Project',
+    options: 'Project',
+    target: 'buyActions',
+    many: true,
+  }),
+  agent: relationship({
+    label: 'Person',
+    options: 'Person',
+    target: 'agent',
+    valueGetter: ({ row }) => `${row.agent.givenName} ${row.agent.familyName}`,
+    many: false,
+  }),
 };
 
 const BuyAction = entity<keyof typeof BUY_ACTION_FIELDS>({
@@ -58,7 +69,7 @@ const BuyAction = entity<keyof typeof BUY_ACTION_FIELDS>({
   form: {
     required: {
       primary: "L'essentiel",
-      secondary: 'Veuillez indiquez le nom du projet',
+      secondary: 'Veuillez indiquez le nom de la dépense',
       description: '',
       fields: {
         name: { col: 12 },
@@ -73,6 +84,7 @@ const BuyAction = entity<keyof typeof BUY_ACTION_FIELDS>({
       priceCurrency
       startTime
       project { id name}
+      agent { id givenName familyName}
     `,
   },
 });

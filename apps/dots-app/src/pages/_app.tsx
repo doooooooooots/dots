@@ -28,14 +28,13 @@ import { Toaster } from 'react-hot-toast';
 import {
   createSchema,
   DotsSchemaProvider,
-  // Person,
+  Action,
   BuyAction,
+  Organization,
+  Person,
+  PostalAddress,
   Project,
-  // Roof,
-  // Layout,
-  // Cladding,
-  // SolarModule,
-  // Product,
+  Task,
 } from '@dots.cool/schema';
 
 // Components
@@ -53,14 +52,13 @@ const theme = createTheme({
 });
 
 const schema = createSchema({
-  // Person,
-  Project,
+  Action,
   BuyAction,
-  // Roof,
-  // Layout,
-  // Cladding,
-  // SolarModule,
-  // Product,
+  Organization,
+  Person,
+  PostalAddress,
+  Project,
+  Task,
 });
 
 export type AppSchema = typeof schema;

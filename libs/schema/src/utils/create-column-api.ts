@@ -16,10 +16,11 @@ export default function createColumnApi<T extends string>(
       .definitions[0].selectionSet.selections[0].selectionSet.selections.reduce(
         (acc: Field[], item: any) => {
           const fieldName = item.name.value as T;
-          if (!isEmpty(item.selectionSet)) return acc;
+          const field = fields[fieldName];
+
+          if (!isEmpty(item.selectionSet) && !field?.valueGetter) return acc;
           if (!(fieldName in fields)) return acc;
 
-          const field = fields[fieldName];
           const { label } = field;
 
           return [

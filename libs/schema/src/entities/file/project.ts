@@ -8,7 +8,6 @@ import select from '../../fields/atoms/select/select';
 import timestamp from '../../fields/atoms/timestamp/timestamp';
 import dimension from '../../fields/atoms/dimension/dimension';
 import float from '../../fields/atoms/float/float';
-import { isEmpty } from 'lodash';
 
 const PROJECT_FIELDS = {
   identifier: text({
@@ -64,52 +63,28 @@ const PROJECT_FIELDS = {
   actualCost: float({
     label: 'Cout total',
   }),
-  actionsCount: relationship({
-    label: 'Actions',
-    options: 'action',
-    many: false,
-    target: 'project',
-    onClick: 'open',
-    width: 80,
+  hasProjectManager: relationship({
+    label: 'Responsable',
+    options: 'Person',
+  }),
+  customer: dimension({
+    label: 'client',
+    options: 'Organization',
+  }),
+  hasCommercial: dimension({
+    label: 'Commercial',
+    options: 'Person',
+  }),
+  hasTechnician: dimension({
+    label: 'Technicien',
+    options: 'Person',
   }),
   buyActionsCount: relationship({
     label: 'Dépenses',
     options: 'buyAction',
-    target: 'project',
-    many: false,
+    many: true,
     onClick: 'open',
   }),
-  hasTechnician: relationship({
-    label: 'Technicien',
-    options: 'Person',
-    target: 'isProjectTechnicianFor',
-    many: true,
-    valueGetter: ({ row }) =>
-      `${
-        !isEmpty(row.hasTechnician) &&
-        row.hasTechnician.map((item) => item.fullName).join(' ')
-      }`,
-  }),
-  hasProjectManager: relationship({
-    label: 'Responsable',
-    options: 'Person',
-    target: 'isProjectManagerFor',
-    many: true,
-    valueGetter: ({ row }) => `${row?.hasProjectManager?.givenName || '-'}`,
-  }),
-  customer: relationship({
-    label: 'client',
-    options: 'Organization',
-    target: 'projects',
-    many: true,
-  }),
-  hasCommercial: relationship({
-    label: 'Commercial',
-    options: 'Person',
-    target: 'isCommercialFor',
-    many: true,
-  }),
-
   // hasCommercial: relationship({
   //   label: 'Commercial',
   //   many: true,
@@ -216,30 +191,26 @@ const Project = entity<keyof typeof PROJECT_FIELDS>({
       dateReception
       dateDelivery
       actualCost
-      actionsCount
+      buyActions(take:10, orderBy:{createdAt: desc}) {
+        id
+        name
+      }
       buyActionsCount
-      hasCommercialCount
-      hasTechnician {
-        id fullName givenName
-      }
-      hasProjectManager {
-        id fullName givenName
-      }
       areaField
       areaSnow
       areaWind
       altitude
       areaSea
+      hasCommercial {
+        id
+        fullName
+      }
     `,
     single: `
       fragment::details
-      buyActions(take:10, orderBy:{createdAt: desc}) {
+      customer {
         id
         name
-      }
-      hasCommercial(take:10, orderBy:{createdAt: desc}) {
-        id
-        fullName
       }
     `,
   },

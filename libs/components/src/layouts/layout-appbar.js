@@ -49,10 +49,15 @@ function LayoutAppBar(props) {
           />
           <Divider orientation="vertical" flexItem sx={{ pl: 2 }} />
           {[
-            ['Produits', '/products'],
-            ['Stock', '/racks'],
-            ['Pricer', '/pricing'],
-            ['Tasks', '/tasks'],
+            ['Projets', '/datas/project'],
+            ['Actions', '/datas/action'],
+            ['Taches', '/datas/task'],
+            ['Dépenses', '/datas/buyAction'],
+            ['Contacts', '/datas/person'],
+            ['Clients', '/datas/organization'],
+            ['Images', '/datas/image'],
+            ['Fichiers', '/datas/file'],
+            ['Editeur', '/editor'],
             // ['Settings', '/settings']
           ].map(([page, url]) => (
             <MenuButton key={page} href={url} component={Link}>

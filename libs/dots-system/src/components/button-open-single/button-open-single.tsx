@@ -12,7 +12,7 @@ function ButtonOpenSingle(props): JSX.Element {
       spacing={1}
       sx={{ position: 'relative', width: '100%' }}
     >
-      <Typography>{cellText}</Typography>
+      <Typography variant="body2">{cellText}</Typography>
       <Box position="absolute" right="0">
         <Button
           className="button--open-details"

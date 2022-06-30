@@ -1,9 +1,9 @@
 import { FunctionComponent, useState } from 'react';
 
 const initialState = {
-  operator: 'and',
-  filters: [],
-  byId: {},
+  // operator: 'and',
+  // filters: [],
+  // byId: {},
 };
 
 const withSmartFilter = (

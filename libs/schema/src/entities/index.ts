@@ -7,3 +7,7 @@ export { default as BuyAction } from './buy-action';
 export { default as Project } from './project';
 export { default as Roof } from './roof';
 export { default as SolarModule } from './solar-module';
+export { default as Action } from './action';
+export { default as Task } from './task';
+export { default as Organization } from './organization';
+export { default as PostalAddress } from './postal-address';

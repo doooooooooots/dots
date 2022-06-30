@@ -1,37 +1,67 @@
 import entity from '../../utils/entity';
-import text from '../../fields/atoms/text/text';
-import number from '../../fields/atoms/float/float';
-import select from '../../fields/atoms/select/select';
+import { text, integer } from '../../fields/atoms';
 
-const MediaObject = entity({
-  singular: 'MediaObject',
-  fields: {
-    name: text({
-      label: 'Nom',
-    }),
-    sku: text({
-      label: 'Purlin type',
-    }),
-    frameType: select({
-      label: 'Type de cadre',
-      options: 'FrameType',
-    }),
-    electricalPower: number({
-      label: 'Puissance éléctrique',
-    }),
+const MEDIA_OBJECT_FIELDS = {
+  url: text({
+    label: 'Nom',
+    isIndexed: true,
+  }),
+  name: text({
+    label: 'Fournisseur',
+  }),
+  description: integer({
+    label: 'Prix',
+  }),
+  alt: integer({
+    label: 'Prix',
+  }),
+  versionNumber: integer({
+    label: 'Prix',
+  }),
+};
+
+const MediaObject = entity<keyof typeof MEDIA_OBJECT_FIELDS>({
+  singular: 'buyAction',
+  copyright: {
+    form: 'Vous allez créer une dépense',
   },
-  filters: {
+  pictures: {
+    form: '/assets/illustrations/buy-action.svg',
+  },
+  fields: MEDIA_OBJECT_FIELDS,
+  allowedSort: ['name'],
+  allowedFilter: [],
+  searchFilters: {
     default: {
-      name: 'nom',
+      name: 'seller',
       query: ['name'],
       filterAttributes: ['name'],
       getters: {
         primary: (option) => `${option.name}`,
-        secondary: (option) => `${option.name}`,
-        info: (option) => `${option.name}`,
+        secondary: (option) => `${option.seller}`,
+        info: () => ``,
       },
     },
   },
+  form: {
+    required: {
+      primary: "L'essentiel",
+      secondary: 'Veuillez indiquez le nom du projet',
+      description: '',
+      fields: {
+        name: { col: 12 },
+      },
+    },
+  },
+  fragments: {
+    details: `
+      name
+      seller
+      price
+      priceCurrency
+      startTime
+      project { id name}
+    `,
+  },
 });
-
 export default MediaObject;
