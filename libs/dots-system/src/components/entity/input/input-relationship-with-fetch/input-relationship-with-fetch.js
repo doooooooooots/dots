@@ -2,7 +2,7 @@ import { useLazyQuery } from '@apollo/client';
 import { useMemo } from 'react';
 import { useDebounce } from 'react-use';
 import { useInputText, useInputSelect } from '@dots.cool/hooks';
-import InputRelationship from './input-relationship';
+import InputRelationship from '../input-relationship/input-relationship';
 import { searchManyBuilder, useDots } from '@dots.cool/schema';
 import { ErrorPage } from '@dots.cool/components';
 import ListItemDefault from '../list-item/list-item-default';

@@ -10,14 +10,13 @@ import { Box } from '@mui/system';
 // [ ](Adrien): use dynamic import
 import InputNumber from '../input/input-number';
 import InputText from '../input/input-text';
-import InputDate from '../input/input-date';
+import InputDate from '../input/input-date/input-date';
 import InputRelationshipWithFetch from '../input/input-relationship-with-fetch';
 import InputEnumWithFetch from '../input/input-enum-with-fetch';
-import InputDimension from '../input/input-dimension';
 import InputTag from '../input/input-tag';
 import InputReaction from '../input/input-reaction';
-import InputCheckbox from '../input/input-checkbox';
-import InputFile from '../input/input-file';
+import InputCheckbox from '../input/input-checkbox/input-checkbox';
+import InputFile from '../input/input-file/input-file';
 
 import withSmartPopper from '../../../hoc/with-smart-popper/with-smart-popper';
 import Actions from '../actions';
