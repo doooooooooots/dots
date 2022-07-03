@@ -3,10 +3,10 @@ import { useAutocomplete, useInputText } from '@dots.cool/hooks';
 import { Alert, Autocomplete, Stack } from '@mui/material';
 import { matchSorter } from 'match-sorter';
 import { isEmpty } from 'lodash';
-import StyledAutocompletePopper from '../styled-autocomplete-popper';
 import { PopperInput, PopperTitle } from '@dots.cool/components';
-import ListItemEnumDefault from '../list-item/list-item-enum-default';
 import { makeSortFunc } from '@dots.cool/utils';
+import StyledAutocompletePopper from '../../styled-autocomplete-popper';
+import ListItemEnumDefault from '../../list-item/list-item-enum-default';
 
 const filterOptions = (options, { inputValue }) =>
   matchSorter(options, inputValue);
@@ -47,7 +47,7 @@ function InputEnum(props) {
   /**
    * Override default component by enum's one
    */
-  let Component = ListItemEnumDefault;
+  const Component = ListItemEnumDefault;
 
   /**
    * Add selected values to all results

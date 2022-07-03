@@ -3,7 +3,7 @@ import { Grid, IconButton, Stack, Button, Typography } from '@mui/material';
 import BackspaceIcon from '@mui/icons-material/BackspaceOutlined';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
-import PopperTextField from '../styled-input';
+import PopperInput from '../../popper-input';
 
 const DIGITS = new Array(9).fill(1);
 const DIGIT_WIDTH = 80;
@@ -100,7 +100,7 @@ function InputNumber(props) {
   return (
     <Stack p={1} pt={2} spacing={1}>
       <Stack>
-        <PopperTextField
+        <PopperInput
           label="Enter a number"
           value={input}
           variant="outlined"

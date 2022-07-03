@@ -3,12 +3,13 @@ import { Autocomplete, Divider, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import { isEmpty } from 'lodash';
 
-import Actions from '../actions';
 import Image from 'next/image';
 import { makeSortFunc } from '@dots.cool/utils';
 import { PopperInput, PopperTitle } from '@dots.cool/components';
-import StyledAutocompletePopper from '../styled-autocomplete-popper';
-import PopperLinkTemplateSelect from '../select-template';
+import StyledAutocompletePopper from '../../styled-autocomplete-popper';
+import PopperLinkTemplateSelect from '../../select-template';
+import PopperSelectedList from '../../../popper/popper-selected-list';
+import Actions from '../../actions';
 
 function PopperComponent(props) {
   const { disablePortal, anchorEl, open, ...other } = props;
@@ -138,9 +139,9 @@ function InputRelationship(props) {
           <Stack width={270} borderLeft={1} borderColor="divider">
             <PopperSelectedList
               filterAttributes={filterSelectedAttributes}
-              renderOption={renderSelectedOption}
-              pendingValue={pendingValue}
               onDelete={handleDelete}
+              pendingValue={pendingValue}
+              renderOption={renderSelectedOption}
             />
           </Stack>
         )}

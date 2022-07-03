@@ -5,8 +5,8 @@ import { useInputText, useInputSelect } from '@dots.cool/hooks';
 import InputRelationship from '../input-relationship/input-relationship';
 import { searchManyBuilder, useDots } from '@dots.cool/schema';
 import { ErrorPage } from '@dots.cool/components';
-import ListItemDefault from '../list-item/list-item-default';
-import ListItemPreview from '../list-item/list-item-preview';
+import ListItemDefault from '../../list-item/list-item-default';
+import ListItemPreview from '../../list-item/list-item-preview';
 
 function InputRelationWithFetch(props) {
   const {

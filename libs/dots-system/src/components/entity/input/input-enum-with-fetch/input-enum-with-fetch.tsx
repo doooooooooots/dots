@@ -1,7 +1,7 @@
 import React from 'react';
 import { CircularProgress, Stack } from '@mui/material';
-import useEnum from '../../../hooks/use-enums';
-import InputEnum from './input-enum';
+import useEnum from '../../../../hooks/use-enums';
+import InputEnum from '../input-enum';
 import { isEmpty, last } from 'lodash';
 import { ErrorPage } from '@dots.cool/components';
 

@@ -1,1 +1,1 @@
-export { default as InputRelationship } from './input-relationship-with-fetch';
+export { default } from './input-relationship-with-fetch';

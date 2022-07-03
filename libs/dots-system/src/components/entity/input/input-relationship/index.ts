@@ -1,1 +1,1 @@
-export { default as InputRelationship } from './input-relationship';
+export { default } from './input-relationship';
