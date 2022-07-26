@@ -1,5 +1,5 @@
 export { default as createSchema } from './create-schema';
-export { default as formatEnums } from './utils/enums';
+export { default as formatEnums } from './utils/format-enums';
 
 export * from './entities';
 export * from './enums';

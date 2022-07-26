@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  Alert,
   Box,
   Button,
   Container,
@@ -16,11 +15,8 @@ import {
   Typography,
 } from '@mui/material';
 import { gql, useQuery } from '@apollo/client';
-import { isEmpty } from 'lodash';
 import { AuthGuard } from '../src/components/authentication/auth-guard';
 import ProjectFormCreate from '../src/components/layout-create/forms/project-create';
-import ProjectDetails from '../src/components/project/project-details';
-import NoProject from './project/no-project';
 import InputNumber from '../src/components/design-system/popper-inputs/popper-input-number';
 import SelectTags from '../src/components/molecule/tag/select-tag-multiple';
 

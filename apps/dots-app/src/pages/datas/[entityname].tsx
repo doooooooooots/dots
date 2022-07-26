@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import { Grid } from '@mui/material';
 
@@ -8,11 +8,7 @@ import {
   LoadingOverlay,
 } from '@dots.cool/components';
 
-import {
-  DotsDatagrid,
-  HistoryBrowser,
-  useHistory,
-} from '@dots.cool/dots-system';
+import { DotsDatagrid, HistoryBrowser } from '@dots.cool/dots-system';
 
 function EntityName() {
   const router = useRouter();
